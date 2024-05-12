@@ -1,0 +1,74 @@
+# =--------------------------------= #
+# +          Localizações          + #
+# =--------------------------------= #
+Tijolão:
+  world: world
+  x: -15.0
+  y: 100.0
+  z: -15.0
+  yaw: 112.50008
+  pitch: 2.1000016
+Tijolão2:
+  world: world
+  x: -15.0
+  y: 100.0
+  z: -15.0
+  yaw: 112.50008
+  pitch: 2.1000016
+Corrida:
+  world: world
+  x: -15.0
+  y: 100.0
+  z: -15.0
+  yaw: 112.50008
+  pitch: 2.1000016
+CorridaBoat:
+  world: world
+  x: -15.0
+  y: 100.0
+  z: -15.0
+  yaw: 112.50008
+  pitch: 2.1000016
+Sumo:
+  world: world
+  x: -15.0
+  y: 100.0
+  z: -15.0
+  yaw: 112.50008
+  pitch: 2.1000016
+arena:
+  Tijolão:
+      world: world
+      x: -15.0
+      y: 100.0
+      z: -15.0
+      yaw: 112.50008
+      pitch: 2.1000016
+  Tijolão2:
+      world: world
+      x: -15.0
+      y: 100.0
+      z: -15.0
+      yaw: 112.50008
+      pitch: 2.1000016
+  Corrida:
+      world: world
+      x: -15.0
+      y: 100.0
+      z: -15.0
+      yaw: 112.50008
+      pitch: 2.1000016
+  CorridaBoat:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+  Sumo:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016

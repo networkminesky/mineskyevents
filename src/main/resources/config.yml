@@ -1,0 +1,46 @@
+# =--------------------------= #
+# +          Config          + #
+# =--------------------------= #
+UltimoDia: null
+bot:
+  enabled: false
+  token: ""
+  channel_logs: 000000000000000000
+# =-----------------------------= #
+# +          Blacklist          + #
+# =-----------------------------= #
+blacklist:
+  tntrun:
+    list:
+      - hacker2000
+  tijolãowars:
+    list:
+      - hacker2001
+  corrida:
+    list:
+      - hacker2003
+  corridaboat:
+    list:
+      - hacker2004
+  sumo:
+    list:
+      - hacker2005
+# =--------------------------------= #
+# +          IP Blacklist          + #
+# =--------------------------------= #
+blacklistip:
+  tntrun:
+    list:
+      - 00.00.000
+  tijolãowars:
+    list:
+      - 00.00.001
+  corrida:
+    list:
+      - 00.00.003
+  corridaboat:
+    list:
+      - 00.00.004
+  sumo:
+    list:
+      - 00.00.005
