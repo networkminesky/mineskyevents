@@ -2,18 +2,12 @@ package minesky.msne.events;
 
 import minesky.msne.MineSkyEvents;
 import minesky.msne.addons.Vault;
-import minesky.msne.bot.MineSkyBot;
-import minesky.msne.config.Config;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
+import minesky.msne.discord.EventsMessage;
 import minesky.msne.utils.Util;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -26,7 +20,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class TijolãoWarsEvent {
-    private Map<Player, Integer> contagemRegressiva = new HashMap<>();
     public static boolean contagem;
     public static boolean contagemI = false;
     public static Set<Player> playerson = new HashSet<>();
@@ -160,9 +153,7 @@ public class TijolãoWarsEvent {
             Util.sendPlayermessage(vencedor, text1);
             Util.sendPlayermessage(vencedores[1], text2);
             Util.sendPlayermessage(vencedores[0], text3);
-            if (Config.Bot) {
-                MineSkyBot.sendLogEvent("TijolãoWars", vencedor, vencedores, premio1, premio2, premio3);
-            }
+            EventsMessage.sendLogEvent("TijolãoWars", vencedor, vencedores, premio1, premio2, premio3);
             playerson.clear();
             mortos.clear();
             for (Player player1 : vencedores) {

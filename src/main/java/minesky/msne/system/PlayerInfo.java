@@ -1,10 +1,7 @@
 package minesky.msne.system;
 
 import minesky.msne.MineSkyEvents;
-import minesky.msne.commands.EventCommand;
-import minesky.msne.config.Config;
 import minesky.msne.config.DataManager;
-import minesky.msne.config.Locations;
 import minesky.msne.config.Messages;
 import minesky.msne.events.CorridaBoatEvent;
 import minesky.msne.events.CorridaEvent;
@@ -12,22 +9,18 @@ import minesky.msne.events.SumoEvent;
 import minesky.msne.events.TijolãoWarsEvent;
 import minesky.msne.utils.Util;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.io.BukkitObjectInputStream;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 
 public class PlayerInfo implements Listener {

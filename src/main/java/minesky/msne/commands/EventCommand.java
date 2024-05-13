@@ -3,7 +3,6 @@ package minesky.msne.commands;
 import minesky.msne.MineSkyEvents;
 import minesky.msne.config.*;
 import minesky.msne.events.*;
-//import minesky.msne.system.events.EventVerification;
 import minesky.msne.system.event.EventVerification;
 import minesky.msne.utils.Util;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -18,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

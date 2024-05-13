@@ -2,21 +2,17 @@ package minesky.msne.events;
 
 import minesky.msne.MineSkyEvents;
 import minesky.msne.addons.Vault;
-import minesky.msne.bot.MineSkyBot;
-import minesky.msne.config.Config;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
+import minesky.msne.discord.EventsMessage;
 import minesky.msne.utils.Util;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -24,7 +20,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class SumoEvent {
-    private Map<Player, Integer> contagemRegressiva = new HashMap<>();
     public static boolean contagem;
     public static boolean contagemI = false;
     public static Set<Player> playerson = new HashSet<>();
@@ -150,9 +145,7 @@ public class SumoEvent {
             Util.sendPlayermessage(vencedor, text1);
             Util.sendPlayermessage(vencedores[1], text2);
             Util.sendPlayermessage(vencedores[0], text3);
-            if (Config.Bot) {
-                MineSkyBot.sendLogEvent("Sumo", vencedor, vencedores, premio1, premio2, premio3);
-            }
+            EventsMessage.sendLogEvent("Sumo", vencedor, vencedores, premio1, premio2, premio3);
             playerson.clear();
             mortos.clear();
             for (Player player1 : vencedores) {

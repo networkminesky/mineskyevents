@@ -2,9 +2,8 @@ package minesky.msne.commands;
 
 import minesky.msne.MineSkyEvents;
 import minesky.msne.addons.Vault;
-import minesky.msne.bot.MineSkyBot;
-import minesky.msne.config.Config;
 import minesky.msne.config.DataManager;
+import minesky.msne.discord.EventsMessage;
 import minesky.msne.events.CorridaBoatEvent;
 import minesky.msne.events.CorridaEvent;
 import minesky.msne.utils.Util;
@@ -117,9 +116,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                 message = message.substring(0, message.length() - 2);
                 TextComponent text = new TextComponent(message);
                 Util.sendMessageBCMSNE(text);
-                if (Config.Bot) {
-                    MineSkyBot.sendLogEventPLIST("Corrida", playerList, premio1, premio2, premio3);
-                }
+                EventsMessage.sendLogEventPLIST("Corrida", playerList, premio1, premio2, premio3);
                 playerList.clear();
                 CorridaEvent.playerson.clear();
                 for (Player p : Bukkit.getOnlinePlayers()) {
@@ -194,9 +191,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                     message = message.substring(0, message.length() - 2);
                     TextComponent text = new TextComponent(message);
                     Util.sendMessageBCMSNE(text);
-                    if (Config.Bot) {
-                        MineSkyBot.sendLogEventPLIST("CorridaBoat", playerList, premio1, premio2, premio3);
-                    }
+                    EventsMessage.sendLogEventPLIST("CorridaBoat", playerList, premio1, premio2, premio3);
                     playerList.clear();
                     playerBOATLIST.clear();
                     CorridaBoatEvent.playerson.clear();

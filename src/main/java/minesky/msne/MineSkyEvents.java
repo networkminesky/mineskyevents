@@ -10,29 +10,19 @@ import minesky.msne.system.PlayerData;
 import minesky.msne.system.PlayerInfo;
 import minesky.msne.utils.Command;
 import minesky.msne.utils.Util;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.EnumSet;
 
 public final class MineSkyEvents extends JavaPlugin {
 
-    public static JDA jda;
     private static MineSkyEvents mineSkyEvents;
     public static FileConfiguration Blacklist;
     public static String event = "OFF";
     private static Version version;
     private static JarType jarType;
-    // private String palavraParaCompetir;
-  //  private static final List<String> eventos = Arrays.asList("Spleef", "TijolãoWars", "Runners", "Corrida", "Corrida de barco", "Pega Bandeira", "TNTRUN");
-   // private static final Random random = new Random();
-    //private static int eventosIniciadosHoje = 0;
-   // private static LocalDate ultimoDia = LocalDate.parse(Config.UltimoDia);
 
     @Override
     public void onEnable() {
@@ -43,7 +33,6 @@ public final class MineSkyEvents extends JavaPlugin {
         carregarConfigs();
         Commands();
         System();
-        Bot();
         Vault.setupEconomy();
         Util.BedLeave = Util.createBed();
         Util.StoneShovel = Util.shovel();
@@ -64,36 +53,10 @@ public final class MineSkyEvents extends JavaPlugin {
     @Override
     public void onDisable() {
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §7-------------------------------------------------");
-        if (Config.Bot) {
-            jda.shutdown();
-            Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §cBOT DISCORD successfully disabled!");
-            /*try {
-                jda.awaitShutdown();
-                Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §cBOT DISCORD successfully disabled!");
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }*/
-        } else {
-            Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §cBOT DISCORD successfully disabled!");
-        }
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §cPlugin successfully disabled!");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §7-------------------------------------------------");
     }
 
-    private void Bot() {
-        if (Config.Bot) {
-            jda = JDABuilder.createLight(Config.Token, EnumSet.of(GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT))
-                    .build();
-            try {
-                jda.awaitReady();
-                Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §aBOT DISCORD successfully initialized!");
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §cBOT DISCORD successfully disabled!");
-        }
-    }
 
     private void Commands() {
         new Command("msne", new MSNECommand());
