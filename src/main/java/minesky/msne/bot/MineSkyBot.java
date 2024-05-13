@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MineSkyBot {
     public static MessageEmbed embedm;
-    public static void sendLogEvent(String event, Player vencedor, Player[] vencedores, double premio1, double premio2, double premio3) {
+    public static void sendLogEvent(String event, Player vencedor, Player[] vencedores, int premio1, int premio2, int premio3) {
         if (Config.Bot) {
             TextChannel channel = MineSkyEvents.jda.getTextChannelById(Config.ChannelLog);
             if (channel != null) {
@@ -24,7 +24,7 @@ public class MineSkyBot {
                         EmbedBuilder embed = new EmbedBuilder();
                         embed.setColor(Color.decode("#FFAA00"));
                         embed.setTitle("TijolãoWars LOGS EVENT");
-                        embed.setDescription("**Online (Server EVENTOS): **" + Bukkit.getOnlinePlayers().size() + "\n\n**Ganhadores:**\n" + vencedor.getName() + " - 1º Lugar\n" + vencedores[0].getName() + " - 2º Lugar\n" + vencedores[1].getName() + " - 3º Lugar\n\n**Prêmios:**\n**" + premio1 + "** - 1º Lugar\n**" + premio2 + "** - 2º Lugar\n**" + premio3 + "** - 3º Lugar\n\n**Feito por:**\n- **Plugin MINESKY-EVENTS**");
+                        embed.setDescription("**Online (Server EVENTOS): **" + Bukkit.getOnlinePlayers().size() + "\n\n**Ganhadores:**\n" + vencedor.getName() + " - 1º Lugar\n" + vencedores[1].getName() + " - 2º Lugar\n" + vencedores[0].getName() + " - 3º Lugar\n\n**Prêmios:**\n- **" + premio1 + "** - 1º Lugar\n- **" + premio2 + "** - 2º Lugar\n- **" + premio3 + "** - 3º Lugar\n\n**Feito por:**\n- **Plugin MINESKY-EVENTS**");
                         embed.setFooter("LOG EVENTS (MINESKY NETWORK)", channel.getGuild().getIconUrl());
                         embed.setThumbnail("https://cdn.discordapp.com/attachments/860609150321164302/1237218921971580978/TIJOlAOWARS.png?ex=663ad969&is=663987e9&hm=79be173217f24409bf6e2711f9b2f25bd8ad9491bfce9c0d1f8e14221e67ba8e&");
                         embed.setTimestamp(Instant.now());
@@ -35,7 +35,7 @@ public class MineSkyBot {
                         EmbedBuilder embeds = new EmbedBuilder();
                         embeds.setColor(Color.decode("#AA0000"));
                         embeds.setTitle("Sumo LOGS EVENT");
-                        embeds.setDescription("**Online (Server EVENTOS): **" + Bukkit.getOnlinePlayers().size() + "\n\n**Ganhadores:**\n" + vencedor.getName() + " - 1º Lugar\n" + vencedores[0].getName() + " - 2º Lugar\n" + vencedores[1].getName() + " - 3º Lugar\n\n**Prêmios:**\n**" + premio1 + "** - 1º Lugar\n**" + premio2 + "** - 2º Lugar\n**" + premio3 + "** - 3º Lugar\n\n**Feito por:**\n- **Plugin MINESKY-EVENTS**");
+                        embeds.setDescription("**Online (Server EVENTOS): **" + Bukkit.getOnlinePlayers().size() + "\n\n**Ganhadores:**\n" + vencedor.getName() + " - 1º Lugar\n" + vencedores[1].getName() + " - 2º Lugar\n" + vencedores[0].getName() + " - 3º Lugar\n\n**Prêmios:**\n- **" + premio1 + "** - 1º Lugar\n- **" + premio2 + "** - 2º Lugar\n- **" + premio3 + "** - 3º Lugar\n\n**Feito por:**\n- **Plugin MINESKY-EVENTS**");
                         embeds.setFooter("LOG EVENTS (MINESKY NETWORK)", channel.getGuild().getIconUrl());
                         embeds.setThumbnail("https://cdn.discordapp.com/attachments/860609150321164302/1237218921971580978/TIJOlAOWARS.png?ex=663ad969&is=663987e9&hm=79be173217f24409bf6e2711f9b2f25bd8ad9491bfce9c0d1f8e14221e67ba8e&");
                         embeds.setTimestamp(Instant.now());

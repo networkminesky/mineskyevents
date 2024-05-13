@@ -28,6 +28,7 @@ public class Util {
     public static ItemStack BedLeave;
     public static ItemStack Head;
     public static ItemStack SumoItem;
+    public static ItemStack Barco;
     public static <K, V> Map<String, Integer> mapToMapInt(Map<K, V> input) {
         Map<String, Integer> output = new HashMap<>();
         for (Map.Entry<K, V> entry : input.entrySet()) {
@@ -192,6 +193,26 @@ public class Util {
 
         return stick;
     }
+    public static ItemStack barco() {
+        ItemStack stick = new ItemStack(Material.JUNGLE_BOAT);
+        ItemMeta meta = stick.getItemMeta();
+
+        if (meta != null) {
+            meta.setDisplayName("§d§lCarro esportivo");
+            meta.setUnbreakable(true);
+
+            List<String> lore = new ArrayList<>();
+            lore.add("§7Barco da corrida de barco.");
+            lore.add("");
+            lore.add("§6| §7Descrição§6:");
+            lore.add("  §7Utilize esse barco para ganhar a corrida.");
+            meta.setLore(lore);
+
+            stick.setItemMeta(meta);
+        }
+
+        return stick;
+    }
 
     public static ItemStack createBed() {
         ItemStack bed = new ItemStack(Material.RED_BED);
@@ -220,7 +241,7 @@ public class Util {
 
         Player player = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
         if (player != null) {
-            player.sendPluginMessage(MineSkyEvents.get(), "custom:msne", out.toByteArray());
+            player.sendPluginMessage(MineSkyEvents.get(), "minesky:proxy", out.toByteArray());
         }
     }
 
@@ -231,7 +252,7 @@ public class Util {
 
         Player player = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
         if (player != null) {
-            player.sendPluginMessage(MineSkyEvents.get(), "custom:msne", out.toByteArray());
+            player.sendPluginMessage(MineSkyEvents.get(), "minesky:proxy", out.toByteArray());
         }
     }
 
@@ -241,7 +262,7 @@ public class Util {
         out.writeUTF(player.getName());
 
         if (player != null) {
-            player.sendPluginMessage(MineSkyEvents.get(), "custom:msne", out.toByteArray());
+            player.sendPluginMessage(MineSkyEvents.get(), "minesky:proxy", out.toByteArray());
         }
     }
 
@@ -252,7 +273,7 @@ public class Util {
         out.writeUTF(TextComponent.toLegacyText(message));
 
         if (player != null) {
-            player.sendPluginMessage(MineSkyEvents.get(), "custom:msne", out.toByteArray());
+            player.sendPluginMessage(MineSkyEvents.get(), "minesky:proxy", out.toByteArray());
         }
     }
 

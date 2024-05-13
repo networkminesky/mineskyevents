@@ -109,10 +109,14 @@ public class SumoEvent {
                 .filter(player -> !mortos.contains(player))
                 .findFirst()
                 .orElse(null);
-        Player[] vencedores = mortos.stream()
-                .sorted(Comparator.comparing(Player::getName).reversed()) // Classifique os jogadores mortos por nome em ordem reversa
-                .limit(2)
-                .toArray(Player[]::new);
+        Player[] vencedores = new Player[2];
+        int lastIndex = mortos.size() - 1;
+        if (lastIndex >= 1) {
+            vencedores[0] = mortos.get(lastIndex - 1);
+            vencedores[1] = mortos.get(lastIndex);
+        } else if (lastIndex == 0) {
+            vencedores[1] = mortos.get(0);
+        }
         MineSkyEvents.event = "OFF";
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Util.PDVE(player) || Util.PDVES(player)) {
@@ -127,13 +131,13 @@ public class SumoEvent {
                     throw new RuntimeException(e);
                 }
             }
-            Bukkit.broadcastMessage(Arrays.toString(playerson.stream().limit(3).toArray(Player[]::new)));
-            Bukkit.broadcastMessage(vencedores[0].getName() + " | " + vencedores[1].getName() + " | " + vencedores[2].getName());
-            TextComponent encerrar = new TextComponent("§4§lSumo §8| §a1º Lugar §8- §a§l" + vencedor.getName() + " §8| §a2º Lugar §8- §a§l" + vencedores[0].getName() + " §8| §a3º Lugar §8- §a§l" + vencedores[1].getName());
+        }
+            TextComponent encerrar = new TextComponent("§4§lSumo §8| §a1º Lugar §8- §a§l" + vencedor.getName() + " §8| §a2º Lugar §8- §a§l" + vencedores[1].getName() + " §8| §a3º Lugar §8- §a§l" + vencedores[0].getName());
             Util.sendMessageBCMSNE(encerrar);
-            double premio1 = Math.random() * (5500 - 4500) + 4500;
-            double premio2 = Math.random() * (3500 - 2500) + 2500;
-            double premio3 = Math.random() * (2500 - 1500) + 1500;
+            Random random = new Random();
+            int premio1 = random.nextInt(5500 - 4500 + 1) + 4500;
+            int premio2 = random.nextInt(3500 - 2500 + 1) + 2500;
+            int premio3 = random.nextInt(2500 - 1500 + 1) + 1500;
             OfflinePlayer p1 = Bukkit.getOfflinePlayer(vencedor.getName());
             OfflinePlayer p2 = Bukkit.getOfflinePlayer(vencedores[0].getName());
             OfflinePlayer p3 = Bukkit.getOfflinePlayer(vencedores[1].getName());
@@ -144,12 +148,13 @@ public class SumoEvent {
             TextComponent text2 = new TextComponent("§4§lSumo §8| §aVocê ganhou o §lSumo §ae como prêmio você ganhou: §l" + premio2);
             TextComponent text3 = new TextComponent("§4§lSumo §8| §aVocê ganhou o §lSumo §ae como prêmio você ganhou: §l" + premio3);
             Util.sendPlayermessage(vencedor, text1);
-            Util.sendPlayermessage(vencedores[0], text2);
-            Util.sendPlayermessage(vencedores[1], text3);
+            Util.sendPlayermessage(vencedores[1], text2);
+            Util.sendPlayermessage(vencedores[0], text3);
             if (Config.Bot) {
                 MineSkyBot.sendLogEvent("Sumo", vencedor, vencedores, premio1, premio2, premio3);
             }
             playerson.clear();
+            mortos.clear();
             for (Player player1 : vencedores) {
                 File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
                 FileConfiguration config = DataManager.getConfiguration(file);
@@ -163,4 +168,3 @@ public class SumoEvent {
             }
         }
     }
-}

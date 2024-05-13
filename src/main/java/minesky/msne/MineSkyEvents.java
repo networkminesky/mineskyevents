@@ -48,7 +48,8 @@ public final class MineSkyEvents extends JavaPlugin {
         Util.BedLeave = Util.createBed();
         Util.StoneShovel = Util.shovel();
         Util.SumoItem = Util.sumo();
-        getServer().getMessenger().registerOutgoingPluginChannel(this, "custom:msne");
+        Util.Barco = Util.barco();
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "minesky:proxy");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §aConfig loaded.");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §aPlugin successfully initialized!");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §7-------------------------------------------------");

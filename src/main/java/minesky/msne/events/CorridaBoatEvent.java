@@ -1,15 +1,18 @@
 package minesky.msne.events;
 
 import minesky.msne.MineSkyEvents;
+import minesky.msne.commands.MSNECommand;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.utils.Util;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
@@ -84,6 +87,8 @@ public class CorridaBoatEvent {
                             if (!Util.PDVE(p)) return;
                             p.teleport(Locations.corridaboatA, PlayerTeleportEvent.TeleportCause.COMMAND);
                             p.getInventory().removeItem(Util.BedLeave);
+                            p.getInventory().addItem(Util.Barco);
+                            MSNECommand.renovarTempo(p);
                             this.cancel();
                         }
                         this.cancel();

@@ -281,6 +281,7 @@ public class PlayerInfo implements Listener {
         }
         if (MineSkyEvents.event == "Sumo") {
             SumoEvent.playerson.remove(p);
+            SumoEvent.mortos.add(p);
             if (SumoEvent.playerson.size() == 1) SumoEvent.finalizar();
             p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
             File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");

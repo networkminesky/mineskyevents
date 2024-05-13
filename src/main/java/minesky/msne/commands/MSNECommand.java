@@ -24,7 +24,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
     public static List<String> playerList = new ArrayList<>();
     public static Map<String, Integer> playerBOATLIST = new HashMap<>();
     private static final long TEMPO_PADRAO = 60000;
-    private Map<String, Long> ultimoRenovacao = new HashMap<>();
+    public static Map<String, Long> ultimoRenovacao = new HashMap<>();
     public static int premio1;
     public static int premio2;
     public static int premio3;
@@ -227,7 +227,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
-    private boolean podeRenovar(Player player) {
+    public static boolean podeRenovar(Player player) {
         String playerName = player.getName();
         if (!ultimoRenovacao.containsKey(playerName)) {
             return true;
@@ -238,7 +238,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
         return tempoAtual - ultimoRenovacaoTempo >= TEMPO_PADRAO;
     }
 
-    private void renovarTempo(Player player) {
+    public static void renovarTempo(Player player) {
         String playerName = player.getName();
         long tempoAtual = System.currentTimeMillis();
         ultimoRenovacao.put(playerName, tempoAtual);
