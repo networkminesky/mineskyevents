@@ -203,7 +203,7 @@ public class PlayerInfo implements Listener {
 
         if (event.getClickedInventory() != null && event.getClickedInventory().getHolder() == event.getWhoClicked()) {
 
-            if (event.getCurrentItem() != null && event.getCurrentItem().isSimilar(Util.BedLeave) || event.getCurrentItem().isSimilar(Util.StoneShovel) || event.getCurrentItem().getType() == Material.PLAYER_HEAD) {
+            if (event.getCurrentItem() != null && event.getCurrentItem().isSimilar(Util.BedLeave) || event.getCurrentItem().isSimilar(Util.StoneShovel) || event.getCurrentItem().getType() == Material.PLAYER_HEAD || event.getCurrentItem().isSimilar(Util.Barco) || event.getCurrentItem().isSimilar(Util.SumoItem)) {
                 if (Util.PDVES((Player) event.getWhoClicked())) {
                     event.setCancelled(true);
                     return;
@@ -217,7 +217,7 @@ public class PlayerInfo implements Listener {
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         ItemStack droppedItem = event.getItemDrop().getItemStack();
-        if (droppedItem.isSimilar(Util.StoneShovel) || droppedItem.isSimilar(Util.BedLeave) || droppedItem.getType() == Material.BRICK || droppedItem.getType() == Material.PLAYER_HEAD) {
+        if (droppedItem.isSimilar(Util.StoneShovel) || droppedItem.isSimilar(Util.BedLeave) || droppedItem.getType() == Material.BRICK || droppedItem.getType() == Material.PLAYER_HEAD || droppedItem.isSimilar(Util.Barco) || droppedItem.isSimilar(Util.SumoItem)) {
             if (Util.PDVES(event.getPlayer())) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage("§8[§c!§8] §cVocê não pode dropar esse item.");
