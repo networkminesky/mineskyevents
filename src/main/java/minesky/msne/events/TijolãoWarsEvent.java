@@ -89,10 +89,10 @@ public class TijolãoWarsEvent {
                         contagem = false;
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (!Util.PDVE(p)) return;
-                            if (selectMapa().equals("Mapa1")) {
+                            if (selectedMap.equals("Mapa1")) {
                                 p.teleport(Locations.tijolaoA, PlayerTeleportEvent.TeleportCause.COMMAND);
                             }
-                            if (selectMapa().equals("Mapa2")) {
+                            if (selectedMap.equals("Mapa2")) {
                                 p.teleport(Locations.tijolao2A, PlayerTeleportEvent.TeleportCause.COMMAND);
                             }
                             p.getInventory().removeItem(Util.BedLeave);

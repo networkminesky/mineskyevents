@@ -62,19 +62,18 @@ public class EventsMessage {
         switch (event) {
             case "Corrida":
                 String messagec = "**Ganhadores:**";
-                webhook.setContent("LOGS");
                 for (int i = 0; i < 3; i++) {
                     messagec += "\\n**" + playerList.get(i) + "** - " + (i + 1) + "º lugar";
-                    webhook.addEmbed(
-                            new DiscordWebhook.EmbedObject()
-                                    .setColor(Color.YELLOW)
-                                    .setTitle("Corrida LOGS EVENT")
-                                    .setDescription("**Online (Server EVENTOS): **" + Bukkit.getOnlinePlayers().size() + "\\n\\n" + messagec + "\\n\\n**Prêmios:**\\n- **" + premio1 + "** - 1º Lugar\\n- **" + premio2 + "** - 2º Lugar\\n- **" + premio3 + "** - 3º Lugar\\n\\n**Feito por:**\\n- **Plugin MINESKY-EVENTS**")
-                                    .setThumbnail("https://cdn.discordapp.com/icons/672661692395814933/85e041ae10b469dcd4de85db0892d35e.png")
-                                    .setFooter("LOG EVENTS (MINESKY NETWORK)", "https://cdn.discordapp.com/icons/672661692395814933/85e041ae10b469dcd4de85db0892d35e.png")
-
-                    );
                 }
+                webhook.addEmbed(
+                        new DiscordWebhook.EmbedObject()
+                                .setColor(Color.YELLOW)
+                                .setTitle("Corrida LOGS EVENT")
+                                .setDescription("**Online (Server EVENTOS): **" + Bukkit.getOnlinePlayers().size() + "\\n\\n" + messagec + "\\n\\n**Prêmios:**\\n- **" + premio1 + "** - 1º Lugar\\n- **" + premio2 + "** - 2º Lugar\\n- **" + premio3 + "** - 3º Lugar\\n\\n**Feito por:**\\n- **Plugin MINESKY-EVENTS**")
+                                .setThumbnail("https://cdn.discordapp.com/icons/672661692395814933/85e041ae10b469dcd4de85db0892d35e.png")
+                                .setFooter("LOG EVENTS (MINESKY NETWORK)", "https://cdn.discordapp.com/icons/672661692395814933/85e041ae10b469dcd4de85db0892d35e.png")
+
+                );
                 try {
                     webhook.execute();
                 } catch (IOException e) {
@@ -84,18 +83,17 @@ public class EventsMessage {
                 break;
             case "CorridaBoat":
                 String messagecb = "**Ganhadores:**";
-                webhook.setContent("LOGS");
                 for (int i = 0; i < 3; i++) {
                     messagecb += "\\n**" + playerList.get(i) + "** - " + (i + 1) + "º lugar";
-                    webhook.addEmbed(
-                            new DiscordWebhook.EmbedObject()
-                                    .setColor(Color.decode("#5555FF"))
-                                    .setTitle("Corrida de barco LOGS EVENT")
-                                    .setDescription("**Online (Server EVENTOS): **" + Bukkit.getOnlinePlayers().size() + "\\n\\n" + messagecb + "\\n\\n**Prêmios:**\\n- **" + premio1 + "** - 1º Lugar\\n- **" + premio2 + "** - 2º Lugar\\n- **" + premio3 + "** - 3º Lugar\\n\\n**Feito por:**\\n- **Plugin MINESKY-EVENTS**")
-                                    .setThumbnail("https://cdn.discordapp.com/icons/672661692395814933/85e041ae10b469dcd4de85db0892d35e.png")
-                                    .setFooter("MINESKY TESTE EMBED", "https://cdn.discordapp.com/icons/672661692395814933/85e041ae10b469dcd4de85db0892d35e.png")
-                    );
                 }
+                webhook.addEmbed(
+                        new DiscordWebhook.EmbedObject()
+                                .setColor(Color.decode("#5555FF"))
+                                .setTitle("Corrida de barco LOGS EVENT")
+                                .setDescription("**Online (Server EVENTOS): **" + Bukkit.getOnlinePlayers().size() + "\\n\\n" + messagecb + "\\n\\n**Prêmios:**\\n- **" + premio1 + "** - 1º Lugar\\n- **" + premio2 + "** - 2º Lugar\\n- **" + premio3 + "** - 3º Lugar\\n\\n**Feito por:**\\n- **Plugin MINESKY-EVENTS**")
+                                .setThumbnail("https://cdn.discordapp.com/icons/672661692395814933/85e041ae10b469dcd4de85db0892d35e.png")
+                                .setFooter("LOG EVENTS (MINESKY NETWORK)", "https://cdn.discordapp.com/icons/672661692395814933/85e041ae10b469dcd4de85db0892d35e.png")
+                );
                 try {
                     webhook.execute();
                 } catch (IOException e) {
