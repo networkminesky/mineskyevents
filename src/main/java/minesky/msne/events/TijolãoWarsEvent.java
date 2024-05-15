@@ -25,9 +25,13 @@ public class TijolãoWarsEvent {
     public static Set<Player> playerson = new HashSet<>();
     public static List<Player> mortos = new ArrayList<>();
     public static BukkitRunnable temporizador;
+    private static final List<String> mapas = Arrays.asList("Mapa1", "Mapa2");
+    public static String selectedMap;
+    private static final Random random = new Random();
     public static void iniciarEvento() {
         MineSkyEvents.event = "TijolãoWars";
         Util.sendMessageBGMSNE("TijolãoWars");
+        selectedMap = selectMapa();
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.hasPermission("mineskyevents.bypass.join")) {
                 Bukkit.dispatchCommand(player, "event entrar");
@@ -65,7 +69,7 @@ public class TijolãoWarsEvent {
         if (!contagemI && playerson.size() >= 4) {
             temporizador.cancel();
             new BukkitRunnable() {
-                int tempoRestante = 180;
+                int tempoRestante = 60;
 
                 @Override
                 public void run() {
@@ -85,7 +89,12 @@ public class TijolãoWarsEvent {
                         contagem = false;
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (!Util.PDVE(p)) return;
-                            p.teleport(Locations.tijolaoA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            if (selectMapa().equals("Mapa1")) {
+                                p.teleport(Locations.tijolaoA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            if (selectMapa().equals("Mapa2")) {
+                                p.teleport(Locations.tijolao2A, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
                             p.getInventory().removeItem(Util.BedLeave);
                             p.getInventory().removeItem(Util.Head);
                             ItemStack bricks = new ItemStack(Material.BRICK, 64);
@@ -171,5 +180,8 @@ public class TijolãoWarsEvent {
                     throw new RuntimeException(e);
                 }
             }
+    }
+    public static String selectMapa() {
+        return mapas.get(random.nextInt(mapas.size()));
     }
 }

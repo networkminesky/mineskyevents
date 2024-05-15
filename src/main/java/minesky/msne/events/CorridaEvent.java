@@ -62,7 +62,7 @@ public class CorridaEvent {
         if (!contagemI && playerson.size() >= 4) {
             temporizador.cancel();
             new BukkitRunnable() {
-                int tempoRestante = 180;
+                int tempoRestante = 60;
 
                 @Override
                 public void run() {

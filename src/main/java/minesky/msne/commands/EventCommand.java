@@ -176,7 +176,6 @@ public class EventCommand implements CommandExecutor, TabCompleter {
             switch (MineSkyEvents.event) {
                 case "TijolãoWars":
                     if (!TijolãoWarsEvent.contagem && TijolãoWarsEvent.contagemI) {
-                        player.teleport(Locations.tijolao, PlayerTeleportEvent.TeleportCause.COMMAND);
                         Util.Head = Util.head(player);
                         player.getInventory().setItem(8, Util.BedLeave);
                         player.getInventory().setItem(4, Util.Head);
@@ -205,7 +204,13 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
                         @Override
                         public void run() {
-                            player.teleport(Locations.tijolao, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            if (TijolãoWarsEvent.selectedMap.equals("Mapa1")) {
+                                player.teleport(Locations.tijolao, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            if (TijolãoWarsEvent.selectedMap.equals("Mapa2")) {
+                                player.teleport(Locations.tijolao2, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
                         }
                     }, 20L);
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -216,19 +221,6 @@ public class EventCommand implements CommandExecutor, TabCompleter {
 
                     break;
                 case "Corrida":
-                    if (!CorridaEvent.contagem && CorridaEvent.contagemI) {
-                        player.teleport(Locations.corrida, PlayerTeleportEvent.TeleportCause.COMMAND);
-                        Util.Head = Util.head(player);
-                        player.getInventory().setItem(8, Util.BedLeave);
-                        player.getInventory().setItem(4, Util.Head);
-                        config.set("EventSpect", true);
-                        try {
-                            config.save(file);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return true;
-                    }
                     Util.Head = Util.head(player);
                     clearInventory(player);
                     player.getInventory().setItem(8, Util.BedLeave);
@@ -247,6 +239,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         @Override
                         public void run() {
                             player.teleport(Locations.corrida, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
                         }
                     }, 20L);
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -254,22 +247,8 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         int playersone = CorridaEvent.playerson.size();
                         p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
                     }
-
                     break;
                 case "CorridaBoat":
-                    if (!CorridaBoatEvent.contagem && CorridaBoatEvent.contagemI) {
-                        player.teleport(Locations.corridaboat, PlayerTeleportEvent.TeleportCause.COMMAND);
-                        Util.Head = Util.head(player);
-                        player.getInventory().setItem(8, Util.BedLeave);
-                        player.getInventory().setItem(4, Util.Head);
-                        config.set("EventSpect", true);
-                        try {
-                            config.save(file);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return true;
-                    }
                     Util.Head = Util.head(player);
                     clearInventory(player);
                     player.getInventory().setItem(8, Util.BedLeave);
@@ -288,6 +267,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         @Override
                         public void run() {
                             player.teleport(Locations.corridaboat, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
                         }
                     }, 20L);
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -328,6 +308,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         @Override
                         public void run() {
                             player.teleport(Locations.sumo, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
                         }
                     }, 20L);
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -678,7 +659,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 FileConfiguration configfor = DataManager.getConfiguration(file);
                 if (!player1.hasPermission("mineskyevents.notify.moderation")) return true;
                 if (!configfor.getBoolean("Notification")) return true;
-                player1.sendMessage("§c&lNotificação §7» §7O jogador §b" + j.getName() + "§7 foi kickado do evento por§b " + s.getName() + "§7. Motivo: §b" + reason);
+                player1.sendMessage("§c§lNotificação §7» §7O jogador §b" + j.getName() + "§7 foi kickado do evento por§b " + s.getName() + "§7. Motivo: §b" + reason);
             }
                     File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                     FileConfiguration config = DataManager.getConfiguration(file);
@@ -708,11 +689,12 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
         if (args[0].equalsIgnoreCase("blacklist")) {
-            if (s.hasPermission("mineskyevents.command.event.blacklist")) {
+            if (!s.hasPermission("mineskyevents.command.event.blacklist")) {
                 s.sendMessage("§8[§c!§8] §cVocê não pode executar esse comando.");
                 return true;
             }
-            FileConfiguration config = ConfigManager.getConfig("config.yml");
+            File file = DataManager.getFile("config.yml");
+            FileConfiguration config = DataManager.getConfiguration(file);
             String event = args[2];
             Player pb = Bukkit.getPlayer(args[3]);
             switch (event) {
@@ -742,7 +724,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     blacklistname.add(pb.getName());
                     config.set("blacklist." + event + ".list", blacklistname);
                     try {
-                        config.save("config.yml");
+                        config.save(file);
                         s.sendMessage("§8[§a!§8] §aVocê adicionar o " + pb.getName() + " na blacklist do evento " + event + " com sucesso!");
                     } catch (IOException e) {
                         s.sendMessage("§8[§c!§8] §cOcorreu um erro ao adicionar o player á blacklist");

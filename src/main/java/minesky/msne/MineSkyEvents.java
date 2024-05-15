@@ -8,6 +8,7 @@ import minesky.msne.enums.JarType;
 import minesky.msne.enums.Version;
 import minesky.msne.system.PlayerData;
 import minesky.msne.system.PlayerInfo;
+import minesky.msne.system.event.EventStopping;
 import minesky.msne.utils.Command;
 import minesky.msne.utils.Util;
 import org.bukkit.Bukkit;
@@ -53,6 +54,7 @@ public final class MineSkyEvents extends JavaPlugin {
     @Override
     public void onDisable() {
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §7-------------------------------------------------");
+        EventStopping.Files();
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §cPlugin successfully disabled!");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §7-------------------------------------------------");
     }

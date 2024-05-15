@@ -38,7 +38,7 @@ public class EventVerification {
                 FileConfiguration configfor = DataManager.getConfiguration(file);
                 if (!player1.hasPermission("mineskyevents.notify.blacklist")) return true;
                 if (!configfor.getBoolean("Notification")) return true;
-                player1.sendMessage("§c&lNotificação §7» §7O jogador §b" + player.getName() + " §7tentou entrar no evento. §8(§7BlackList§8)");
+                player1.sendMessage("§c§lNotificação §7» §7O jogador §b" + player.getName() + " §7tentou entrar no evento. §8(§7BlackList§8)");
             }
             return true;
         }
