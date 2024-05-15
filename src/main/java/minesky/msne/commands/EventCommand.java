@@ -25,6 +25,7 @@ import java.util.List;
 
 
 public class EventCommand implements CommandExecutor, TabCompleter {
+    private static String selectedMap;
     public List<String> strings = new ArrayList<>();
     public List<String> id = new ArrayList<>();
     public List<String> names = new ArrayList<>();
@@ -41,6 +42,10 @@ public class EventCommand implements CommandExecutor, TabCompleter {
         names.add("TNTRun");
         names.add("CorridaBoat");
         names.add("Sumo");
+        names.add("Mini-Wars");
+        names.add("Esconde-esconde");
+        names.add("Ruínas");
+        names.add("CopaPVP");
         if (args.length == 1) {
             for (String idif : id) {
                 for (int i = 1; i <= idif.length(); i++) {
@@ -92,6 +97,35 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         strings.addAll(Util.PVE());
                     }
                 }
+            }
+        }
+        if (args.length == 3 && args[0].equalsIgnoreCase("anunciar")) {
+            strings.clear();
+            if (!s.hasPermission("mineskyevents.command.event.anunciar")) return strings;
+            if (args[2].equalsIgnoreCase("Mini-Wars")) {
+                strings.clear();
+                strings.add("Mapa-1");
+                strings.add("Mapa-2");
+                strings.add("Mapa-3");
+                strings.add("Mapa-4");
+                strings.add("Mapa-5");
+                return strings;
+            }
+            if (args[2].equalsIgnoreCase("CopaPVP")) {
+                strings.clear();
+                strings.add("Mapa-1");
+                return strings;
+            }
+            if (args[0].equalsIgnoreCase("Esconde-Esconde")) {
+                strings.clear();
+                strings.add("Mapa-1");
+                strings.add("Mapa-2");
+                return strings;
+            }
+            if (args[0].equalsIgnoreCase("Ruínas")) {
+                strings.clear();
+                strings.add("Mapa-1");
+                return strings;
             }
         }
         if (args.length == 3 && args[0].equalsIgnoreCase("set")) {
@@ -318,6 +352,81 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     }
 
                     break;
+                case "Mini-Wars":
+                    clearInventory(player);
+                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                        @Override
+                        public void run() {
+                            if (selectedMap.equalsIgnoreCase("Mapa-1")) {
+                                player.teleport(Locations.miniwars, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            if (selectedMap.equalsIgnoreCase("Mapa-2")) {
+                                player.teleport(Locations.miniwars2, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            if (selectedMap.equalsIgnoreCase("Mapa-3")) {
+                                player.teleport(Locations.miniwars3, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            if (selectedMap.equalsIgnoreCase("Mapa-4")) {
+                                player.teleport(Locations.miniwars4, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            if (selectedMap.equalsIgnoreCase("Mapa-5")) {
+                                player.teleport(Locations.miniwars5, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
+                        }
+                    }, 20L);
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage("§7" + player.getName() + " §eentrou no evento.");
+                    }
+                    break;
+                case "CopaPVP":
+                    clearInventory(player);
+                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                        @Override
+                        public void run() {
+                            if (selectedMap.equalsIgnoreCase("Mapa-1")) {
+                                player.teleport(Locations.copapvp, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
+                        }
+                    }, 20L);
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage("§7" + player.getName() + " §eentrou no evento.");
+                    }
+                    break;
+                case "Esconde-esconde":
+                    clearInventory(player);
+                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                        @Override
+                        public void run() {
+                            if (selectedMap.equalsIgnoreCase("Mapa-1")) {
+                                player.teleport(Locations.esconde, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            if (selectedMap.equalsIgnoreCase("Mapa-2")) {
+                                player.teleport(Locations.esconde2, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
+                        }
+                    }, 20L);
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage("§7" + player.getName() + " §eentrou no evento.");
+                    }
+                    break;
+                case "Ruínas":
+                    clearInventory(player);
+                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                        @Override
+                        public void run() {
+                            if (selectedMap.equalsIgnoreCase("Mapa-1")) {
+                                player.teleport(Locations.ruinas, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
+                        }
+                    }, 20L);
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage("§7" + player.getName() + " §eentrou no evento.");
+                    }
+                    break;
             }
         }
         if (args[0].equalsIgnoreCase("anunciar")) {
@@ -342,6 +451,32 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     Util.sendMessageBGMSNE("Sumo");
                     break;
             }
+            switch (args[1].toLowerCase()) {
+                case "mini-wars":
+                    if (args.length < 3) return true;
+                    MineSkyEvents.event = "Mini-Wars";
+                    selectedMap = args[2];
+                    Util.sendMessageBGMSNE("Mini-Wars");
+                    break;
+                case "copapvp":
+                    if (args.length < 3) return true;
+                    MineSkyEvents.event = "CopaPVP";
+                    selectedMap = args[2];
+                    Util.sendMessageBGMSNE("CopaPVP");
+                    break;
+                case "esconde-esconde":
+                    if (args.length < 3) return true;
+                    MineSkyEvents.event = "Esconde-esconde";
+                    selectedMap = args[2];
+                    Util.sendMessageBGMSNE("Esconde-esconde");
+                    break;
+                case "ruínas":
+                    if (args.length < 3) return true;
+                    MineSkyEvents.event = "Ruínas";
+                    selectedMap = args[2];
+                    Util.sendMessageBGMSNE("Ruínas");
+                    break;
+            }
         }
         if (args[0].equalsIgnoreCase("start")) {
             if (!s.hasPermission("mineskyevents.command.event.start")) {
@@ -352,33 +487,45 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 s.sendMessage("§8[§c!§8] §cInforme um evento");
                 return true;
             }
-            switch (args[1]) {
-                case "Spleef":
+            switch (args[1].toLowerCase()) {
+                case "spleef":
                     //SpleefEvent.iniciarEvento();
                     s.sendMessage("§8[§c!§8] §cEvento indisponível.");
                     break;
-                case "TijolãoWars":
+                case "tijolãowars":
                     TijolãoWarsEvent.iniciarEvento();
                     break;
-                case "Runners":
+                case "runners":
                     //RunnersEvent.iniciarEvento();
                     s.sendMessage("§8[§c!§8] §cEvento indisponível.");
                     break;
-                case "Corrida":
+                case "corrida":
                     CorridaEvent.iniciarEvento();
                     break;
-                case "CorridaBoat":
+                case "corridaboat":
                     CorridaBoatEvent.iniciarEvento();
                     break;
-                case "PegaBandeira":
+                case "pegabandeira":
                     //orridaEvent.iniciarEvento();
                     s.sendMessage("§8[§c!§8] §cEvento indisponível.");
                     break;
-                case "TNTRun":
+                case "tntrun":
                     TNTRunEvent.iniciarEvento();
                     break;
-                case "Sumo":
+                case "sumo":
                     SumoEvent.iniciarEvento();
+                    break;
+                case "mini-wars":
+                    s.sendMessage("§8[§c!§8] §cEste evento não pode ser iniciado. Usage: /event anunciar Mini-Wars (mapa)");
+                    break;
+                case "copapvp":
+                    s.sendMessage("§8[§c!§8] §cEste evento não pode ser iniciado. Usage: /event anunciar CopaPVP (mapa)");
+                    break;
+                case "esconde-esconde":
+                    s.sendMessage("§8[§c!§8] §cEste evento não pode ser iniciado. Usage: /event anunciar Esconde-esconde (mapa)");
+                    break;
+                case "ruínas":
+                    s.sendMessage("§8[§c!§8] §cEste evento não pode ser iniciado. Usage: /event anunciar Ruínas (mapa)");
                     break;
             }
         }
@@ -399,16 +546,16 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                 FileConfiguration config = DataManager.getConfiguration(file);
 
                                 Locations.tijolao = loc;
-                                config.set("Tijolão", loc);
-                                config.set("Tijolão.world", loc.getWorld().getName());
-                                config.set("Tijolão.x", Double.valueOf(loc.getX()));
-                                config.set("Tijolão.y", Double.valueOf(loc.getY()));
-                                config.set("Tijolão.z", Double.valueOf(loc.getZ()));
-                                config.set("Tijolão.yaw", Float.valueOf(loc.getYaw()));
-                                config.set("Tijolão.pitch", Float.valueOf(loc.getPitch()));
+                                config.set("TijolãoWars.1", loc);
+                                config.set("TijolãoWars.1.world", loc.getWorld().getName());
+                                config.set("TijolãoWars.1.x", Double.valueOf(loc.getX()));
+                                config.set("TijolãoWars.1.y", Double.valueOf(loc.getY()));
+                                config.set("TijolãoWars.1.z", Double.valueOf(loc.getZ()));
+                                config.set("TijolãoWars.1.yaw", Float.valueOf(loc.getYaw()));
+                                config.set("TijolãoWars.1.pitch", Float.valueOf(loc.getPitch()));
                                 try {
                                     config.save(file);
-                                    s.sendMessage("§8[§a!§8] §aSpawn de Tijolão Wars setado para os eventos com sucesso.");
+                                    s.sendMessage("§8[§a!§8] §aSpawn de Tijolão Wars §8(§aMapa 1§8) setado para os eventos com sucesso.");
                                 } catch (IOException e) {
                                     Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                                 }
@@ -442,16 +589,16 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                 FileConfiguration config = DataManager.getConfiguration(file);
 
                                 Locations.tijolao2 = loc;
-                                config.set("Tijolão2", loc);
-                                config.set("Tijolão2.world", loc.getWorld().getName());
-                                config.set("Tijolão2.x", Double.valueOf(loc.getX()));
-                                config.set("Tijolão2.y", Double.valueOf(loc.getY()));
-                                config.set("Tijolão2.z", Double.valueOf(loc.getZ()));
-                                config.set("Tijolão2.yaw", Float.valueOf(loc.getYaw()));
-                                config.set("Tijolão2.pitch", Float.valueOf(loc.getPitch()));
+                                config.set("TijolãoWars.2", loc);
+                                config.set("TijolãoWars.2.world", loc.getWorld().getName());
+                                config.set("TijolãoWars.2.x", Double.valueOf(loc.getX()));
+                                config.set("TijolãoWars.2.y", Double.valueOf(loc.getY()));
+                                config.set("TijolãoWars.2.z", Double.valueOf(loc.getZ()));
+                                config.set("TijolãoWars.2.yaw", Float.valueOf(loc.getYaw()));
+                                config.set("TijolãoWars.2.pitch", Float.valueOf(loc.getPitch()));
                                 try {
                                     config.save(file);
-                                    s.sendMessage("§8[§a!§8] §aSpawn de Tijolão Wars setado para os eventos com sucesso.");
+                                    s.sendMessage("§8[§a!§8] §aSpawn de §lTijolão Wars §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
                                 } catch (IOException e) {
                                     Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                                 }
@@ -530,7 +677,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
-            if (args[1].equalsIgnoreCase("CorridaBoat")) {
+                    if (args[1].equalsIgnoreCase("CorridaBoat")) {
                 if (args[3].equalsIgnoreCase("1")) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
@@ -578,7 +725,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
-            if (args[1].equalsIgnoreCase("Sumo")) {
+                    if (args[1].equalsIgnoreCase("Sumo")) {
                 if (args[3].equalsIgnoreCase("1")) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
@@ -617,6 +764,224 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         try {
                             config.save(file);
                             s.sendMessage("§8[§a!§8] §aArena de Sumo setado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else {
+                    s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
+                }
+            }
+                    if (args[1].equalsIgnoreCase("Mini-Wars")) {
+                if (args[3].equalsIgnoreCase("1")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.miniwars = loc;
+                        config.set("Mini-Wars.1", loc);
+                        config.set("Mini-Wars.1.world", loc.getWorld().getName());
+                        config.set("Mini-Wars.1.x", Double.valueOf(loc.getX()));
+                        config.set("Mini-Wars.1.y", Double.valueOf(loc.getY()));
+                        config.set("Mini-Wars.1.z", Double.valueOf(loc.getZ()));
+                        config.set("Mini-Wars.1.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("Mini-Wars.1.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de Mini-Wars §8(§aMapa 1§8) setado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else if (args[3].equalsIgnoreCase("2")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.miniwars2 = loc;
+                        config.set("Mini-Wars.2", loc);
+                        config.set("Mini-Wars.2.world", loc.getWorld().getName());
+                        config.set("Mini-Wars.2.x", Double.valueOf(loc.getX()));
+                        config.set("Mini-Wars.2.y", Double.valueOf(loc.getY()));
+                        config.set("Mini-Wars.2.z", Double.valueOf(loc.getZ()));
+                        config.set("Mini-Wars.2.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("Mini-Wars.2.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de Mini-Wars §8(§aMapa 2§8) setado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else if (args[3].equalsIgnoreCase("3")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.miniwars3 = loc;
+                        config.set("Mini-Wars.3", loc);
+                        config.set("Mini-Wars.3.world", loc.getWorld().getName());
+                        config.set("Mini-Wars.3.x", Double.valueOf(loc.getX()));
+                        config.set("Mini-Wars.3.y", Double.valueOf(loc.getY()));
+                        config.set("Mini-Wars.3.z", Double.valueOf(loc.getZ()));
+                        config.set("Mini-Wars.3.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("Mini-Wars.3.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de Mini-Wars §8(§aMapa 3§8) setado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else if (args[3].equalsIgnoreCase("4")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.miniwars4 = loc;
+                        config.set("Mini-Wars.4", loc);
+                        config.set("Mini-Wars.4.world", loc.getWorld().getName());
+                        config.set("Mini-Wars.4.x", Double.valueOf(loc.getX()));
+                        config.set("Mini-Wars.4.y", Double.valueOf(loc.getY()));
+                        config.set("Mini-Wars.4.z", Double.valueOf(loc.getZ()));
+                        config.set("Mini-Wars.4.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("Mini-Wars.4.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de Mini-Wars §8(§aMapa 4§8) setado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else if (args[3].equalsIgnoreCase("5")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.miniwars5 = loc;
+                        config.set("Mini-Wars.5", loc);
+                        config.set("Mini-Wars.5.world", loc.getWorld().getName());
+                        config.set("Mini-Wars.5.x", Double.valueOf(loc.getX()));
+                        config.set("Mini-Wars.5.y", Double.valueOf(loc.getY()));
+                        config.set("Mini-Wars.5.z", Double.valueOf(loc.getZ()));
+                        config.set("Mini-Wars.5.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("Mini-Wars.5.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de Mini-Wars §8(§aMapa 5§8) setado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else {
+                    s.sendMessage("§8[§c!§8] §cEste evento só tem 5 mapa.");
+                }
+            }
+                    if (args[1].equalsIgnoreCase("CopaPVP")) {
+                if (args[3].equalsIgnoreCase("1")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.copapvp = loc;
+                        config.set("CopaPVP", loc);
+                        config.set("CopaPVP.world", loc.getWorld().getName());
+                        config.set("CopaPVP.x", Double.valueOf(loc.getX()));
+                        config.set("CopaPVP.y", Double.valueOf(loc.getY()));
+                        config.set("CopaPVP.z", Double.valueOf(loc.getZ()));
+                        config.set("CopaPVP.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("CopaPVP.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn da CopaPVP setado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else {
+                    s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
+                }
+            }
+                    if (args[1].equalsIgnoreCase("Esconde-esconde")) {
+                if (args[3].equalsIgnoreCase("1")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.esconde = loc;
+                        config.set("Esconde-esconde.1", loc);
+                        config.set("Esconde-esconde.1.world", loc.getWorld().getName());
+                        config.set("Esconde-esconde.1.x", Double.valueOf(loc.getX()));
+                        config.set("Esconde-esconde.1.y", Double.valueOf(loc.getY()));
+                        config.set("Esconde-esconde.1.z", Double.valueOf(loc.getZ()));
+                        config.set("Esconde-esconde.1.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("Esconde-esconde.1.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de Tijolão Wars §8(§aMapa 1§8) setado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else if (args[3].equalsIgnoreCase("2")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.esconde2 = loc;
+                        config.set("Esconde-esconde.2", loc);
+                        config.set("Esconde-esconde.2.world", loc.getWorld().getName());
+                        config.set("Esconde-esconde.2.x", Double.valueOf(loc.getX()));
+                        config.set("Esconde-esconde.2.y", Double.valueOf(loc.getY()));
+                        config.set("Esconde-esconde.2.z", Double.valueOf(loc.getZ()));
+                        config.set("Esconde-esconde.2.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("Esconde-esconde.2.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lEsconde-esconde §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else {
+                    s.sendMessage("§8[§c!§8] §cEste evento só tem 2 mapa.");
+                }
+            }
+                    if (args[1].equalsIgnoreCase("Ruínas")) {
+                if (args[3].equalsIgnoreCase("1")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.ruinas = loc;
+                        config.set("Ruínas", loc);
+                        config.set("Ruínas.world", loc.getWorld().getName());
+                        config.set("Ruínas.x", Double.valueOf(loc.getX()));
+                        config.set("Ruínas.y", Double.valueOf(loc.getY()));
+                        config.set("Ruínas.z", Double.valueOf(loc.getZ()));
+                        config.set("Ruínas.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("Ruínas.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de Ruínas setado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }

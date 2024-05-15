@@ -1,20 +1,21 @@
 # =--------------------------------= #
 # +          Localizações          + #
 # =--------------------------------= #
-Tijolão:
-  world: world
-  x: -15.0
-  y: 100.0
-  z: -15.0
-  yaw: 112.50008
-  pitch: 2.1000016
-Tijolão2:
-  world: world
-  x: -15.0
-  y: 100.0
-  z: -15.0
-  yaw: 112.50008
-  pitch: 2.1000016
+TijolãoWars:
+  1:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+  2:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
 Corrida:
   world: world
   x: -15.0
@@ -36,21 +37,87 @@ Sumo:
   z: -15.0
   yaw: 112.50008
   pitch: 2.1000016
+Mini-Wars:
+  1:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+  2:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+  3:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+  4:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+  5:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+CopaPVP:
+  world: world
+  x: -15.0
+  y: 100.0
+  z: -15.0
+  yaw: 112.50008
+  pitch: 2.1000016
+Esconde-esconde:
+  1:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+  2:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+Ruínas:
+  world: world
+  x: -15.0
+  y: 100.0
+  z: -15.0
+  yaw: 112.50008
+  pitch: 2.1000016
 arena:
-  Tijolão:
-      world: world
-      x: -15.0
-      y: 100.0
-      z: -15.0
-      yaw: 112.50008
-      pitch: 2.1000016
-  Tijolão2:
-      world: world
-      x: -15.0
-      y: 100.0
-      z: -15.0
-      yaw: 112.50008
-      pitch: 2.1000016
+  TijolãoWars:
+  1:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+  2:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
   Corrida:
       world: world
       x: -15.0
