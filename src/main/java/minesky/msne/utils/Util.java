@@ -29,26 +29,7 @@ public class Util {
     public static ItemStack Head;
     public static ItemStack SumoItem;
     public static ItemStack Barco;
-    public static <K, V> Map<String, Integer> mapToMapInt(Map<K, V> input) {
-        Map<String, Integer> output = new HashMap<>();
-        for (Map.Entry<K, V> entry : input.entrySet()) {
-            try {
-                output.put(entry.getKey().toString(), Integer.valueOf(Integer.parseInt(entry.getValue().toString())));
-            } catch (Throwable throwable) {}
-        }
-        return output;
-    }
 
-    public static boolean stringContainsSpecialCharacters(String input) {
-        return pattern.matcher(input).find();
-    }
-
-    public static String getSpecialCharacters(String input) {
-        Matcher matcher = pattern.matcher(input);
-        if (matcher.find())
-            return matcher.group();
-        return "";
-    }
 
     public static String serializeLocation(Location l) {
         return String.valueOf(l.getWorld().getName()) + ',' +
@@ -67,11 +48,6 @@ public class Util {
                 Double.parseDouble(location[3]),
                 Float.parseFloat(location[4]),
                 Float.parseFloat(location[5]));
-    }
-    public static String LocationR(Location l) {
-        return l.getX() + ", " +
-                l.getY() + ", " +
-                l.getZ();
     }
 
     public static String Color(String s) {
@@ -349,32 +325,6 @@ public class Util {
         return head;
     }
 
-
-    public static ChatColor hexToChatColor(String hexCode) {
-        return ChatColor.getByChar(hexCode.substring(1));
-    }
-
-
-    public static String colorizeMessage(String message) {
-
-        message = ChatColor.translateAlternateColorCodes('&', message);
-
-
-        Pattern pattern = Pattern.compile("\\{#[a-fA-F0-9]{6}}");
-        Matcher matcher = pattern.matcher(message);
-
-
-        while (matcher.find()) {
-            String match = matcher.group();
-            ChatColor color = hexToChatColor(match);
-            message = message.replace(match, color.toString());
-        }
-
-        return message;
-    }
-
-
-
     public static void send(Player player, String s) {
         player.sendMessage(Color(Prefix() + " &8» &c" + s));
     }
@@ -387,5 +337,4 @@ public class Util {
         return "§8[§6MineSky Events§8]";
     }
 
-    private static final Pattern pattern = Pattern.compile("[^A-zÀ-ü0-9@$]");
 }

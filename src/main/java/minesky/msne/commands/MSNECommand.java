@@ -119,8 +119,11 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                 EventsMessage.sendLogEventPLIST("Corrida", playerList, premio1, premio2, premio3);
                 playerList.clear();
                 CorridaEvent.playerson.clear();
+                CorridaEvent.contagem = true;
+                CorridaEvent.contagemI = false;
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (Util.PDVE(p) || Util.PDVES(p)) {
+                        EventCommand.RevealPlayer(player);
                         Util.sendConectionBCMSNE(p);
                         File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
                         FileConfiguration config = DataManager.getConfiguration(file);
@@ -195,8 +198,11 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                     playerList.clear();
                     playerBOATLIST.clear();
                     CorridaBoatEvent.playerson.clear();
+                    CorridaBoatEvent.contagem = true;
+                    CorridaBoatEvent.contagemI = false;
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(p) || Util.PDVES(p)) {
+                            EventCommand.RevealPlayer(p);
                             Util.sendConectionBCMSNE(p);
                             File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);

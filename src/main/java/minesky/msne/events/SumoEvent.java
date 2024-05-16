@@ -2,6 +2,7 @@ package minesky.msne.events;
 
 import minesky.msne.MineSkyEvents;
 import minesky.msne.addons.Vault;
+import minesky.msne.commands.EventCommand;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.discord.EventsMessage;
@@ -115,6 +116,7 @@ public class SumoEvent {
         MineSkyEvents.event = "OFF";
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Util.PDVE(player) || Util.PDVES(player)) {
+                EventCommand.RevealPlayer(player);
                 Util.sendConectionBCMSNE(player);
                 File file = DataManager.getFile(player.getName().toLowerCase(), "playerdata");
                 FileConfiguration config = DataManager.getConfiguration(file);
@@ -148,6 +150,8 @@ public class SumoEvent {
             EventsMessage.sendLogEvent("Sumo", vencedor, vencedores, premio1, premio2, premio3);
             playerson.clear();
             mortos.clear();
+            contagem = true;
+            contagemI = false;
             for (Player player1 : vencedores) {
                 File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
                 FileConfiguration config = DataManager.getConfiguration(file);

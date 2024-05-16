@@ -1,12 +1,10 @@
 package minesky.msne.system;
 
 import minesky.msne.MineSkyEvents;
+import minesky.msne.commands.EventCommand;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Messages;
-import minesky.msne.events.CorridaBoatEvent;
-import minesky.msne.events.CorridaEvent;
-import minesky.msne.events.SumoEvent;
-import minesky.msne.events.TijolãoWarsEvent;
+import minesky.msne.events.*;
 import minesky.msne.utils.Util;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,6 +25,7 @@ public class PlayerInfo implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
+        EventCommand.RevealPlayer(p);
         File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
         FileConfiguration config = DataManager.getConfiguration(file);
 
@@ -40,7 +39,12 @@ public class PlayerInfo implements Listener {
         }
         if (!p.hasPermission("mineskyevents.bypass.join")) {
             if (MineSkyEvents.event == "TNTRun") {
-                Bukkit.dispatchCommand(e.getPlayer(), "tntrun join mapa1");
+                if (TNTRunEvent.selectedMap.equals("Mapa1")) {
+                    Bukkit.dispatchCommand(p, "tntrun join mapa1");
+                }
+                if (TNTRunEvent.selectedMap.equals("Mapa2")) {
+                    Bukkit.dispatchCommand(p, "tntrun join mapa2");
+                }
                 return;
             }
             Bukkit.dispatchCommand(e.getPlayer(), "event entrar");
@@ -50,6 +54,7 @@ public class PlayerInfo implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         Player p = e.getPlayer();
+        EventCommand.RevealPlayer(p);
         Location location = p.getLocation();
         String loc = Util.serializeLocation(location);
         if (!(MineSkyEvents.event == "OFF")) {
@@ -141,6 +146,7 @@ public class PlayerInfo implements Listener {
 
         if (Util.BedLeave.isSimilar(player.getInventory().getItemInMainHand())) {
             if (Util.PDVES(player)) {
+                EventCommand.RevealPlayer(player);
                 Util.sendConectionBCMSNE(player);
                 File file = DataManager.getFile(player.getName().toLowerCase(), "playerdata");
                 FileConfiguration config = DataManager.getConfiguration(file);
@@ -159,7 +165,7 @@ public class PlayerInfo implements Listener {
             }
 
             if (!Util.PDVE(player)) return;
-
+            EventCommand.RevealPlayer(player);
             Util.sendConectionBCMSNE(player);
 
             File file = DataManager.getFile(player.getName().toLowerCase(), "playerdata");

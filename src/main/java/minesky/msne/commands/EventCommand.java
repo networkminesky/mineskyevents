@@ -16,6 +16,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;
@@ -213,6 +215,19 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         Util.Head = Util.head(player);
                         player.getInventory().setItem(8, Util.BedLeave);
                         player.getInventory().setItem(4, Util.Head);
+                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                            @Override
+                            public void run() {
+                                if (TijolãoWarsEvent.selectedMap.equals("Mapa1")) {
+                                    player.teleport(Locations.tijolaoA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                }
+                                if (TijolãoWarsEvent.selectedMap.equals("Mapa2")) {
+                                    player.teleport(Locations.tijolao2A, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                }
+                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
+                            }
+                        }, 20L);
+                        PlayerSpectator(player);
                         config.set("EventSpect", true);
                         try {
                             config.save(file);
@@ -255,6 +270,26 @@ public class EventCommand implements CommandExecutor, TabCompleter {
 
                     break;
                 case "Corrida":
+                    if (!CorridaEvent.contagem && CorridaEvent.contagemI) {
+                        Util.Head = Util.head(player);
+                        player.getInventory().setItem(8, Util.BedLeave);
+                        player.getInventory().setItem(4, Util.Head);
+                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                            @Override
+                            public void run() {
+                                player.teleport(Locations.corridaA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
+                            }
+                        }, 20L);
+                        PlayerSpectator(player);
+                        config.set("EventSpect", true);
+                        try {
+                            config.save(file);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return true;
+                    }
                     Util.Head = Util.head(player);
                     clearInventory(player);
                     player.getInventory().setItem(8, Util.BedLeave);
@@ -283,6 +318,26 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     }
                     break;
                 case "CorridaBoat":
+                    if (!CorridaBoatEvent.contagem && CorridaBoatEvent.contagemI) {
+                        Util.Head = Util.head(player);
+                        player.getInventory().setItem(8, Util.BedLeave);
+                        player.getInventory().setItem(4, Util.Head);
+                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                            @Override
+                            public void run() {
+                                player.teleport(Locations.corridaboatA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
+                            }
+                        }, 20L);
+                        PlayerSpectator(player);
+                        config.set("EventSpect", true);
+                        try {
+                            config.save(file);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return true;
+                    }
                     Util.Head = Util.head(player);
                     clearInventory(player);
                     player.getInventory().setItem(8, Util.BedLeave);
@@ -316,6 +371,14 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         Util.Head = Util.head(player);
                         player.getInventory().setItem(8, Util.BedLeave);
                         player.getInventory().setItem(4, Util.Head);
+                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                            @Override
+                            public void run() {
+                                player.teleport(Locations.sumoA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
+                            }
+                        }, 20L);
+                        PlayerSpectator(player);
                         config.set("EventSpect", true);
                         try {
                             config.save(file);
@@ -555,7 +618,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                 config.set("TijolãoWars.1.pitch", Float.valueOf(loc.getPitch()));
                                 try {
                                     config.save(file);
-                                    s.sendMessage("§8[§a!§8] §aSpawn de Tijolão Wars §8(§aMapa 1§8) setado para os eventos com sucesso.");
+                                    s.sendMessage("§8[§a!§8] §aSpawn de §lTijolão Wars §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
                                 } catch (IOException e) {
                                     Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                                 }
@@ -567,16 +630,16 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                 FileConfiguration config = DataManager.getConfiguration(file);
 
                                 Locations.tijolaoA = loc;
-                                config.set("arena.Tijolão", loc);
-                                config.set("arena.Tijolão.world", loc.getWorld().getName());
-                                config.set("arena.Tijolão.x", Double.valueOf(loc.getX()));
-                                config.set("arena.Tijolão.y", Double.valueOf(loc.getY()));
-                                config.set("arena.Tijolão.z", Double.valueOf(loc.getZ()));
-                                config.set("arena.Tijolão.yaw", Float.valueOf(loc.getYaw()));
-                                config.set("arena.Tijolão.pitch", Float.valueOf(loc.getPitch()));
+                                config.set("arena.TijolãoWars.1", loc);
+                                config.set("arena.TijolãoWars.1.world", loc.getWorld().getName());
+                                config.set("arena.TijolãoWars.1.x", Double.valueOf(loc.getX()));
+                                config.set("arena.TijolãoWars.1.y", Double.valueOf(loc.getY()));
+                                config.set("arena.TijolãoWars.1.z", Double.valueOf(loc.getZ()));
+                                config.set("arena.TijolãoWars.1.yaw", Float.valueOf(loc.getYaw()));
+                                config.set("arena.TijolãoWars.1.pitch", Float.valueOf(loc.getPitch()));
                                 try {
                                     config.save(file);
-                                    s.sendMessage("§8[§a!§8] §aArena de TijolãoWars setado para os eventos com sucesso.");
+                                    s.sendMessage("§8[§a!§8] §aArena de §lTijolãoWars §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
                                 } catch (IOException e) {
                                     Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                                 }
@@ -610,16 +673,16 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                 FileConfiguration config = DataManager.getConfiguration(file);
 
                                 Locations.tijolao2A = loc;
-                                config.set("arena.Tijolão2", loc);
-                                config.set("arena.Tijolão2.world", loc.getWorld().getName());
-                                config.set("arena.Tijolão2.x", Double.valueOf(loc.getX()));
-                                config.set("arena.Tijolão2.y", Double.valueOf(loc.getY()));
-                                config.set("arena.Tijolão2.z", Double.valueOf(loc.getZ()));
-                                config.set("arena.Tijolão2.yaw", Float.valueOf(loc.getYaw()));
-                                config.set("arena.Tijolão2.pitch", Float.valueOf(loc.getPitch()));
+                                config.set("arena.TijolãoWars.2", loc);
+                                config.set("arena.TijolãoWars.2.world", loc.getWorld().getName());
+                                config.set("arena.TijolãoWars.2.x", Double.valueOf(loc.getX()));
+                                config.set("arena.TijolãoWars.2.y", Double.valueOf(loc.getY()));
+                                config.set("arena.TijolãoWars.2.z", Double.valueOf(loc.getZ()));
+                                config.set("arena.TijolãoWars.2.yaw", Float.valueOf(loc.getYaw()));
+                                config.set("arena.TijolãoWars.2.pitch", Float.valueOf(loc.getPitch()));
                                 try {
                                     config.save(file);
-                                    s.sendMessage("§8[§a!§8] §aArena de TijolãoWars setado para os eventos com sucesso.");
+                                    s.sendMessage("§8[§a!§8] §aArena de §lTijolãoWars §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
                                 } catch (IOException e) {
                                     Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                                 }
@@ -646,7 +709,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("Corrida.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aSpawn de Corrida setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lCorrida §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -667,7 +730,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("arena.Corrida.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aArena de Corrida setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aArena de §lCorrida §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -694,7 +757,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("CorridaBoat.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aSpawn de Corrida de barco setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lCorrida de barco §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -715,7 +778,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("arena.CorridaBoat.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aArena de Corrida de barco setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aArena de §lCorrida de barco §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -742,7 +805,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("Sumo.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aSpawn de Sumo setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lSumo §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -763,7 +826,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("arena.Sumo.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aArena de Sumo setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aArena de §lSumo §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -790,7 +853,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("Mini-Wars.1.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aSpawn de Mini-Wars §8(§aMapa 1§8) setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lMini-Wars §8(§aMapa 1§8)§a setado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -812,7 +875,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("Mini-Wars.2.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aSpawn de Mini-Wars §8(§aMapa 2§8) setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lMini-Wars §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -834,7 +897,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("Mini-Wars.3.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aSpawn de Mini-Wars §8(§aMapa 3§8) setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lMini-Wars §8(§aMapa 3§8)§a setado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -856,7 +919,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("Mini-Wars.4.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aSpawn de Mini-Wars §8(§aMapa 4§8) setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lMini-Wars §8(§aMapa 4§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -878,7 +941,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("Mini-Wars.5.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aSpawn de Mini-Wars §8(§aMapa 5§8) setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lMini-Wars §8(§aMapa 5§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -905,7 +968,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("CopaPVP.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aSpawn da CopaPVP setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aSpawn da §lCopaPVP §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -932,7 +995,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("Esconde-esconde.1.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aSpawn de Tijolão Wars §8(§aMapa 1§8) setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lEsconde-esconde §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -981,7 +1044,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.set("Ruínas.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
-                            s.sendMessage("§8[§a!§8] §aSpawn de Ruínas setado para os eventos com sucesso.");
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lRuínas§a setado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
@@ -1161,5 +1224,17 @@ public class EventCommand implements CommandExecutor, TabCompleter {
         inv.setChestplate(null);
         inv.setLeggings(null);
         inv.setBoots(null);
+    }
+    private void PlayerSpectator(Player p) {
+        p.setAllowFlight(true);
+        p.setFlying(true);
+        p.setInvisible(true);
+        p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
+    }
+    public static void RevealPlayer(Player p) {
+        p.setAllowFlight(false);
+        p.setFlying(false);
+        p.setInvisible(false);
+        p.removePotionEffect(PotionEffectType.INVISIBILITY);
     }
         }
