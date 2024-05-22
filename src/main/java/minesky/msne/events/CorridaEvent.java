@@ -62,7 +62,7 @@ public class CorridaEvent {
         if (!contagemI && playerson.size() >= 4) {
             temporizador.cancel();
             new BukkitRunnable() {
-                int tempoRestante = 60;
+                int tempoRestante = 180;
 
                 @Override
                 public void run() {
@@ -70,11 +70,12 @@ public class CorridaEvent {
                     contagem = true;
                     if (tempoRestante == 180 ||tempoRestante == 60 || tempoRestante == 30 || tempoRestante == 15 || tempoRestante == 10 || tempoRestante == 5 || tempoRestante == 4 || tempoRestante == 3 || tempoRestante == 2 || tempoRestante == 1) {
                         for (Player player : Bukkit.getOnlinePlayers()) {
-                            if (!Util.PDVE(player)) return;
-                            if (tempoRestante == 180) {
-                                player.sendTitle("§a3m", "", 10, 70, 20);
+                            if (Util.PDVE(player)) {
+                                if (tempoRestante == 180) {
+                                    player.sendTitle("§a3m", "", 10, 70, 20);
+                                }
+                                player.sendTitle(ChatColor.RED + String.valueOf(tempoRestante) + "s", "", 10, 70, 20);
                             }
-                            player.sendTitle(ChatColor.RED + String.valueOf(tempoRestante) + "s", "", 10, 70, 20);
                         }
                     }
 

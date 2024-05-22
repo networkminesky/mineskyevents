@@ -23,7 +23,7 @@ public class ConfigManager {
     public static void createConfigFolder(String file, String folder) {
         File dataFolder = new File(MineSkyEvents.get().getDataFolder(), folder);
         if (!dataFolder.exists()) {
-            Bukkit.getConsoleSender().sendMessage("§8[§cSecurityX§8] §cCreating a " + folder + " folder...");
+            Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §cCreating a " + folder + " folder...");
             dataFolder.mkdirs();
         }
         File configFolder = new File(dataFolder, file);

@@ -37,6 +37,20 @@ Sumo:
   z: -15.0
   yaw: 112.50008
   pitch: 2.1000016
+TNTTag:
+  world: world
+  x: -15.0
+  y: 100.0
+  z: -15.0
+  yaw: 112.50008
+  pitch: 2.1000016
+Parapente:
+  world: world
+  x: -15.0
+  y: 100.0
+  z: -15.0
+  yaw: 112.50008
+  pitch: 2.1000016
 Mini-Wars:
   1:
     world: world
@@ -133,6 +147,20 @@ arena:
     yaw: 112.50008
     pitch: 2.1000016
   Sumo:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+  TNTTag:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+  Parapente:
     world: world
     x: -15.0
     y: 100.0

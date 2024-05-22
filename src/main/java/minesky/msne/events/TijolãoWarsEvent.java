@@ -78,38 +78,40 @@ public class TijolãoWarsEvent {
                     contagem = true;
                     if (tempoRestante == 180 ||tempoRestante == 60 || tempoRestante == 30 || tempoRestante == 15 || tempoRestante == 10 || tempoRestante == 5 || tempoRestante == 4 || tempoRestante == 3 || tempoRestante == 2 || tempoRestante == 1) {
                         for (Player player : Bukkit.getOnlinePlayers()) {
-                            if (!Util.PDVE(player)) return;
-                            if (tempoRestante == 180) {
-                                player.sendTitle("§a3m", "", 10, 70, 20);
+                            if (Util.PDVE(player)) {
+                                if (tempoRestante == 180) {
+                                    player.sendTitle("§a3m", "", 10, 70, 20);
+                                }
+                                player.sendTitle(ChatColor.RED + String.valueOf(tempoRestante) + "s", "", 10, 70, 20);
                             }
-                            player.sendTitle(ChatColor.RED + String.valueOf(tempoRestante) + "s", "", 10, 70, 20);
                         }
                     }
 
                     if (tempoRestante == 0) {
                         contagem = false;
                         for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (!Util.PDVE(p)) return;
-                            if (selectedMap.equals("Mapa1")) {
-                                p.teleport(Locations.tijolaoA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            if (selectedMap.equals("Mapa2")) {
-                                p.teleport(Locations.tijolao2A, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            p.getInventory().removeItem(Util.BedLeave);
-                            p.getInventory().removeItem(Util.Head);
-                            ItemStack bricks = new ItemStack(Material.BRICK, 64);
-                            PlayerInventory inventory = p.getInventory();
-
-                            for (int i = 0; i < inventory.getSize(); i++) {
-                                if (i == 40 || (i >= 36 && i <= 39)) {
-                                    continue;
+                            if (Util.PDVE(p)) {
+                                if (selectedMap.equals("Mapa1")) {
+                                    p.teleport(Locations.tijolaoA, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 }
-                                inventory.setItem(i, bricks.clone());
+                                if (selectedMap.equals("Mapa2")) {
+                                    p.teleport(Locations.tijolao2A, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                }
+                                p.getInventory().removeItem(Util.BedLeave);
+                                p.getInventory().removeItem(Util.Head);
+                                ItemStack bricks = new ItemStack(Material.BRICK, 64);
+                                PlayerInventory inventory = p.getInventory();
+
+                                for (int i = 0; i < inventory.getSize(); i++) {
+                                    if (i == 40 || (i >= 36 && i <= 39)) {
+                                        continue;
+                                    }
+                                    inventory.setItem(i, bricks.clone());
+                                }
+                                this.cancel();
                             }
                             this.cancel();
                         }
-                        this.cancel();
                     }
 
                     tempoRestante--;

@@ -22,6 +22,12 @@ blacklist:
   sumo:
     list:
       - hacker2005
+  tnttag:
+    list:
+      - hacker2006
+  parapente:
+    list:
+      - hacker2005
 # =--------------------------------= #
 # +          IP Blacklist          + #
 # =--------------------------------= #
@@ -41,3 +47,9 @@ blacklistip:
   sumo:
     list:
       - 00.00.005
+  tnttag:
+    list:
+      - 00.00.006
+  parapente:
+    list:
+      - 00.00.007

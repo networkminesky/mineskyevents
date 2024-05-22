@@ -27,18 +27,24 @@ public class EventVerification {
             case "Sumo":
                 event = "sumo";
                 break;
+            case "TNTTag":
+                event = "tnttag";
+                break;
         }
-        FileConfiguration config = ConfigManager.getConfig("config.yml");
+        File file = DataManager.getFile("config.yml");
+        FileConfiguration config = DataManager.getConfiguration(file);
         List<String> Blacklist = config.getStringList("blacklist." + event + ".list");
         List<String> BlacklistIP = config.getStringList("blacklistip." + event + ".list");
         if (Blacklist.contains(player.getName()) || BlacklistIP.contains(player.getAddress().getAddress().getHostAddress())) {
             player.sendMessage("§8[§c!§8] §cVocê está na blacklist do evento: " + event);
             for (Player player1 : Bukkit.getOnlinePlayers()) {
-                File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
-                FileConfiguration configfor = DataManager.getConfiguration(file);
-                if (!player1.hasPermission("mineskyevents.notify.blacklist")) return true;
-                if (!configfor.getBoolean("Notification")) return true;
-                player1.sendMessage("§c§lNotificação §7» §7O jogador §b" + player.getName() + " §7tentou entrar no evento. §8(§7BlackList§8)");
+                File filefor = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
+                FileConfiguration configfor = DataManager.getConfiguration(filefor);
+                if (player1.hasPermission("mineskyevents.notify.blacklist")) {
+                    if (configfor.getBoolean("Notification")) {
+                        player1.sendMessage("§c" + player.getName() + " §fTentou entrar no evento. §8(§fBlackList§8)");
+                    }
+                }
             }
             return true;
         }

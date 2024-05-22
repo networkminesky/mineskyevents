@@ -64,7 +64,9 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
         if (args[0].equalsIgnoreCase("give")) {
             player.getInventory().addItem(Util.StoneShovel);
             player.getInventory().addItem(Util.SumoItem);
-            s.sendMessage("§8[§a!§8] §aVocê pegou a pá de ouro do evento §lSPLEEF §ae também pegou o stick do evento §lSUMO");
+            player.getInventory().addItem(Util.TNT);
+            player.getInventory().addItem(Util.Barco);
+            s.sendMessage("§8[§a!§8] §aVocê recebeu todos os itens de eventos.");
             return true;
         }
         if (args[0].equalsIgnoreCase("racefinal")) {

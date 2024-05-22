@@ -29,6 +29,7 @@ public class Util {
     public static ItemStack Head;
     public static ItemStack SumoItem;
     public static ItemStack Barco;
+    public static ItemStack TNT;
 
 
     public static String serializeLocation(Location l) {
@@ -108,16 +109,6 @@ public class Util {
         }
         return playersWithEvent;
     }
-
-    private static String getPlayerNameFromLines(List<String> lines) {
-        for (String line : lines) {
-            if (line.startsWith("Nick: ")) {
-
-                return line.substring("Nick: ".length());
-            }
-        }
-        return null;
-    }
     public static List<String> getOnlinePlayerNames() {
         List<String> onlinePlayerNames = new ArrayList<>();
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
@@ -188,6 +179,27 @@ public class Util {
         }
 
         return stick;
+    }
+    public static ItemStack tnt() {
+        ItemStack tnt = new ItemStack(Material.TNT);
+        ItemMeta meta = tnt.getItemMeta();
+
+        if (meta != null) {
+            meta.setDisplayName("§c§lBatata Quente!");
+            meta.addEnchant(Enchantment.MENDING, 1, true);
+            meta.setUnbreakable(true);
+
+            List<String> lore = new ArrayList<>();
+            lore.add("§7Batata quente (TNT) do TNTTAG");
+            lore.add("");
+            lore.add("§6| §7Descrição§6:");
+            lore.add("  §7Caso tenha ela na sua cabeça e passar entre 15 a 30 segundos ela explode.");
+            meta.setLore(lore);
+
+            tnt.setItemMeta(meta);
+        }
+
+        return tnt;
     }
 
     public static ItemStack createBed() {

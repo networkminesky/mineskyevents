@@ -74,23 +74,25 @@ public class SumoEvent {
                     contagem = true;
                     if (tempoRestante == 180 ||tempoRestante == 60 || tempoRestante == 30 || tempoRestante == 15 || tempoRestante == 10 || tempoRestante == 5 || tempoRestante == 4 || tempoRestante == 3 || tempoRestante == 2 || tempoRestante == 1) {
                         for (Player player : Bukkit.getOnlinePlayers()) {
-                            if (!Util.PDVE(player)) return;
-                            if (tempoRestante == 180) {
-                                player.sendTitle("§a3m", "", 10, 70, 20);
+                            if (Util.PDVE(player)) {
+                                if (tempoRestante == 180) {
+                                    player.sendTitle("§a3m", "", 10, 70, 20);
+                                }
+                                player.sendTitle(ChatColor.RED + String.valueOf(tempoRestante) + "s", "", 10, 70, 20);
                             }
-                            player.sendTitle(ChatColor.RED + String.valueOf(tempoRestante) + "s", "", 10, 70, 20);
                         }
                     }
 
                     if (tempoRestante == 0) {
                         contagem = false;
                         for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (!Util.PDVE(p)) return;
-                            p.teleport(Locations.sumoA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            p.getInventory().removeItem(Util.BedLeave);
-                            p.getInventory().removeItem(Util.Head);
-                            p.getInventory().addItem(Util.SumoItem);
-                            this.cancel();
+                            if (Util.PDVE(p)) {
+                                p.teleport(Locations.sumoA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                p.getInventory().removeItem(Util.BedLeave);
+                                p.getInventory().removeItem(Util.Head);
+                                p.getInventory().addItem(Util.SumoItem);
+                                this.cancel();
+                            }
                         }
                         this.cancel();
                     }

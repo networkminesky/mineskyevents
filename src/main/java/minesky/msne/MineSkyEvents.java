@@ -39,6 +39,7 @@ public final class MineSkyEvents extends JavaPlugin {
         Util.StoneShovel = Util.shovel();
         Util.SumoItem = Util.sumo();
         Util.Barco = Util.barco();
+        Util.TNT = Util.tnt();
         getServer().getMessenger().registerOutgoingPluginChannel(this, "minesky:proxy");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §aConfig loaded.");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §aPlugin successfully initialized!");
@@ -58,7 +59,6 @@ public final class MineSkyEvents extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §cPlugin successfully disabled!");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §7-------------------------------------------------");
     }
-
 
     private void Commands() {
         new Command("msne", new MSNECommand());

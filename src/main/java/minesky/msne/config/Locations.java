@@ -15,6 +15,8 @@ public class Locations {
     public static Location corrida = padrao;
     public static Location corridaboat = padrao;
     public static Location sumo = padrao;
+    public static Location tnttag = padrao;
+    public static Location parapente = padrao;
     public static Location miniwars = padrao;
     public static Location miniwars2 = padrao;
     public static Location miniwars3 = padrao;
@@ -30,6 +32,8 @@ public class Locations {
     public static Location corridaA = padrao;
     public static Location corridaboatA = padrao;
     public static Location sumoA = padrao;
+    public static Location tnttagA = padrao;
+    public static Location parapenteA = padrao;
 
     public static void loadLocations() {
         setLocations();
@@ -46,6 +50,8 @@ public class Locations {
         corrida = getLocationFromConfig(config, "Corrida");
         corridaboat = getLocationFromConfig(config, "CorridaBoat");
         sumo = getLocationFromConfig(config, "Sumo");
+        tnttag = getLocationFromConfig(config, "TNTTag");
+        parapente = getLocationFromConfig(config, "Parapente");
         miniwars = getLocationFromConfig(config, "Mini-Wars.1");
         miniwars = getLocationFromConfig(config, "Mini-Wars.2");
         miniwars = getLocationFromConfig(config, "Mini-Wars.3");
@@ -61,6 +67,8 @@ public class Locations {
         corridaA = getLocationFromConfig(config, "arena.Corrida");
         corridaboatA = getLocationFromConfig(config, "arena.CorridaBoat");
         sumoA = getLocationFromConfig(config, "arena.Sumo");
+        tnttagA = getLocationFromConfig(config, "arena.TNTTag");
+        parapenteA = getLocationFromConfig(config, "arena.Parapente");
     }
 
     private static Location getLocationFromConfig(FileConfiguration config, String path) {
@@ -115,6 +123,22 @@ public class Locations {
         if (sumo == null || sumo.getWorld() == null) {
             tentarValidarNovamente = true;
             sumo = padrao;
+            if (!reavaliar) {
+                Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo spawn");
+            }
+        }
+
+        if (tnttag == null || tnttag.getWorld() == null) {
+            tentarValidarNovamente = true;
+            tnttag = padrao;
+            if (!reavaliar) {
+                Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo spawn");
+            }
+        }
+
+        if (parapente == null || parapente.getWorld() == null) {
+            tentarValidarNovamente = true;
+            parapente = padrao;
             if (!reavaliar) {
                 Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo spawn");
             }
@@ -187,6 +211,22 @@ public class Locations {
         if (sumoA == null || sumoA.getWorld() == null) {
             tentarValidarNovamente = true;
             sumoA = padrao;
+            if (!reavaliar) {
+                Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo arena");
+            }
+        }
+
+        if (tnttagA == null || tnttagA.getWorld() == null) {
+            tentarValidarNovamente = true;
+            tnttagA = padrao;
+            if (!reavaliar) {
+                Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo arena");
+            }
+        }
+
+        if (parapenteA == null || parapenteA.getWorld() == null) {
+            tentarValidarNovamente = true;
+            parapenteA = padrao;
             if (!reavaliar) {
                 Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo arena");
             }

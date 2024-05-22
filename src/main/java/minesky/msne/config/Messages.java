@@ -12,9 +12,6 @@ public class Messages {
     public static String Falied_to_save;
     public static String Invalid_character;
     public static String Similar_nickname;
-    public static String Join;
-    public static String Quit;
-    public static String Blacklist;
 
     public static void loadMessages() {
         FileConfiguration config = ConfigManager.getConfig("messages.yml");
@@ -27,9 +24,6 @@ public class Messages {
         Falied_to_save = getString(config, "falied_to_save");
         Invalid_character = getString(config, "invalid_character");
         Similar_nickname = getString(config, "similar_nickname");
-        Join = getString(config, "join");
-        Quit = getString(config, "quit");
-        Blacklist = getString(config, "blacklist");
     }
 
     private static String getString(FileConfiguration config, String path) {

@@ -7,6 +7,7 @@ import minesky.msne.system.event.EventVerification;
 import minesky.msne.utils.Util;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,6 +32,8 @@ public class EventCommand implements CommandExecutor, TabCompleter {
     public List<String> strings = new ArrayList<>();
     public List<String> id = new ArrayList<>();
     public List<String> names = new ArrayList<>();
+    public List<String> namesA = new ArrayList<>();
+    public List<String> namesF = new ArrayList<>();
     @Override
     public List<String> onTabComplete(CommandSender s, Command cmd, String lbl, String[] args) {
         id.add("anunciar");
@@ -39,22 +42,27 @@ public class EventCommand implements CommandExecutor, TabCompleter {
         id.add("kick");
         id.add("set");
         id.add("start");
+        id.add("finalizar");
         names.add("TijolãoWars");
         names.add("Corrida");
         names.add("TNTRun");
         names.add("CorridaBoat");
         names.add("Sumo");
-        names.add("Mini-Wars");
-        names.add("Esconde-esconde");
-        names.add("Ruínas");
-        names.add("CopaPVP");
+        names.add("TNTTag");
+        names.add("Parapente");
+        namesA.add("Mini-Wars");
+        namesA.add("Esconde-esconde");
+        namesA.add("Ruínas");
+        namesA.add("CopaPVP");
+        namesF.addAll(namesA);
+        namesF.addAll(names);
         if (args.length == 1) {
             for (String idif : id) {
                 for (int i = 1; i <= idif.length(); i++) {
                     if (args[0].equalsIgnoreCase(idif.substring(0, i))) {
                         strings.clear();
                         strings.add(idif);
-                    } else if (args[0].length() == 0) {
+                    } else if (args[0].isEmpty()) {
                         strings.clear();
                         if (s.hasPermission("mineskyevents.command.event.anunciar")) strings.add("anunciar");
                         if (s.hasPermission("mineskyevents.command.event.blacklist")) strings.add("blacklist");
@@ -77,12 +85,42 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 for (int i = 1; i <= name.length() ; i++) {
                     if (args[1].equalsIgnoreCase(name.substring(0, i))) {
                         strings.clear();
-                        if (!s.hasPermission("mineskyevents.command.event.set") || !s.hasPermission("mineskyevents.command.event.start") || !s.hasPermission("mineskyevents.command.event.anunciar")) return strings;
+                        if (!s.hasPermission("mineskyevents.command.event.set") || !s.hasPermission("mineskyevents.command.event.start")) return strings;
                         strings.add(name);
-                    } else if (args[1].length() == 0) {
+                    } else if (args[1].isEmpty()) {
                         strings.clear();
-                        if (!s.hasPermission("mineskyevents.command.event.set") || !s.hasPermission("mineskyevents.command.event.start") || !s.hasPermission("mineskyevents.command.event.anunciar")) return strings;
+                        if (!s.hasPermission("mineskyevents.command.event.set") || !s.hasPermission("mineskyevents.command.event.start")) return strings;
                         strings.addAll(names);
+                    }
+                }
+            }
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("anunciar")) {
+            for (String name : namesA) {
+                for (int i = 1; i <= name.length() ; i++) {
+                    if (args[1].equalsIgnoreCase(name.substring(0, i))) {
+                        strings.clear();
+                        if (!s.hasPermission("mineskyevents.command.event.anunciar")) return strings;
+                        strings.add(name);
+                    } else if (args[1].isEmpty()) {
+                        strings.clear();
+                        if (!s.hasPermission("mineskyevents.command.event.anunciar")) return strings;
+                        strings.addAll(namesA);
+                    }
+                }
+            }
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("finalizar")) {
+            for (String name : namesF) {
+                for (int i = 1; i <= name.length() ; i++) {
+                    if (args[1].equalsIgnoreCase(name.substring(0, i))) {
+                        strings.clear();
+                        if (!s.hasPermission("mineskyevents.command.event.finalizar")) return strings;
+                        strings.add(name);
+                    } else if (args[1].isEmpty()) {
+                        strings.clear();
+                        if (!s.hasPermission("mineskyevents.command.event.finalizar")) return strings;
+                        strings.addAll(namesF);
                     }
                 }
             }
@@ -93,7 +131,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     if (args[1].equalsIgnoreCase(ps.substring(0, i))) {
                         strings.clear();
                         strings.add(ps);
-                    } else if (args[1].length() == 0) {
+                    } else if (args[1].isEmpty()) {
                         strings.clear();
                         if (!s.hasPermission("mineskyevents.command.event.kick")) return strings;
                         strings.addAll(Util.PVE());
@@ -143,7 +181,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         strings.clear();
                         if (!s.hasPermission("mineskyevents.command.event.blacklist")) return strings;
                         strings.add(name);
-                    } else if (args[2].length() == 0) {
+                    } else if (args[2].isEmpty()) {
                         strings.clear();
                         if (!s.hasPermission("mineskyevents.command.event.blacklist")) return strings;
                         strings.addAll(names);
@@ -157,7 +195,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     if (args[3].equalsIgnoreCase(ps.substring(0, i))) {
                         strings.clear();
                         strings.add(ps);
-                    } else if (args[3].length() == 0) {
+                    } else if (args[3].isEmpty()) {
                         strings.clear();
                         strings.addAll(Util.getOnlinePlayerNames());
                     }
@@ -196,7 +234,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
             if (EventVerification.getBlacklist(player, MineSkyEvents.event)) {
-                Bukkit.getLogger().warning(player.getName() + " tentou entrar mas está na blacklist do evento:" + MineSkyEvents.event);
+                Bukkit.getLogger().warning("[MineSky-Events] " + player.getName() + " Tentou entrar mas está na blacklist do evento: " + MineSkyEvents.event);
                 return true;
             }
             if (Util.PDVE(((Player) s).getPlayer())) {
@@ -263,11 +301,11 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                     }, 20L);
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (!Util.PDVE(p)) return true;
-                        int playersone = TijolãoWarsEvent.playerson.size();
-                        p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
+                        if (Util.PDVE(p)) {
+                            int playersone = TijolãoWarsEvent.playerson.size();
+                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
+                        }
                     }
-
                     break;
                 case "Corrida":
                     if (!CorridaEvent.contagem && CorridaEvent.contagemI) {
@@ -312,9 +350,10 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                     }, 20L);
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (!Util.PDVE(p)) return true;
-                        int playersone = CorridaEvent.playerson.size();
-                        p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
+                        if (Util.PDVE(p)) {
+                            int playersone = CorridaEvent.playerson.size();
+                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
+                        }
                     }
                     break;
                 case "CorridaBoat":
@@ -360,9 +399,10 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                     }, 20L);
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (!Util.PDVE(p)) return true;
-                        int playersone = CorridaBoatEvent.playerson.size();
-                        p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
+                        if (Util.PDVE(p)) {
+                            int playersone = CorridaBoatEvent.playerson.size();
+                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
+                        }
                     }
                     break;
                 case "Sumo":
@@ -409,11 +449,60 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                     }, 20L);
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (!Util.PDVE(p)) return true;
-                        int playersone = SumoEvent.playerson.size();
-                        p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
+                        if (Util.PDVE(p)) {
+                            int playersone = SumoEvent.playerson.size();
+                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
+                        }
                     }
-
+                    break;
+                case "TNTTag":
+                    if (!TNTTagEvent.contagem && TNTTagEvent.contagemI) {
+                        Util.Head = Util.head(player);
+                        player.getInventory().setItem(8, Util.BedLeave);
+                        player.getInventory().setItem(4, Util.Head);
+                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                            @Override
+                            public void run() {
+                                player.teleport(Locations.tnttagA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
+                            }
+                        }, 20L);
+                        PlayerSpectator(player);
+                        config.set("EventSpect", true);
+                        try {
+                            config.save(file);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return true;
+                    }
+                    Util.Head = Util.head(player);
+                    clearInventory(player);
+                    player.getInventory().setItem(8, Util.BedLeave);
+                    player.getInventory().setItem(4, Util.Head);
+                    if (TNTTagEvent.playerson != null && !TNTTagEvent.contagemI) {
+                        TNTTagEvent.playerson.add(player);
+                    }
+                    if (!TNTTagEvent.contagemI) TNTTagEvent.comtagemEvento();
+                    config.set("Event", true);
+                    try {
+                        config.save(file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                        @Override
+                        public void run() {
+                            player.teleport(Locations.tnttag, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
+                        }
+                    }, 20L);
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(p)) {
+                            int playersone = TNTTagEvent.playerson.size();
+                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b8§e)");
+                        }
+                    }
                     break;
                 case "Mini-Wars":
                     clearInventory(player);
@@ -491,55 +580,304 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     }
                     break;
             }
+            return true;
         }
         if (args[0].equalsIgnoreCase("anunciar")) {
             if (!s.hasPermission("mineskyevents.command.event.anunciar")) {
                 s.sendMessage("§8[§c!§8] §cVocê não pode executar esse comando.");
                 return true;
             }
-            switch (MineSkyEvents.event) {
-                case "TijolãoWars":
-                    Util.sendMessageBGMSNE("TijolãoWars");
-                    break;
-                case "Corrida":
-                    Util.sendMessageBGMSNE("Corrida");
-                    break;
-                case "TNTRun":
-                    Util.sendMessageBGMSNE("TNTRun");
-                    break;
-                case "CorridaBoat":
-                    Util.sendMessageBGMSNE("CorridaBoat");
-                    break;
-                case "Sumo":
-                    Util.sendMessageBGMSNE("Sumo");
-                    break;
+            if (MineSkyEvents.event == "OFF") {
+                s.sendMessage("§8[§c!§8] §cNenhum evento esta acontecendo agora.");
             }
+                switch (MineSkyEvents.event) {
+                    case "TijolãoWars":
+                        Util.sendMessageBGMSNE("TijolãoWars");
+                        break;
+                    case "Corrida":
+                        Util.sendMessageBGMSNE("Corrida");
+                        break;
+                    case "TNTRun":
+                        Util.sendMessageBGMSNE("TNTRun");
+                        break;
+                    case "CorridaBoat":
+                        Util.sendMessageBGMSNE("CorridaBoat");
+                        break;
+                    case "Sumo":
+                        Util.sendMessageBGMSNE("Sumo");
+                        break;
+                    case "TNTTag":
+                        Util.sendMessageBGMSNE("TNTTag");
+                        break;
+                    case "Parapente":
+                        Util.sendMessageBGMSNE("Parapente");
+                        break;
+                }
             switch (args[1].toLowerCase()) {
                 case "mini-wars":
-                    if (args.length < 3) return true;
+                    if (args.length < 3) {
+                        s.sendMessage("§8[§c!§8] §cVocê deve informar um mapa!");
+                        return true;
+                    }
                     MineSkyEvents.event = "Mini-Wars";
                     selectedMap = args[2];
+                    if (!selectedMap.equalsIgnoreCase("Mapa-1") || !selectedMap.equalsIgnoreCase("Mapa-2") || !selectedMap.equalsIgnoreCase("Mapa-3") || !selectedMap.equalsIgnoreCase("Mapa-4") || !selectedMap.equalsIgnoreCase("Mapa-5")) {
+                        s.sendMessage("§8[§c!§8] §cEste evento só tem 5 mapas!");
+                        return true;
+                    }
+                    MineSkyEvents.event = "Mini-Wars";
                     Util.sendMessageBGMSNE("Mini-Wars");
                     break;
                 case "copapvp":
                     if (args.length < 3) return true;
-                    MineSkyEvents.event = "CopaPVP";
                     selectedMap = args[2];
+                    if (!selectedMap.equalsIgnoreCase("Mapa-1")) {
+                        s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapas!");
+                        return true;
+                    }
+                    MineSkyEvents.event = "CopaPVP";
                     Util.sendMessageBGMSNE("CopaPVP");
                     break;
                 case "esconde-esconde":
                     if (args.length < 3) return true;
-                    MineSkyEvents.event = "Esconde-esconde";
                     selectedMap = args[2];
+                    if (!selectedMap.equalsIgnoreCase("Mapa-1") || !selectedMap.equalsIgnoreCase("Mapa-2")) {
+                        s.sendMessage("§8[§c!§8] §cEste evento só tem 2 mapas!");
+                        return true;
+                    }
+                    MineSkyEvents.event = "Esconde-esconde";
                     Util.sendMessageBGMSNE("Esconde-esconde");
                     break;
                 case "ruínas":
                     if (args.length < 3) return true;
-                    MineSkyEvents.event = "Ruínas";
                     selectedMap = args[2];
+                    if (!selectedMap.equalsIgnoreCase("Mapa-1")) {
+                        s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapas!");
+                        return true;
+                    }
+                    MineSkyEvents.event = "Ruínas";
                     Util.sendMessageBGMSNE("Ruínas");
                     break;
             }
+        }
+        if (args[0].equalsIgnoreCase("finalizar")) {
+            if (!player.hasPermission("mineskyevents.command.event.finalizar")) {
+                s.sendMessage("§8[§c!§8] §cVocê não pode executar esse comando.");
+                return true;
+            }
+            if (MineSkyEvents.event.equalsIgnoreCase("OFF")) {
+                s.sendMessage("§8[§c!§8] §cNenhum evento acontecendo agora.");
+                return true;
+            }
+            String event = MineSkyEvents.event;
+            switch (MineSkyEvents.event) {
+                case "TijolãoWars":
+                    MineSkyEvents.event = "OFF";
+                    for (Player j : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(j) || Util.PDVES(j)) {
+                            Util.sendConectionBCMSNE(j);
+                            RevealPlayer(j);
+                            File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
+                            FileConfiguration config = DataManager.getConfiguration(file);
+                            config.set("Event", false);
+                            config.set("EventSpect", false);
+                            try {
+                                config.save(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    TijolãoWarsEvent.mortos.clear();
+                    TijolãoWarsEvent.playerson.clear();
+                    TijolãoWarsEvent.contagem = true;
+                    TijolãoWarsEvent.contagemI = false;
+                    break;
+                case "Corrida":
+                    MineSkyEvents.event = "OFF";
+                    for (Player j : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(j) || Util.PDVES(j)) {
+                            Util.sendConectionBCMSNE(j);
+                            RevealPlayer(j);
+                            File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
+                            FileConfiguration config = DataManager.getConfiguration(file);
+                            config.set("Event", false);
+                            config.set("EventSpect", false);
+                            try {
+                                config.save(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    MSNECommand.playerList.clear();
+                    CorridaEvent.playerson.clear();
+                    CorridaEvent.contagem = true;
+                    CorridaEvent.contagemI = false;
+                    break;
+                case "CorridaBoat":
+                    MineSkyEvents.event = "OFF";
+                    for (Player j : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(j) || Util.PDVES(j)) {
+                            Util.sendConectionBCMSNE(j);
+                            RevealPlayer(j);
+                            File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
+                            FileConfiguration config = DataManager.getConfiguration(file);
+                            config.set("Event", false);
+                            config.set("EventSpect", false);
+                            try {
+                                config.save(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    MSNECommand.playerList.clear();
+                    MSNECommand.playerBOATLIST.clear();
+                    CorridaBoatEvent.playerson.clear();
+                    CorridaBoatEvent.contagem = true;
+                    CorridaBoatEvent.contagemI = false;
+                    break;
+                case "Sumo":
+                    MineSkyEvents.event = "OFF";
+                    for (Player j : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(j) || Util.PDVES(j)) {
+                            Util.sendConectionBCMSNE(j);
+                            RevealPlayer(j);
+                            File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
+                            FileConfiguration config = DataManager.getConfiguration(file);
+                            config.set("Event", false);
+                            config.set("EventSpect", false);
+                            try {
+                                config.save(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    SumoEvent.mortos.clear();
+                    SumoEvent.playerson.clear();
+                    SumoEvent.contagem = true;
+                    SumoEvent.contagemI = false;
+                    break;
+                case "TNTRun":
+                    MineSkyEvents.event = "OFF";
+                    for (Player j : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(j) || Util.PDVES(j)) {
+                            Util.sendConectionBCMSNE(j);
+                            RevealPlayer(j);
+                            File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
+                            FileConfiguration config = DataManager.getConfiguration(file);
+                            config.set("Event", false);
+                            config.set("EventSpect", false);
+                            try {
+                                config.save(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    break;
+                case "TNTTag":
+                    MineSkyEvents.event = "OFF";
+                    for (Player j : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(j) || Util.PDVES(j)) {
+                            Util.sendConectionBCMSNE(j);
+                            RevealPlayer(j);
+                            File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
+                            FileConfiguration config = DataManager.getConfiguration(file);
+                            config.set("Event", false);
+                            config.set("EventSpect", false);
+                            try {
+                                config.save(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    TNTTagEvent.mortos.clear();
+                    TNTTagEvent.playerson.clear();
+                    TNTTagEvent.jogadores.clear();
+                    TNTTagEvent.tnt.clear();
+                    TNTTagEvent.temp1.cancel();
+                    TNTTagEvent.temp2.cancel();
+                    TNTTagEvent.contagem = true;
+                    TNTTagEvent.contagemI = false;
+                    break;
+                case "Mini-Wars":
+                    MineSkyEvents.event = "OFF";
+                    for (Player j : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(j) || Util.PDVES(j)) {
+                            Util.sendConectionBCMSNE(j);
+                            RevealPlayer(j);
+                            File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
+                            FileConfiguration config = DataManager.getConfiguration(file);
+                            config.set("Event", false);
+                            config.set("EventSpect", false);
+                            try {
+                                config.save(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    break;
+                case "CopaPVP":
+                    MineSkyEvents.event = "OFF";
+                    for (Player j : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(j) || Util.PDVES(j)) {
+                            Util.sendConectionBCMSNE(j);
+                            RevealPlayer(j);
+                            File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
+                            FileConfiguration config = DataManager.getConfiguration(file);
+                            config.set("Event", false);
+                            config.set("EventSpect", false);
+                            try {
+                                config.save(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    break;
+                case "Esconde-esconde":
+                    MineSkyEvents.event = "OFF";
+                    for (Player j : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(j) || Util.PDVES(j)) {
+                            Util.sendConectionBCMSNE(j);
+                            RevealPlayer(j);
+                            File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
+                            FileConfiguration config = DataManager.getConfiguration(file);
+                            config.set("Event", false);
+                            config.set("EventSpect", false);
+                            try {
+                                config.save(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    break;
+                case "Ruínas":
+                    MineSkyEvents.event = "OFF";
+                    for (Player j : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(j) || Util.PDVES(j)) {
+                            Util.sendConectionBCMSNE(j);
+                            RevealPlayer(j);
+                            File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
+                            FileConfiguration config = DataManager.getConfiguration(file);
+                            config.set("Event", false);
+                            config.set("EventSpect", false);
+                            try {
+                                config.save(file);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                    break;
+            }
+            s.sendMessage("§8[§a!§8] §aVocê finalizou o evento: " + event);
         }
         if (args[0].equalsIgnoreCase("start")) {
             if (!s.hasPermission("mineskyevents.command.event.start")) {
@@ -577,6 +915,12 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     break;
                 case "sumo":
                     SumoEvent.iniciarEvento();
+                    break;
+                case "tnttag":
+                    TNTTagEvent.iniciarEvento();
+                    break;
+                case "parapente":
+                    TNTTagEvent.iniciarEvento();
                     break;
                 case "mini-wars":
                     s.sendMessage("§8[§c!§8] §cEste evento não pode ser iniciado. Usage: /event anunciar Mini-Wars (mapa)");
@@ -836,6 +1180,54 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
+            if (args[1].equalsIgnoreCase("TNTTag")) {
+                if (args[3].equalsIgnoreCase("1")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.tnttag = loc;
+                        config.set("TNTTag", loc);
+                        config.set("TNTTag.world", loc.getWorld().getName());
+                        config.set("TNTTag.x", Double.valueOf(loc.getX()));
+                        config.set("TNTTag.y", Double.valueOf(loc.getY()));
+                        config.set("TNTTag.z", Double.valueOf(loc.getZ()));
+                        config.set("TNTTag.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("TNTTag.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lTNTTag §asetado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                    if (args[2].equalsIgnoreCase("arena")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.tnttagA = loc;
+                        config.set("arena.TNTTag", loc);
+                        config.set("arena.TNTTag.world", loc.getWorld().getName());
+                        config.set("arena.TNTTag.x", Double.valueOf(loc.getX()));
+                        config.set("arena.TNTTag.y", Double.valueOf(loc.getY()));
+                        config.set("arena.TNTTag.z", Double.valueOf(loc.getZ()));
+                        config.set("arena.TNTTag.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("arena.TNTTag.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aArena de §lTNTTag §asetado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else {
+                    s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
+                }
+            }
                     if (args[1].equalsIgnoreCase("Mini-Wars")) {
                 if (args[3].equalsIgnoreCase("1")) {
                     if (args[2].equalsIgnoreCase("spawn")) {
@@ -1078,16 +1470,16 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     String result = String.join(" ", argsSubset).replace("&", "§");
                     if (args.length == 3) reason = result;
                     Util.sendConectionBCMSNE(j);
-                    TextComponent message = new TextComponent("§8[§c!§8] §cVocê foi kickado do evento. Motivo: " + reason);
+                    TextComponent message = new TextComponent("§8[§c!§8] §cVocê foi expulso do evento. Motivo: " + reason);
                     Util.sendPlayermessage(j, message);
 
-                    s.sendMessage("§8[§a!§8] §aO jogador foi kickado com sucesso do evento.");
+                    s.sendMessage("§8[§a!§8] §aO jogador foi expulso com sucesso do evento.");
             for (Player player1 : Bukkit.getOnlinePlayers()) {
                 File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
                 FileConfiguration configfor = DataManager.getConfiguration(file);
                 if (!player1.hasPermission("mineskyevents.notify.moderation")) return true;
                 if (!configfor.getBoolean("Notification")) return true;
-                player1.sendMessage("§c§lNotificação §7» §7O jogador §b" + j.getName() + "§7 foi kickado do evento por§b " + s.getName() + "§7. Motivo: §b" + reason);
+                player1.sendMessage("§c" + j.getName() + "§f foi expulso do evento por§c " + s.getName() + "§f. Motivo: §c" + reason);
             }
                     File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                     FileConfiguration config = DataManager.getConfiguration(file);
@@ -1109,6 +1501,12 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                                 break;
                             case "Sumo":
                                 SumoEvent.playerson.remove(j);
+                                if (SumoEvent.playerson.size() == 1 && !SumoEvent.contagem && SumoEvent.contagemI) SumoEvent.finalizar();
+                                break;
+                            case "TNTTag":
+                                TNTTagEvent.playerson.remove(j);
+                                TNTTagEvent.jogadores.remove(j);
+                                if (TNTTagEvent.playerson.size() == 1 && !TNTTagEvent.contagem && TNTTagEvent.contagemI) TNTTagEvent.finalizar();
                                 break;
                         }
                     } catch (IOException e) {
@@ -1123,25 +1521,8 @@ public class EventCommand implements CommandExecutor, TabCompleter {
             }
             File file = DataManager.getFile("config.yml");
             FileConfiguration config = DataManager.getConfiguration(file);
-            String event = args[2];
+            String event = args[2].toLowerCase();
             Player pb = Bukkit.getPlayer(args[3]);
-            switch (event) {
-                case "TijolãoWars":
-                    event = "tijolãowars";
-                    break;
-                case "TNTRun":
-                    event = "tntrun";
-                    break;
-                case "Corrida":
-                    event = "corrida";
-                    break;
-                case "CorridaBoat":
-                    event = "corridaboat";
-                    break;
-                case "Sumo":
-                    event = "sumo";
-                    break;
-            }
             if (args[1].equalsIgnoreCase("adicionar")) {
                 if (!(args.length == 5)) {
                     List<String> blacklistname = config.getStringList("blacklist." + event + ".list");
@@ -1155,7 +1536,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         config.save(file);
                         s.sendMessage("§8[§a!§8] §aVocê adicionar o " + pb.getName() + " na blacklist do evento " + event + " com sucesso!");
                     } catch (IOException e) {
-                        s.sendMessage("§8[§c!§8] §cOcorreu um erro ao adicionar o player á blacklist");
+                        s.sendMessage("§8[§c!§8] §cOcorreu um erro ao adicionar o player à blacklist");
                     }
                 } else {
                     if (!args[4].equalsIgnoreCase("ip")) {
@@ -1170,10 +1551,10 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     blacklistname.add(pb.getAddress().getAddress().getHostAddress());
                     config.set("blacklistip." + event + ".list", blacklistname);
                     try {
-                        config.save("config.yml");
-                        s.sendMessage("§8[§a!§8] §aVocê adicionar o " + pb.getName() + " na blacklist por ip do evento " + event + " com sucesso!");
+                        config.save(file);
+                        s.sendMessage("§8[§a!§8] §aVocê adicionou o " + pb.getName() + " na blacklist por ip do evento " + event + " com sucesso!");
                     } catch (IOException e) {
-                        s.sendMessage("§8[§c!§8] §cOcorreu um erro ao adicionar o player á blacklist por ip");
+                        s.sendMessage("§8[§c!§8] §cOcorreu um erro ao adicionar o player à blacklist por ip");
                     }
                 }
             }
@@ -1187,10 +1568,10 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     blacklistname.remove(pb.getName());
                     config.set("blacklist." + event + ".list", blacklistname);
                     try {
-                        config.save("config.yml");
+                        config.save(file);
                         s.sendMessage("§8[§a!§8] §aVocê removeu o " + pb.getName() + " na blacklist do evento " + event + " com sucesso!");
                     } catch (IOException e) {
-                        s.sendMessage("§8[§c!§8] §cOcorreu um erro ao remover o player á blacklist");
+                        s.sendMessage("§8[§c!§8] §cOcorreu um erro ao remover o player à blacklist");
                     }
                 } else {
                     if (!args[4].equalsIgnoreCase("ip")) {
@@ -1205,10 +1586,10 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     blacklistname.remove(pb.getAddress().getAddress().getHostAddress());
                     config.set("blacklistip." + event + ".list", blacklistname);
                     try {
-                        config.save("config.yml");
+                        config.save(file);
                         s.sendMessage("§8[§a!§8] §aVocê removeu o " + pb.getName() + " na blacklist por ip do evento " + event + " com sucesso!");
                     } catch (IOException e) {
-                        s.sendMessage("§8[§c!§8] §cOcorreu um erro ao remover o player á blacklist por ip");
+                        s.sendMessage("§8[§c!§8] §cOcorreu um erro ao remover o player à blacklist por ip");
                     }
                 }
             }
@@ -1226,15 +1607,31 @@ public class EventCommand implements CommandExecutor, TabCompleter {
         inv.setBoots(null);
     }
     private void PlayerSpectator(Player p) {
+        for (Player jogador : Bukkit.getOnlinePlayers()) {
+            jogador.hidePlayer(MineSkyEvents.get(), p);
+        }
         p.setAllowFlight(true);
         p.setFlying(true);
         p.setInvisible(true);
+        p.setGameMode(GameMode.ADVENTURE);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 1, false, false));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 4, false, false));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, Integer.MAX_VALUE, 1, false, false));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, false, false));
     }
     public static void RevealPlayer(Player p) {
+        for (Player jogador : Bukkit.getOnlinePlayers()) {
+            jogador.showPlayer(MineSkyEvents.get(), p);
+        }
         p.setAllowFlight(false);
         p.setFlying(false);
         p.setInvisible(false);
+        p.setGameMode(GameMode.SURVIVAL);
         p.removePotionEffect(PotionEffectType.INVISIBILITY);
+        p.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
+        p.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+        p.removePotionEffect(PotionEffectType.WATER_BREATHING);
+        p.removePotionEffect(PotionEffectType.NIGHT_VISION);
     }
         }
