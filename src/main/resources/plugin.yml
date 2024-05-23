@@ -27,8 +27,14 @@ permissions:
   mineskyevents.command.event.blacklist:
     description: Permission to add or remove a player from the event blacklist.
     default: op
+  mineskyevents.notify.enabled:
+    description: ...
+    default: op
   mineskyevents.notify.moderation:
     description: Permission to receive kick notifications from events.
+    default: false
+  mineskyevents.notify.restored:
+    description: Permission to be notified when the Spleef arena has been restored.
     default: false
   mineskyevents.notify.blacklist:
     description: Permission to receive kick notifications from events.
@@ -45,9 +51,11 @@ permissions:
     description: Permission to have access to all notifications.
     default: false
     children:
+      mineskyevents.notify.enabled: true
       mineskyevents.notify.moderation: true
       mineskyevents.notify.blacklist: true
       mineskyevents.notify.leave: true
+      mineskyevents.notify.restored: true
   mineskyevents.admin:
     description: Plugin admin permission.
     default: op

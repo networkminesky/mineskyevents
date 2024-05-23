@@ -30,6 +30,7 @@ public class Util {
     public static ItemStack SumoItem;
     public static ItemStack Barco;
     public static ItemStack TNT;
+    public static ItemStack CheckP;
 
 
     public static String serializeLocation(Location l) {
@@ -201,6 +202,26 @@ public class Util {
 
         return tnt;
     }
+    public static ItemStack checkpoint() {
+        ItemStack tnt = new ItemStack(Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
+        ItemMeta meta = tnt.getItemMeta();
+
+        if (meta != null) {
+            meta.setDisplayName("§e→ CheckPoint");
+            meta.setUnbreakable(true);
+
+            List<String> lore = new ArrayList<>();
+            lore.add("§7Item próprio do evento Parapente");
+            lore.add("");
+            lore.add("§6| §7Descrição§6:");
+            lore.add("  §7Use ele quando quiser voltar para o checkpoint do Parapente");
+            meta.setLore(lore);
+
+            tnt.setItemMeta(meta);
+        }
+
+        return tnt;
+    }
 
     public static ItemStack createBed() {
         ItemStack bed = new ItemStack(Material.RED_BED);
@@ -328,6 +349,37 @@ public class Util {
                 lore.add("");
                 lore.add("§6| §7Vitórias§6: " + config.getInt("Events.Sumo.win"));
                 lore.add("§6| §7Mortes§6: " + config.getInt("Events.Sumo.dead"));
+                meta.setLore(lore);
+
+                head.setItemMeta(meta);
+                return head;
+            }
+        }
+        if (MineSkyEvents.event == "TNTTag") {
+            if (meta != null) {
+                meta.setDisplayName("§c§lInformações " + p.getName());
+                meta.setUnbreakable(true);
+
+                List<String> lore = new ArrayList<>();
+                lore.add("§7Suas informações do evento TNT-TAG");
+                lore.add("");
+                lore.add("§6| §7Vitórias§6: " + config.getInt("Events.TNTTag.win"));
+                lore.add("§6| §7Mortes§6: " + config.getInt("Events.TNTTag.dead"));
+                meta.setLore(lore);
+
+                head.setItemMeta(meta);
+                return head;
+            }
+        }
+        if (MineSkyEvents.event == "Parapente") {
+            if (meta != null) {
+                meta.setDisplayName("§c§lInformações " + p.getName());
+                meta.setUnbreakable(true);
+
+                List<String> lore = new ArrayList<>();
+                lore.add("§7Suas informações do evento Corrida de Parapente");
+                lore.add("");
+                lore.add("§6| §7Vitórias§6: " + config.getInt("Events.Parapente.win"));
                 meta.setLore(lore);
 
                 head.setItemMeta(meta);

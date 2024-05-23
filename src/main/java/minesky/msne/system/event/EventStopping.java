@@ -19,6 +19,7 @@ public class EventStopping {
             try {
                 config.save(file);
                 EventCommand.RevealPlayer(p);
+                Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §7Saving player information: " + p.getName());
             } catch (IOException e) {
                 Bukkit.getLogger().warning("[PlayerData] Falhou a salvar os arquivos do player " + p.getName());
                 e.printStackTrace();

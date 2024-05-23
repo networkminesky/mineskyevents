@@ -1,7 +1,6 @@
 package minesky.msne.events;
 
 import minesky.msne.MineSkyEvents;
-import minesky.msne.commands.MSNECommand;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.utils.Util;
@@ -18,14 +17,14 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CorridaBoatEvent {
+public class ParapenteEvent {
     public static boolean contagem;
     public static boolean contagemI = false;
     public static Set<Player> playerson = new HashSet<>();
     public static BukkitRunnable temporizador;
     public static void iniciarEvento() {
-        MineSkyEvents.event = "CorridaBoat";
-        Util.sendMessageBGMSNE("CorridaBoat");
+        MineSkyEvents.event = "Parapente";
+        Util.sendMessageBGMSNE("Parapente");
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.hasPermission("mineskyevents.bypass.join")) {
                 Bukkit.dispatchCommand(player, "event entrar");
@@ -51,7 +50,7 @@ public class CorridaBoatEvent {
                             }
                         }
                     }
-                    TextComponent menorplayer = new TextComponent("§9§lCorrida de barco §8| §aInfelizmente o evento não teve §l4§a players para iniciar.");
+                    TextComponent menorplayer = new TextComponent("§3§lCorrida de Parapente §8| §aInfelizmente o evento não teve §l4§a players para iniciar.");
                     Util.sendMessageBCMSNE(menorplayer);
                 }
                 tempoRestante--;
@@ -83,20 +82,11 @@ public class CorridaBoatEvent {
                     if (tempoRestante == 0) {
                         contagem = false;
                         for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (Util.PDVE(p)) {
-                                p.teleport(Locations.corridaboatA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                p.getInventory().removeItem(Util.BedLeave);
-                                p.getInventory().addItem(Util.Barco);
-                                p.getInventory().addItem(Util.Barco);
-                                p.getInventory().addItem(Util.Barco);
-                                p.getInventory().addItem(Util.Barco);
-                                p.getInventory().addItem(Util.Barco);
-                                p.getInventory().addItem(Util.Barco);
-                                p.getInventory().addItem(Util.Barco);
-                                p.getInventory().addItem(Util.Barco);
-                                MSNECommand.renovarTempo(p);
-                                this.cancel();
-                            }
+                            if (!Util.PDVE(p)) return;
+                            p.teleport(Locations.parapenteA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            p.getInventory().removeItem(Util.BedLeave);
+                            p.getInventory().setItem(3, Util.CheckP);
+                            this.cancel();
                         }
                         this.cancel();
                     }

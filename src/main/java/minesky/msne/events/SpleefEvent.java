@@ -8,27 +8,27 @@ import minesky.msne.config.Locations;
 import minesky.msne.discord.EventsMessage;
 import minesky.msne.utils.Util;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class SumoEvent {
+public class SpleefEvent {
     public static boolean contagem;
     public static boolean contagemI = false;
     public static Set<Player> playerson = new HashSet<>();
     public static List<Player> mortos = new ArrayList<>();
+    public static Map<Location, Material> blocksbreak = new HashMap<>();
     public static BukkitRunnable temporizador;
     public static void iniciarEvento() {
-        MineSkyEvents.event = "Sumo";
-        Util.sendMessageBGMSNE("Sumo");
+        MineSkyEvents.event = "Spleef";
+        Util.sendMessageBGMSNE("Spleef");
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.hasPermission("mineskyevents.bypass.join")) {
                 Bukkit.dispatchCommand(player, "event entrar");
@@ -54,7 +54,7 @@ public class SumoEvent {
                             }
                         }
                     }
-                    TextComponent menorplayer = new TextComponent("§4§lSumo §8| §aInfelizmente o evento não teve §l4§a players para iniciar.");
+                    TextComponent menorplayer = new TextComponent("§b§lSpleef §8| §aInfelizmente o evento não teve §l4§a players para iniciar.");
                     Util.sendMessageBCMSNE(menorplayer);
                 }
                 tempoRestante--;
@@ -90,7 +90,7 @@ public class SumoEvent {
                                 p.teleport(Locations.sumoA, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 p.getInventory().removeItem(Util.BedLeave);
                                 p.getInventory().removeItem(Util.Head);
-                                p.getInventory().addItem(Util.SumoItem);
+                                p.getInventory().addItem(Util.StoneShovel);
                                 this.cancel();
                             }
                         }
@@ -131,39 +131,62 @@ public class SumoEvent {
                 }
             }
         }
-            TextComponent encerrar = new TextComponent("§4§lSumo §8| §a1º Lugar §8- §a§l" + vencedor.getName() + " §8| §a2º Lugar §8- §a§l" + vencedores[1].getName() + " §8| §a3º Lugar §8- §a§l" + vencedores[0].getName());
-            Util.sendMessageBCMSNE(encerrar);
-            Random random = new Random();
-            int premio1 = random.nextInt(5500 - 4500 + 1) + 4500;
-            int premio2 = random.nextInt(3500 - 2500 + 1) + 2500;
-            int premio3 = random.nextInt(2500 - 1500 + 1) + 1500;
-            OfflinePlayer p1 = Bukkit.getOfflinePlayer(vencedor.getName());
-            OfflinePlayer p2 = Bukkit.getOfflinePlayer(vencedores[0].getName());
-            OfflinePlayer p3 = Bukkit.getOfflinePlayer(vencedores[1].getName());
-            Vault.economy.depositPlayer(p1, premio1);
-            Vault.economy.depositPlayer(p2, premio2);
-            Vault.economy.depositPlayer(p3, premio3);
-            TextComponent text1 = new TextComponent("§4§lSumo §8| §aVocê ganhou o §lSumo §ae como prêmio você ganhou: §l" + premio1);
-            TextComponent text2 = new TextComponent("§4§lSumo §8| §aVocê ganhou o §lSumo §ae como prêmio você ganhou: §l" + premio2);
-            TextComponent text3 = new TextComponent("§4§lSumo §8| §aVocê ganhou o §lSumo §ae como prêmio você ganhou: §l" + premio3);
-            Util.sendPlayermessage(vencedor, text1);
-            Util.sendPlayermessage(vencedores[1], text2);
-            Util.sendPlayermessage(vencedores[0], text3);
-            EventsMessage.sendLogEvent("Sumo", vencedor, vencedores, premio1, premio2, premio3);
-            playerson.clear();
-            mortos.clear();
-            contagem = true;
-            contagemI = false;
-            for (Player player1 : vencedores) {
-                File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
-                FileConfiguration config = DataManager.getConfiguration(file);
+        TextComponent encerrar = new TextComponent("§b§lSpleef §8| §a1º Lugar §8- §a§l" + vencedor.getName() + " §8| §a2º Lugar §8- §a§l" + vencedores[1].getName() + " §8| §a3º Lugar §8- §a§l" + vencedores[0].getName());
+        Util.sendMessageBCMSNE(encerrar);
+        Random random = new Random();
+        int premio1 = random.nextInt(5500 - 4500 + 1) + 4500;
+        int premio2 = random.nextInt(3500 - 2500 + 1) + 2500;
+        int premio3 = random.nextInt(2500 - 1500 + 1) + 1500;
+        OfflinePlayer p1 = Bukkit.getOfflinePlayer(vencedor.getName());
+        OfflinePlayer p2 = Bukkit.getOfflinePlayer(vencedores[0].getName());
+        OfflinePlayer p3 = Bukkit.getOfflinePlayer(vencedores[1].getName());
+        Vault.economy.depositPlayer(p1, premio1);
+        Vault.economy.depositPlayer(p2, premio2);
+        Vault.economy.depositPlayer(p3, premio3);
+        TextComponent text1 = new TextComponent("§b§lSpleef §8| §aVocê ganhou o §lSpleef §ae como prêmio você ganhou: §l" + premio1);
+        TextComponent text2 = new TextComponent("§b§lSpleef §8| §aVocê ganhou o §lSpleef §ae como prêmio você ganhou: §l" + premio2);
+        TextComponent text3 = new TextComponent("§b§lSpleef §8| §aVocê ganhou o §lSpleef §ae como prêmio você ganhou: §l" + premio3);
+        Util.sendPlayermessage(vencedor, text1);
+        Util.sendPlayermessage(vencedores[1], text2);
+        Util.sendPlayermessage(vencedores[0], text3);
+        EventsMessage.sendLogEvent("Spleef", vencedor, vencedores, premio1, premio2, premio3);
+        playerson.clear();
+        mortos.clear();
+        restaurar();
+        contagem = true;
+        contagemI = false;
+        for (Player player1 : vencedores) {
+            File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
+            FileConfiguration config = DataManager.getConfiguration(file);
 
-                config.set("Events.Sumo.win", config.getInt("Events.Sumo.win")+1);
-                try {
-                    config.save(file);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+            config.set("Events.Spleef.win", config.getInt("Events.Spleef.win")+1);
+            try {
+                config.save(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }
+
+    public static void restaurar() {
+        for (Map.Entry<Location, Material> entry : blocksbreak.entrySet()) {
+            Location location = entry.getKey();
+            Material material = entry.getValue();
+            location.getBlock().setType(material);
+        }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.hasPermission("mineskyevents.notify.restored")) {
+                File filefor = DataManager.getFile(player.getName().toLowerCase(), "playerdata");
+                FileConfiguration configfor = DataManager.getConfiguration(filefor);
+                if (configfor.getBoolean("Notification")) {
+                    TextComponent text = new TextComponent("§b§lSpleef §8| §aA arena foi restaurada com sucesso!");
+                    Util.sendPlayermessage(player, text);
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+    }
+}

@@ -70,7 +70,7 @@ public class TijolãoWarsEvent {
         if (!contagemI && playerson.size() >= 4) {
             temporizador.cancel();
             new BukkitRunnable() {
-                int tempoRestante = 60;
+                int tempoRestante = 180;
 
                 @Override
                 public void run() {

@@ -12,9 +12,12 @@ import java.util.List;
 public class EventVerification {
     public static boolean getBlacklist(Player player, String event) {
         switch (event) {
+            case "Spleef":
+                event = "spleef";
+                break;
             case "TijolãoWars":
                 event = "tijolãowars";
-                        break;
+                break;
             case "TNTRun":
                 event = "tntrun";
                 break;
@@ -29,6 +32,9 @@ public class EventVerification {
                 break;
             case "TNTTag":
                 event = "tnttag";
+                break;
+            case "Parapente":
+                event = "parapente";
                 break;
         }
         File file = DataManager.getFile("config.yml");

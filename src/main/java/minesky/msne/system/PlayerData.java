@@ -33,6 +33,8 @@ public class PlayerData implements Listener {
             config.set("EventSpect", false);
             config.set("Notification", true);
             config.set("Localizer", "Localizer OFF");
+            config.set("Events.Spleef.win", 0);
+            config.set("Events.Spleef.dead", 0);
             config.set("Events.Tijolao.win", 0);
             config.set("Events.Tijolao.dead", 0);
             config.set("Events.Corrida.win", 0);
@@ -41,8 +43,7 @@ public class PlayerData implements Listener {
             config.set("Events.Sumo.dead", 0);
             config.set("Events.TNTTag.win", 0);
             config.set("Events.TNTTag.dead", 0);
-            config.set("Events.Parapente.dead", 0);
-            config.set("Events.Parapente.dead", 0);
+            config.set("Events.Parapente.win", 0);
             try {
                 config.save(file);
             } catch (IOException ex) {

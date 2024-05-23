@@ -15,19 +15,22 @@ blacklist:
       - hacker2001
   corrida:
     list:
-      - hacker2003
+      - hacker2002
   corridaboat:
     list:
-      - hacker2004
+      - hacker2003
   sumo:
     list:
-      - hacker2005
+      - hacker2004
   tnttag:
     list:
-      - hacker2006
+      - hacker2005
   parapente:
     list:
-      - hacker2005
+      - hacker2006
+  spleef:
+    list:
+      - hacker2007
 # =--------------------------------= #
 # +          IP Blacklist          + #
 # =--------------------------------= #
@@ -40,16 +43,19 @@ blacklistip:
       - 00.00.001
   corrida:
     list:
-      - 00.00.003
+      - 00.00.002
   corridaboat:
     list:
-      - 00.00.004
+      - 00.00.003
   sumo:
     list:
-      - 00.00.005
+      - 00.00.004
   tnttag:
     list:
-      - 00.00.006
+      - 00.00.005
   parapente:
+    list:
+      - 00.00.006
+  spleef:
     list:
       - 00.00.007
