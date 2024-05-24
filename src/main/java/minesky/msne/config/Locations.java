@@ -16,6 +16,8 @@ public class Locations {
     public static Location corrida = padrao;
     public static Location corridaboat = padrao;
     public static Location sumo = padrao;
+    public static Location tntrun = padrao;
+    public static Location tntrun2 = padrao;
     public static Location tnttag = padrao;
     public static Location parapente = padrao;
     public static Location miniwars = padrao;
@@ -34,6 +36,8 @@ public class Locations {
     public static Location corridaA = padrao;
     public static Location corridaboatA = padrao;
     public static Location sumoA = padrao;
+    public static Location tntrunA = padrao;
+    public static Location tntrun2A = padrao;
     public static Location tnttagA = padrao;
     public static Location parapenteA = padrao;
     public static Location parapenteC1 = padrao;
@@ -56,13 +60,15 @@ public class Locations {
         corrida = getLocationFromConfig(config, "Corrida");
         corridaboat = getLocationFromConfig(config, "CorridaBoat");
         sumo = getLocationFromConfig(config, "Sumo");
+        tntrun = getLocationFromConfig(config, "TNTRun.1");
+        tntrun2 = getLocationFromConfig(config, "TNTRun.2");
         tnttag = getLocationFromConfig(config, "TNTTag");
         parapente = getLocationFromConfig(config, "Parapente");
         miniwars = getLocationFromConfig(config, "Mini-Wars.1");
-        miniwars = getLocationFromConfig(config, "Mini-Wars.2");
-        miniwars = getLocationFromConfig(config, "Mini-Wars.3");
-        miniwars = getLocationFromConfig(config, "Mini-Wars.4");
-        miniwars = getLocationFromConfig(config, "Mini-Wars.5");
+        miniwars2 = getLocationFromConfig(config, "Mini-Wars.2");
+        miniwars3 = getLocationFromConfig(config, "Mini-Wars.3");
+        miniwars4 = getLocationFromConfig(config, "Mini-Wars.4");
+        miniwars5 = getLocationFromConfig(config, "Mini-Wars.5");
         copapvp = getLocationFromConfig(config, "CopaPVP");
         esconde = getLocationFromConfig(config, "Esconde-esconde.1");
         esconde2 = getLocationFromConfig(config, "Esconde-esconde.2");
@@ -74,6 +80,8 @@ public class Locations {
         corridaA = getLocationFromConfig(config, "arena.Corrida");
         corridaboatA = getLocationFromConfig(config, "arena.CorridaBoat");
         sumoA = getLocationFromConfig(config, "arena.Sumo");
+        tntrunA = getLocationFromConfig(config, "arena.TNTRun.1");
+        tntrun2A = getLocationFromConfig(config, "arena.TNTRun.2");
         tnttagA = getLocationFromConfig(config, "arena.TNTTag");
         parapenteA = getLocationFromConfig(config, "arena.Parapente");
         parapenteC1 = getLocationFromConfig(config, "arena.Parapente.checkpoint.1");
@@ -141,6 +149,22 @@ public class Locations {
         if (sumo == null || sumo.getWorld() == null) {
             tentarValidarNovamente = true;
             sumo = padrao;
+            if (!reavaliar) {
+                Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo spawn");
+            }
+        }
+
+        if (tntrun == null || tntrun.getWorld() == null) {
+            tentarValidarNovamente = true;
+            tntrun = padrao;
+            if (!reavaliar) {
+                Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo spawn");
+            }
+        }
+
+        if (tntrun2 == null || tntrun2.getWorld() == null) {
+            tentarValidarNovamente = true;
+            tntrun2 = padrao;
             if (!reavaliar) {
                 Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo spawn");
             }
@@ -237,6 +261,22 @@ public class Locations {
         if (sumoA == null || sumoA.getWorld() == null) {
             tentarValidarNovamente = true;
             sumoA = padrao;
+            if (!reavaliar) {
+                Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo arena");
+            }
+        }
+
+        if (tntrunA == null || tntrunA.getWorld() == null) {
+            tentarValidarNovamente = true;
+            tntrunA = padrao;
+            if (!reavaliar) {
+                Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo arena");
+            }
+        }
+
+        if (tntrun2A == null || tntrun2A.getWorld() == null) {
+            tentarValidarNovamente = true;
+            tntrun2A = padrao;
             if (!reavaliar) {
                 Bukkit.getConsoleSender().sendMessage("§8[§bMineSky Events§8] §cNão foi possivel carregar a localizacão do Sumo! Entre no jogo e use §e/event set Sumo arena");
             }

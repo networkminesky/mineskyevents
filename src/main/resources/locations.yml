@@ -44,6 +44,21 @@ Sumo:
   z: -15.0
   yaw: 112.50008
   pitch: 2.1000016
+TNTRun:
+  1:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
+  2:
+    world: world
+    x: -15.0
+    y: 100.0
+    z: -15.0
+    yaw: 112.50008
+    pitch: 2.1000016
 TNTTag:
   world: world
   x: -15.0
@@ -167,6 +182,21 @@ arena:
     z: -15.0
     yaw: 112.50008
     pitch: 2.1000016
+  TNTRun:
+    1:
+      world: world
+      x: -15.0
+      y: 100.0
+      z: -15.0
+      yaw: 112.50008
+      pitch: 2.1000016
+    2:
+      world: world
+      x: -15.0
+      y: 100.0
+      z: -15.0
+      yaw: 112.50008
+      pitch: 2.1000016
   TNTTag:
     world: world
     x: -15.0

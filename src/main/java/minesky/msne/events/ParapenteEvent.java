@@ -14,14 +14,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ParapenteEvent {
     public static boolean contagem;
     public static boolean contagemI = false;
-    public static Set<Player> playerson = new HashSet<>();
+    public static List<Player> playerson = new ArrayList<>();
     public static BukkitRunnable temporizador;
+    public static BukkitRunnable contagemtemp;
     public static void iniciarEvento() {
         MineSkyEvents.event = "Parapente";
         Util.sendMessageBGMSNE("Parapente");
@@ -61,7 +64,7 @@ public class ParapenteEvent {
     public static void comtagemEvento() {
         if (!contagemI && playerson.size() >= 4) {
             temporizador.cancel();
-            new BukkitRunnable() {
+            contagemtemp = new BukkitRunnable() {
                 int tempoRestante = 180;
 
                 @Override
@@ -93,7 +96,8 @@ public class ParapenteEvent {
 
                     tempoRestante--;
                 }
-            }.runTaskTimer(MineSkyEvents.get(), 0, 20);
+            };
+            contagemtemp.runTaskTimer(MineSkyEvents.get(), 0, 20);
         }
     }
 }

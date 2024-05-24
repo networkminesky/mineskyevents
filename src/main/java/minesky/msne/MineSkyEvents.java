@@ -41,6 +41,7 @@ public final class MineSkyEvents extends JavaPlugin {
         Util.Barco = Util.barco();
         Util.TNT = Util.tnt();
         Util.CheckP = Util.checkpoint();
+        event = "OFF";
         getServer().getMessenger().registerOutgoingPluginChannel(this, "minesky:proxy");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §aConfig loaded.");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §aPlugin successfully initialized!");

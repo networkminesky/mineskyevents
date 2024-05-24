@@ -48,15 +48,6 @@ public class PlayerInfo implements Listener {
             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%file%", p.getName() + " (PlayerData)"));
         }
         if (!p.hasPermission("mineskyevents.bypass.join")) {
-            if (MineSkyEvents.event == "TNTRun") {
-                if (TNTRunEvent.selectedMap.equals("Mapa1")) {
-                    Bukkit.dispatchCommand(p, "tntrun join mapa1");
-                }
-                if (TNTRunEvent.selectedMap.equals("Mapa2")) {
-                    Bukkit.dispatchCommand(p, "tntrun join mapa2");
-                }
-                return;
-            }
             Bukkit.dispatchCommand(e.getPlayer(), "event entrar");
         }
     }
@@ -77,6 +68,11 @@ public class PlayerInfo implements Listener {
                             if (SpleefEvent.playerson.size() == 1) SpleefEvent.finalizar();
                             config.set("Events.Spleef.dead", config.getInt("Events.Spleef.dead")+1);
                             SpleefEvent.playerson.remove(p);
+                            for (Player player2 : Bukkit.getOnlinePlayers()) {
+                                if (Util.PDVE(player2)) {
+                                    player2.sendMessage("§8[§f☠§8]" + p.getName() + " §cMorreu!");
+                                }
+                            }
                         }
                     } else {
                         for (Player player2 : Bukkit.getOnlinePlayers()) {
@@ -96,6 +92,11 @@ public class PlayerInfo implements Listener {
                             if (TijolãoWarsEvent.playerson.size() == 1) TijolãoWarsEvent.finalizar();
                             config.set("Events.Tijolao.dead", config.getInt("Events.Tijolao.dead")+1);
                             TijolãoWarsEvent.playerson.remove(p);
+                            for (Player player2 : Bukkit.getOnlinePlayers()) {
+                                if (Util.PDVE(player2)) {
+                                    player2.sendMessage("§8[§f☠§8]" + p.getName() + " §cMorreu!");
+                                }
+                            }
                         }
                     } else {
                         for (Player player2 : Bukkit.getOnlinePlayers()) {
@@ -113,6 +114,11 @@ public class PlayerInfo implements Listener {
                         FileConfiguration config = DataManager.getConfiguration(file);
                         if (config.getBoolean("Event")) {
                             CorridaEvent.playerson.remove(p);
+                            for (Player player2 : Bukkit.getOnlinePlayers()) {
+                                if (Util.PDVE(player2)) {
+                                    player2.sendMessage("§8[§f☠§8]" + p.getName() + " §Saiu do evento!");
+                                }
+                            }
                         }
                     } else {
                         for (Player player2 : Bukkit.getOnlinePlayers()) {
@@ -130,6 +136,11 @@ public class PlayerInfo implements Listener {
                         FileConfiguration config = DataManager.getConfiguration(file);
                         if (config.getBoolean("Event")) {
                             CorridaBoatEvent.playerson.remove(p);
+                            for (Player player2 : Bukkit.getOnlinePlayers()) {
+                                if (Util.PDVE(player2)) {
+                                    player2.sendMessage("§8[§f☠§8]" + p.getName() + " §cSaiu do evento!");
+                                }
+                            }
                         }
                     } else {
                         for (Player player2 : Bukkit.getOnlinePlayers()) {
@@ -149,12 +160,41 @@ public class PlayerInfo implements Listener {
                             if (SumoEvent.playerson.size() == 1) SumoEvent.finalizar();
                             config.set("Events.Sumo.dead", config.getInt("Events.Sumo.dead")+1);
                             SumoEvent.playerson.remove(p);
+                            for (Player player2 : Bukkit.getOnlinePlayers()) {
+                                if (Util.PDVE(player2)) {
+                                    player2.sendMessage("§8[§f☠§8]" + p.getName() + " §cMorreu!");
+                                }
+                            }
                         }
                     } else {
                         for (Player player2 : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(player2)) {
                                 SumoEvent.playerson.remove(p);
                                 int playersone = SumoEvent.playerson.size();
+                                player2.sendMessage("§7" + p.getName() + " §esaiu do evento. (§b" + playersone + "§e/§b4§e)");
+                            }
+                        }
+                    }
+                    break;
+                case "TNTRun":
+                    if (!TNTRunEvent.contagem && TNTRunEvent.contagemI) {
+                        File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+                        if (config.getBoolean("Event")) {
+                            if (TNTRunEvent.playerson.size() == 1) TNTRunEvent.finalizar();
+                            config.set("Events.TNTRun.dead", config.getInt("Events.TNTRun.dead")+1);
+                            TNTRunEvent.playerson.remove(p);
+                            for (Player player2 : Bukkit.getOnlinePlayers()) {
+                                if (Util.PDVE(player2)) {
+                                    player2.sendMessage("§8[§f☠§8]" + p.getName() + " §cMorreu!");
+                                }
+                            }
+                        }
+                    } else {
+                        for (Player player2 : Bukkit.getOnlinePlayers()) {
+                            if (Util.PDVE(player2)) {
+                                TNTRunEvent.playerson.remove(p);
+                                int playersone = TNTRunEvent.playerson.size();
                                 player2.sendMessage("§7" + p.getName() + " §esaiu do evento. (§b" + playersone + "§e/§b4§e)");
                             }
                         }
@@ -172,6 +212,11 @@ public class PlayerInfo implements Listener {
                         if (config.getBoolean("Event")) {
                             if (SumoEvent.playerson.size() == 1) SumoEvent.finalizar();
                             config.set("Events.TNTTag.dead", config.getInt("Events.TNTTag.dead")+1);
+                            for (Player player2 : Bukkit.getOnlinePlayers()) {
+                                if (Util.PDVE(player2)) {
+                                    player2.sendMessage("§8[§f☠§8]" + p.getName() + " §cSaiu do evento!");
+                                }
+                            }
                         }
                     } else if (!TNTTagEvent.contagem && TNTTagEvent.contagemI && TNTTagEvent.tnt.contains(p)) {
                         TNTTagEvent.playerson.remove(p);
@@ -260,6 +305,11 @@ public class PlayerInfo implements Listener {
                         FileConfiguration config = DataManager.getConfiguration(file);
                         if (config.getBoolean("Event")) {
                             ParapenteEvent.playerson.remove(p);
+                            for (Player player2 : Bukkit.getOnlinePlayers()) {
+                                if (Util.PDVE(player2)) {
+                                    player2.sendMessage("§8[§f☠§8]" + p.getName() + " §cSaiu do evento!");
+                                }
+                            }
                         }
                     } else {
                         for (Player player2 : Bukkit.getOnlinePlayers()) {
@@ -314,6 +364,7 @@ public class PlayerInfo implements Listener {
                     CorridaEvent.playerson.remove(player);
                     CorridaBoatEvent.playerson.remove(player);
                     SumoEvent.playerson.remove(player);
+                    TNTRunEvent.playerson.remove(player);
                     TNTTagEvent.playerson.remove(player);
                     ParapenteEvent.playerson.remove(player);
                 } catch (IOException e) {
@@ -334,12 +385,6 @@ public class PlayerInfo implements Listener {
             try {
                 config.save(file);
                 event.getPlayer().sendMessage("§8[§c!§8] §7Você saiu do evento §c" + MineSkyEvents.event);
-                TijolãoWarsEvent.playerson.remove(player);
-                CorridaEvent.playerson.remove(player);
-                CorridaBoatEvent.playerson.remove(player);
-                SumoEvent.playerson.remove(player);
-                TNTTagEvent.playerson.remove(player);
-                ParapenteEvent.playerson.remove(player);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -348,31 +393,37 @@ public class PlayerInfo implements Listener {
                 if (Util.PDVE(p)) {
                     int playersone = 0;
                     switch (MineSkyEvents.event) {
+                        case "Spleef":
+                            SpleefEvent.playerson.remove(p);
+                            playersone = SpleefEvent.playerson.size();
+                            break;
                         case "TijolãoWars":
-                            playersone =
-                                    TijolãoWarsEvent.playerson.size();
                             TijolãoWarsEvent.playerson.remove(p);
+                            playersone = TijolãoWarsEvent.playerson.size();
                             break;
                         case "Corrida":
-                            playersone =
-                                    CorridaEvent.playerson.size();
                             CorridaEvent.playerson.remove(p);
+                            playersone = CorridaEvent.playerson.size();
                             break;
                         case "CorridaBoat":
-                            playersone = CorridaBoatEvent.playerson.size();
                             CorridaBoatEvent.playerson.remove(p);
+                            playersone = CorridaBoatEvent.playerson.size();
                             break;
                         case "Sumo":
-                            playersone = SumoEvent.playerson.size();
                             SumoEvent.playerson.remove(p);
+                            playersone = SumoEvent.playerson.size();
+                            break;
+                        case "TNTRun":
+                            TNTRunEvent.playerson.remove(p);
+                            playersone = TNTRunEvent.playerson.size();
                             break;
                         case "TNTTag":
-                            playersone = TNTTagEvent.playerson.size();
                             TNTTagEvent.playerson.remove(p);
+                            playersone = TNTTagEvent.playerson.size();
                             break;
                         case "Parapente":
-                            playersone = ParapenteEvent.playerson.size();
                             ParapenteEvent.playerson.remove(p);
+                            playersone = ParapenteEvent.playerson.size();
                             break;
                     }
                     p.sendMessage("§7" + player.getName() + " §esaiu do evento. (§b" + playersone + "§e/§b4§e)");
@@ -547,6 +598,29 @@ public class PlayerInfo implements Listener {
             }
             return;
         }
+        if (MineSkyEvents.event == "TNTRun") {
+            TNTRunEvent.playerson.remove(p);
+            TNTRunEvent.mortos.add(p);
+            if (TNTRunEvent.playerson.size() == 1) TNTRunEvent.finalizar();
+            p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
+            event.setDeathMessage(null);
+            File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
+            FileConfiguration config = DataManager.getConfiguration(file);
+
+            config.set("Event", false);
+            config.set("Events.TNTRun.dead", config.getInt("Events.TNTRun.dead")+1);
+            try {
+                config.save(Util.PlayerDataF(p));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Bukkit.dispatchCommand(p, "event entrar");
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.getName().equals(p.getName())) return;
+                player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7morreu.");
+            }
+            return;
+        }
         if (MineSkyEvents.event == "TNTTag") {
             TNTTagEvent.playerson.remove(p);
             TNTTagEvent.mortos.add(p);
@@ -708,6 +782,23 @@ public class PlayerInfo implements Listener {
                 event.setCancelled(true);
                 return;
             }
+        }
+    }
+    @EventHandler
+    public void onMovePlayer(PlayerMoveEvent e) {
+        Player p = e.getPlayer();
+        Location pl = e.getPlayer().getLocation();
+        Location block1 = pl.clone().subtract(0, 1, 0);
+        Location block2 = pl.clone().subtract(0, 2, 0);
+        if (MineSkyEvents.event.equals("TNTRun")) {
+            if (!Util.PDVE(p)) return;
+            if (!(block1.getBlock().getType() == Material.AIR)) return;
+            TNTRunEvent.blocksbreak.put(block1, block1.getBlock().getType());
+            TNTRunEvent.blocksbreak.put(block2, block2.getBlock().getType());
+            block2.getBlock().setType(Material.AIR);
+            block1.getBlock().setType(Material.AIR);
+        } else {
+            return;
         }
     }
 }

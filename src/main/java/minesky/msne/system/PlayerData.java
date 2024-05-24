@@ -41,6 +41,8 @@ public class PlayerData implements Listener {
             config.set("Events.CorridaBoat.win", 0);
             config.set("Events.Sumo.win", 0);
             config.set("Events.Sumo.dead", 0);
+            config.set("Events.TNTRun.win", 0);
+            config.set("Events.TNTRun.dead", 0);
             config.set("Events.TNTTag.win", 0);
             config.set("Events.TNTTag.dead", 0);
             config.set("Events.Parapente.win", 0);

@@ -403,6 +403,11 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
             }
             return true;
         }
+        if (args[0].equalsIgnoreCase("kill")) {
+            player.damage(999999999);
+            Bukkit.getLogger().warning("[MineSky-Events] " + player.getName() + " Morreu!");
+            return true;
+        }
         if (args[0].equalsIgnoreCase("reload")) {
             if (!s.hasPermission("mineskyevents.reload")) {
                 s.sendMessage("§8[§c!§8] §Você não pode executar esse comando.");

@@ -147,7 +147,7 @@ public class Util {
         if (meta != null) {
             meta.setDisplayName("§4§lIrei te pegar!");
             meta.setUnbreakable(true);
-            meta.addEnchant(Enchantment.KNOCKBACK, 2, true);
+            meta.addEnchant(Enchantment.KNOCKBACK, 3, true);
 
             List<String> lore = new ArrayList<>();
             lore.add("§7Stick do evento de Sumo");
@@ -293,6 +293,22 @@ public class Util {
         ItemMeta meta = (ItemMeta) skullMeta;
         File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
         FileConfiguration config = DataManager.getConfiguration(file);
+        if (MineSkyEvents.event == "Spleef") {
+            if (meta != null) {
+                meta.setDisplayName("§c§lInformações " + p.getName());
+                meta.setUnbreakable(true);
+
+                List<String> lore = new ArrayList<>();
+                lore.add("§7Suas informações do evento Spleef");
+                lore.add("");
+                lore.add("§6| §7Vitórias§6: " + config.getInt("Events.Spleef.win"));
+                lore.add("§6| §7Mortes§6: " + config.getInt("Events.Spleef.dead"));
+                meta.setLore(lore);
+
+                head.setItemMeta(meta);
+                return head;
+            }
+        }
         if (MineSkyEvents.event == "TijolãoWars") {
             if (meta != null) {
                 meta.setDisplayName("§c§lInformações " + p.getName());
@@ -349,6 +365,22 @@ public class Util {
                 lore.add("");
                 lore.add("§6| §7Vitórias§6: " + config.getInt("Events.Sumo.win"));
                 lore.add("§6| §7Mortes§6: " + config.getInt("Events.Sumo.dead"));
+                meta.setLore(lore);
+
+                head.setItemMeta(meta);
+                return head;
+            }
+        }
+        if (MineSkyEvents.event == "TNTRun") {
+            if (meta != null) {
+                meta.setDisplayName("§c§lInformações " + p.getName());
+                meta.setUnbreakable(true);
+
+                List<String> lore = new ArrayList<>();
+                lore.add("§7Suas informações do evento TNTRUN");
+                lore.add("");
+                lore.add("§6| §7Vitórias§6: " + config.getInt("Events.TNTRun.win"));
+                lore.add("§6| §7Mortes§6: " + config.getInt("Events.TNTRun.dead"));
                 meta.setLore(lore);
 
                 head.setItemMeta(meta);

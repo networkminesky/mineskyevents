@@ -23,9 +23,10 @@ import java.util.*;
 public class TijolãoWarsEvent {
     public static boolean contagem;
     public static boolean contagemI = false;
-    public static Set<Player> playerson = new HashSet<>();
+    public static List<Player> playerson = new ArrayList<>();
     public static List<Player> mortos = new ArrayList<>();
     public static BukkitRunnable temporizador;
+    public static BukkitRunnable contagemtemp;
     private static final List<String> mapas = Arrays.asList("Mapa1", "Mapa2");
     public static String selectedMap;
     private static final Random random = new Random();
@@ -69,7 +70,7 @@ public class TijolãoWarsEvent {
     public static void comtagemEvento() {
         if (!contagemI && playerson.size() >= 4) {
             temporizador.cancel();
-            new BukkitRunnable() {
+            contagemtemp =new BukkitRunnable() {
                 int tempoRestante = 180;
 
                 @Override
@@ -116,7 +117,8 @@ public class TijolãoWarsEvent {
 
                     tempoRestante--;
                 }
-            }.runTaskTimer(MineSkyEvents.get(), 0, 20);
+            };
+            contagemtemp.runTaskTimer(MineSkyEvents.get(), 0, 20);
         }
     }
     public static void finalizar() {

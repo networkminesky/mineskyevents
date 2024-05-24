@@ -26,9 +26,10 @@ import java.util.*;
 public class TNTTagEvent {
     public static boolean contagem;
     public static boolean contagemI = false;
-    public static Set<Player> playerson = new HashSet<>();
+    public static List<Player> playerson = new ArrayList<>();
     public static List<Player> mortos = new ArrayList<>();
     public static BukkitRunnable temporizador;
+    public static BukkitRunnable contagemtemp;
     public static BukkitRunnable temp1;
     public static BukkitRunnable temp2;
     public static int TIME;
@@ -77,7 +78,7 @@ public class TNTTagEvent {
     public static void comtagemEvento() {
         if (!contagemI && playerson.size() >= 4) {
             temporizador.cancel();
-            new BukkitRunnable() {
+            contagemtemp = new BukkitRunnable() {
                 int tempoRestante = 60;
 
                 @Override
@@ -118,7 +119,8 @@ public class TNTTagEvent {
                     }
                     tempoRestante--;
                 }
-            }.runTaskTimer(MineSkyEvents.get(), 0, 20);
+            };
+            contagemtemp.runTaskTimer(MineSkyEvents.get(), 0, 20);
         }
     }
     public static void finalizar() {

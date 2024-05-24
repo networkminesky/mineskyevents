@@ -9,6 +9,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.block.data.type.TNT;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -506,6 +507,65 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                     }
                     break;
+                case "TNTRun":
+                    if (!TNTRunEvent.contagem && TNTRunEvent.contagemI) {
+                        Util.Head = Util.head(player);
+                        player.getInventory().setItem(8, Util.BedLeave);
+                        player.getInventory().setItem(4, Util.Head);
+                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                            @Override
+                            public void run() {
+                                if (TNTRunEvent.selectedMap.equals("Mapa1")) {
+                                    player.teleport(Locations.tntrunA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                }
+                                if (TNTRunEvent.selectedMap.equals("Mapa2")) {
+                                    player.teleport(Locations.tntrun2A, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                }
+                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
+                            }
+                        }, 20L);
+                        PlayerSpectator(player);
+                        config.set("EventSpect", true);
+                        try {
+                            config.save(file);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return true;
+                    }
+                    Util.Head = Util.head(player);
+                    clearInventory(player);
+                    player.getInventory().setItem(8, Util.BedLeave);
+                    player.getInventory().setItem(4, Util.Head);
+                    if (TNTRunEvent.playerson != null && !TNTRunEvent.contagemI) {
+                        TNTRunEvent.playerson.add(player);
+                    }
+                    if (!TNTRunEvent.contagemI) TNTRunEvent.comtagemEvento();
+                    config.set("Event", true);
+                    try {
+                        config.save(file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
+                        @Override
+                        public void run() {
+                            if (TNTRunEvent.selectedMap.equals("Mapa1")) {
+                                player.teleport(Locations.tntrun, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            if (TNTRunEvent.selectedMap.equals("Mapa2")) {
+                                player.teleport(Locations.tntrun2, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
+                        }
+                    }, 20L);
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (Util.PDVE(p)) {
+                            int playersone = TNTRunEvent.playerson.size();
+                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
+                        }
+                    }
+                    break;
                 case "TNTTag":
                     if (!TNTTagEvent.contagem && TNTTagEvent.contagemI) {
                         Util.Head = Util.head(player);
@@ -687,8 +747,9 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 s.sendMessage("§8[§c!§8] §cVocê não pode executar esse comando.");
                 return true;
             }
-            if (MineSkyEvents.event == "OFF") {
+            if (MineSkyEvents.event.equals("OFF") && args[1].isEmpty()) {
                 s.sendMessage("§8[§c!§8] §cNenhum evento esta acontecendo agora.");
+                return true;
             }
                 switch (MineSkyEvents.event) {
                     case "Spleef":
@@ -762,6 +823,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     Util.sendMessageBGMSNE("Ruínas");
                     break;
             }
+            return true;
         }
         if (args[0].equalsIgnoreCase("finalizar")) {
             if (!player.hasPermission("mineskyevents.command.event.finalizar")) {
@@ -796,6 +858,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     SpleefEvent.contagem = true;
                     SpleefEvent.contagemI = false;
                     SpleefEvent.temporizador.cancel();
+                    SpleefEvent.contagemtemp.cancel();
                     break;
                 case "TijolãoWars":
                     MineSkyEvents.event = "OFF";
@@ -819,6 +882,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     TijolãoWarsEvent.contagem = true;
                     TijolãoWarsEvent.contagemI = false;
                     TijolãoWarsEvent.temporizador.cancel();
+                    TijolãoWarsEvent.contagemtemp.cancel();
                     break;
                 case "Corrida":
                     MineSkyEvents.event = "OFF";
@@ -842,6 +906,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     CorridaEvent.contagem = true;
                     CorridaEvent.contagemI = false;
                     CorridaEvent.temporizador.cancel();
+                    CorridaEvent.contagemtemp.cancel();
                     break;
                 case "CorridaBoat":
                     MineSkyEvents.event = "OFF";
@@ -866,6 +931,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     CorridaBoatEvent.contagem = true;
                     CorridaBoatEvent.contagemI = false;
                     CorridaBoatEvent.temporizador.cancel();
+                    CorridaBoatEvent.contagemtemp.cancel();
                     break;
                 case "Sumo":
                     MineSkyEvents.event = "OFF";
@@ -889,6 +955,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     SumoEvent.contagem = true;
                     SumoEvent.contagemI = false;
                     SumoEvent.temporizador.cancel();
+                    SumoEvent.contagemtemp.cancel();
                     break;
                 case "TNTRun":
                     MineSkyEvents.event = "OFF";
@@ -907,6 +974,12 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                             }
                         }
                     }
+                    TNTRunEvent.mortos.clear();
+                    TNTRunEvent.playerson.clear();
+                    TNTRunEvent.contagem = true;
+                    TNTRunEvent.contagemI = false;
+                    TNTRunEvent.temporizador.cancel();
+                    TNTRunEvent.contagemtemp.cancel();
                     break;
                 case "TNTTag":
                     MineSkyEvents.event = "OFF";
@@ -934,6 +1007,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     TNTTagEvent.contagem = true;
                     TNTTagEvent.contagemI = false;
                     TNTTagEvent.temporizador.cancel();
+                    TNTTagEvent.contagemtemp.cancel();
                     break;
                 case "Parapente":
                     MineSkyEvents.event = "OFF";
@@ -959,6 +1033,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     ParapenteEvent.contagem = true;
                     ParapenteEvent.contagemI = false;
                     ParapenteEvent.temporizador.cancel();
+                    ParapenteEvent.contagemtemp.cancel();
                     break;
                 case "Mini-Wars":
                     MineSkyEvents.event = "OFF";
@@ -1100,6 +1175,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 s.sendMessage("§8[§c!§8] §cUso incorreto. Use /event set (Evento) (Arena/Spawn)");
                 return true;
             }
+            int arg = Integer.parseInt(args[1]);
             if (args[1].equalsIgnoreCase("Spleef")) {
                 if (args[3].equalsIgnoreCase("1")) {
                     if (args[2].equalsIgnoreCase("spawn")) {
@@ -1383,6 +1459,97 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
+            if (args[1].equalsIgnoreCase("TNTRun")) {
+                if (args[3].equalsIgnoreCase("1")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.tntrun = loc;
+                        config.set("TNTRun.1", loc);
+                        config.set("TNTRun.1.world", loc.getWorld().getName());
+                        config.set("TNTRun.1.x", Double.valueOf(loc.getX()));
+                        config.set("TNTRun.1.y", Double.valueOf(loc.getY()));
+                        config.set("TNTRun.1.z", Double.valueOf(loc.getZ()));
+                        config.set("TNTRun.1.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("TNTRun.1.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lTNTRUN §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                    if (args[2].equalsIgnoreCase("arena")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.tntrunA = loc;
+                        config.set("arena.TNTRun.1", loc);
+                        config.set("arena.TNTRun.1.world", loc.getWorld().getName());
+                        config.set("arena.TNTRun.1.x", Double.valueOf(loc.getX()));
+                        config.set("arena.TNTRun.1.y", Double.valueOf(loc.getY()));
+                        config.set("arena.TNTRun.1.z", Double.valueOf(loc.getZ()));
+                        config.set("arena.TNTRun.1.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("arena.TNTRun.1.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aArena de §lTNTRUN §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else if (args[3].equalsIgnoreCase("2")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.tntrun2 = loc;
+                        config.set("TNTRun.2", loc);
+                        config.set("TNTRun.2.world", loc.getWorld().getName());
+                        config.set("TNTRun.2.x", Double.valueOf(loc.getX()));
+                        config.set("TNTRun.2.y", Double.valueOf(loc.getY()));
+                        config.set("TNTRun.2.z", Double.valueOf(loc.getZ()));
+                        config.set("TNTRun.2.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("TNTRun.2.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lTNTRUN §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                    if (args[2].equalsIgnoreCase("arena")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.tntrun2A = loc;
+                        config.set("arena.TNTRun.2", loc);
+                        config.set("arena.TNTRun.2.world", loc.getWorld().getName());
+                        config.set("arena.TNTRun.2.x", Double.valueOf(loc.getX()));
+                        config.set("arena.TNTRun.2.y", Double.valueOf(loc.getY()));
+                        config.set("arena.TNTRun.2.z", Double.valueOf(loc.getZ()));
+                        config.set("arena.TNTRun.2.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("arena.TNTRun.2.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aArena de §lTNTRUN §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else {
+                    s.sendMessage("§8[§c!§8] §cEste evento só tem 2 mapa.");
+                }
+            }
             if (args[1].equalsIgnoreCase("TNTTag")) {
                 if (args[3].equalsIgnoreCase("1")) {
                     if (args[2].equalsIgnoreCase("spawn")) {
@@ -1535,8 +1702,8 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
-                    if (args[1].equalsIgnoreCase("Mini-Wars")) {
-                if (args[3].equalsIgnoreCase("1")) {
+            if (args[1].equalsIgnoreCase("Mini-Wars")) {
+                if (arg == 1) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
                         File file = DataManager.getFile("locations.yml");
@@ -1558,7 +1725,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                         return true;
                     }
-                } else if (args[3].equalsIgnoreCase("2")) {
+                } else if (arg == 2) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
                         File file = DataManager.getFile("locations.yml");
@@ -1580,7 +1747,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                         return true;
                     }
-                } else if (args[3].equalsIgnoreCase("3")) {
+                } else if (arg == 3) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
                         File file = DataManager.getFile("locations.yml");
@@ -1602,7 +1769,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                         return true;
                     }
-                } else if (args[3].equalsIgnoreCase("4")) {
+                } else if (arg == 4) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
                         File file = DataManager.getFile("locations.yml");
@@ -1624,7 +1791,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                         return true;
                     }
-                } else if (args[3].equalsIgnoreCase("5")) {
+                } else if (arg == 5) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
                         File file = DataManager.getFile("locations.yml");
@@ -1646,7 +1813,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                         return true;
                     }
-                } else {
+                } else if (arg > 5) {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 5 mapa.");
                 }
             }
@@ -1678,7 +1845,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 }
             }
                     if (args[1].equalsIgnoreCase("Esconde-esconde")) {
-                if (args[3].equalsIgnoreCase("1")) {
+                if (arg == 1) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
                         File file = DataManager.getFile("locations.yml");
@@ -1700,7 +1867,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                         return true;
                     }
-                } else if (args[3].equalsIgnoreCase("2")) {
+                } else if (arg == 2) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
                         File file = DataManager.getFile("locations.yml");
@@ -1722,7 +1889,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         }
                         return true;
                     }
-                } else {
+                } else if (arg > 2) {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 2 mapa.");
                 }
             }
@@ -1813,6 +1980,10 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                             case "Sumo":
                                 SumoEvent.playerson.remove(j);
                                 if (SumoEvent.playerson.size() == 1 && !SumoEvent.contagem && SumoEvent.contagemI) SumoEvent.finalizar();
+                                break;
+                            case "TNTRun":
+                                TNTRunEvent.playerson.remove(player);
+                                if (TNTRunEvent.playerson.size() == 1 && !TNTRunEvent.contagem && TNTRunEvent.contagemI) TNTRunEvent.finalizar();
                                 break;
                             case "TNTTag":
                                 TNTTagEvent.playerson.remove(j);

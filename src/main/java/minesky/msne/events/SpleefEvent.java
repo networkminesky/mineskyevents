@@ -22,10 +22,11 @@ import java.util.*;
 public class SpleefEvent {
     public static boolean contagem;
     public static boolean contagemI = false;
-    public static Set<Player> playerson = new HashSet<>();
+    public static List<Player> playerson = new ArrayList<>();
     public static List<Player> mortos = new ArrayList<>();
     public static Map<Location, Material> blocksbreak = new HashMap<>();
     public static BukkitRunnable temporizador;
+    public static BukkitRunnable contagemtemp;
     public static void iniciarEvento() {
         MineSkyEvents.event = "Spleef";
         Util.sendMessageBGMSNE("Spleef");
@@ -65,7 +66,7 @@ public class SpleefEvent {
     public static void comtagemEvento() {
         if (!contagemI && playerson.size() >= 4) {
             temporizador.cancel();
-            new BukkitRunnable() {
+            contagemtemp = new BukkitRunnable() {
                 int tempoRestante = 180;
 
                 @Override
@@ -87,7 +88,7 @@ public class SpleefEvent {
                         contagem = false;
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(p)) {
-                                p.teleport(Locations.sumoA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                p.teleport(Locations.spleefA, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 p.getInventory().removeItem(Util.BedLeave);
                                 p.getInventory().removeItem(Util.Head);
                                 p.getInventory().addItem(Util.StoneShovel);
@@ -99,7 +100,8 @@ public class SpleefEvent {
 
                     tempoRestante--;
                 }
-            }.runTaskTimer(MineSkyEvents.get(), 0, 20);
+            };
+            contagemtemp.runTaskTimer(MineSkyEvents.get(), 0, 20);
         }
     }
     public static void finalizar() {
