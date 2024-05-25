@@ -8,6 +8,8 @@ import minesky.msne.discord.EventsMessage;
 import minesky.msne.events.CorridaBoatEvent;
 import minesky.msne.events.CorridaEvent;
 import minesky.msne.events.ParapenteEvent;
+import minesky.msne.utils.EventItem;
+import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -60,18 +62,18 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
             Player adotar = Bukkit.getPlayer(args[1]);
             if (adotar != null && adotar.isOnline()) {
                 TextComponent messageADOPT = new TextComponent("§b" + player.getName() + " §7adotou §b" + adotar.getName());
-                Util.sendMessageBCMSNE(messageADOPT);
+                SendMessages.sendMessageBCMSNE(messageADOPT);
             } else {
                 player.sendMessage("§8[§c!§8] §cEste player não está online no momento");
             }
             return true;
         }
         if (args[0].equalsIgnoreCase("give")) {
-            player.getInventory().addItem(Util.StoneShovel);
-            player.getInventory().addItem(Util.SumoItem);
-            player.getInventory().addItem(Util.TNT);
-            player.getInventory().addItem(Util.Barco);
-            player.getInventory().addItem(Util.CheckP);
+            player.getInventory().addItem(EventItem.SpleefITEM);
+            player.getInventory().addItem(EventItem.SumoITEM);
+            player.getInventory().addItem(EventItem.TNTHEAD);
+            player.getInventory().addItem(EventItem.BarcoITEM);
+            player.getInventory().addItem(EventItem.CheckPoint);
             s.sendMessage("§8[§a!§8] §aVocê recebeu todos os itens de eventos.");
             return true;
         }
@@ -86,11 +88,11 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
 
             if (playerList.size() >= 3) {
                 MineSkyEvents.event = "OFF";
-                String message = "§e§lCorrida §8| §a";
+                StringBuilder message = new StringBuilder("§e§lCorrida §8| §a");
                 for (int i = 0; i < 3; i++) {
                     String ganhador = playerList.get(i);
                     Player ganhadorPlayer = player.getServer().getPlayer(ganhador);
-                    message += (i + 1) + "º lugar: §l" + playerList.get(i) + " §8|§a ";
+                    message.append((i + 1)).append("º lugar: §l").append(playerList.get(i)).append(" §8|§a ");
                     int premio = 0;
                     Random random = new Random();
                     if (i == 0) {
@@ -109,7 +111,9 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                     Player p = Bukkit.getPlayer(playerList.get(i));
                     Vault.economy.depositPlayer(poff, premio);
                     TextComponent text1 = new TextComponent("§e§lCorrida §8| §aVocê ganhou a §lCorrida §ae como prêmio você ganhou: §l$" + premio);
-                    Util.sendPlayermessage(p, text1);
+                    assert p != null;
+                    SendMessages.sendPlayermessage(p, text1);
+                    assert ganhadorPlayer != null;
                     File file = DataManager.getFile(ganhadorPlayer.getName().toLowerCase(), "playerdata");
                     FileConfiguration config = DataManager.getConfiguration(file);
 
@@ -121,9 +125,9 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                     }
 
                 }
-                message = message.substring(0, message.length() - 2);
-                TextComponent text = new TextComponent(message);
-                Util.sendMessageBCMSNE(text);
+                message = new StringBuilder(message.substring(0, message.length() - 2));
+                TextComponent text = new TextComponent(message.toString());
+                SendMessages.sendMessageBCMSNE(text);
                 EventsMessage.sendLogEventPLIST("Corrida", playerList, premio1, premio2, premio3);
                 playerList.clear();
                 CorridaEvent.playerson.clear();
@@ -132,7 +136,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (Util.PDVE(p) || Util.PDVES(p)) {
                         EventCommand.RevealPlayer(player);
-                        Util.sendConectionBCMSNE(p);
+                        SendMessages.sendConectionBCMSNE(p);
                         File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
                         FileConfiguration config = DataManager.getConfiguration(file);
                         config.set("Event", false);
@@ -164,11 +168,11 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                 player.sendMessage("§8[§a!§8] §aVocê completou as§l 3 §avoltas!");
                 if (playerList.size() >= 3) {
                     MineSkyEvents.event = "OFF";
-                    String message = "§9§lCorrida de barco §8| §a";
+                    StringBuilder message = new StringBuilder("§9§lCorrida de barco §8| §a");
                     for (int i = 0; i < 3; i++) {
                         String ganhador = playerList.get(i);
                         Player ganhadorPlayer = player.getServer().getPlayer(ganhador);
-                        message += (i + 1) + "º lugar: §l" + playerList.get(i) + " §8|§a ";
+                        message.append((i + 1)).append("º lugar: §l").append(playerList.get(i)).append(" §8|§a ");
                         int premio = 0;
                         Random random = new Random();
                         if (i == 0) {
@@ -187,7 +191,9 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                         Player p = Bukkit.getPlayer(playerList.get(i));
                         Vault.economy.depositPlayer(poff, premio);
                         TextComponent text1 = new TextComponent("§9§lCorrida de barco §8| §aVocê ganhou a §lCorrida de barco §ae como prêmio você ganhou: §l$" + premio);
-                        Util.sendPlayermessage(p, text1);
+                        assert p != null;
+                        SendMessages.sendPlayermessage(p, text1);
+                        assert ganhadorPlayer != null;
                         File file = DataManager.getFile(ganhadorPlayer.getName().toLowerCase(), "playerdata");
                         FileConfiguration config = DataManager.getConfiguration(file);
 
@@ -199,9 +205,9 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                         }
 
                     }
-                    message = message.substring(0, message.length() - 2);
-                    TextComponent text = new TextComponent(message);
-                    Util.sendMessageBCMSNE(text);
+                    message = new StringBuilder(message.substring(0, message.length() - 2));
+                    TextComponent text = new TextComponent(message.toString());
+                    SendMessages.sendMessageBCMSNE(text);
                     EventsMessage.sendLogEventPLIST("CorridaBoat", playerList, premio1, premio2, premio3);
                     playerList.clear();
                     playerBOATLIST.clear();
@@ -211,7 +217,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(p) || Util.PDVES(p)) {
                             EventCommand.RevealPlayer(p);
-                            Util.sendConectionBCMSNE(p);
+                            SendMessages.sendConectionBCMSNE(p);
                             File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
                             config.set("Event", false);
@@ -340,11 +346,11 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
 
             if (playerList.size() >= 3) {
                 MineSkyEvents.event = "OFF";
-                String message = "§3§lCorrida de Parapente §8| §a";
+                StringBuilder message = new StringBuilder("§3§lCorrida de Parapente §8| §a");
                 for (int i = 0; i < 3; i++) {
                     String ganhador = playerList.get(i);
                     Player ganhadorPlayer = player.getServer().getPlayer(ganhador);
-                    message += (i + 1) + "º lugar: §l" + playerList.get(i) + " §8|§a ";
+                    message.append((i + 1)).append("º lugar: §l").append(playerList.get(i)).append(" §8|§a ");
                     int premio = 0;
                     Random random = new Random();
                     if (i == 0) {
@@ -363,7 +369,9 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                     Player p = Bukkit.getPlayer(playerList.get(i));
                     Vault.economy.depositPlayer(poff, premio);
                     TextComponent text1 = new TextComponent("§3§lCorrida de Parapente §8| §aVocê ganhou a §lCorrida de Parapente §ae como prêmio você ganhou: §l$" + premio);
-                    Util.sendPlayermessage(p, text1);
+                    assert p != null;
+                    SendMessages.sendPlayermessage(p, text1);
+                    assert ganhadorPlayer != null;
                     File file = DataManager.getFile(ganhadorPlayer.getName().toLowerCase(), "playerdata");
                     FileConfiguration config = DataManager.getConfiguration(file);
 
@@ -375,9 +383,9 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                     }
 
                 }
-                message = message.substring(0, message.length() - 2);
-                TextComponent text = new TextComponent(message);
-                Util.sendMessageBCMSNE(text);
+                message = new StringBuilder(message.substring(0, message.length() - 2));
+                TextComponent text = new TextComponent(message.toString());
+                SendMessages.sendMessageBCMSNE(text);
                 EventsMessage.sendLogEventPLIST("Parapente", playerList, premio1, premio2, premio3);
                 playerList.clear();
                 playerARCOLIST.clear();
@@ -388,7 +396,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (Util.PDVE(p) || Util.PDVES(p)) {
                         EventCommand.RevealPlayer(player);
-                        Util.sendConectionBCMSNE(p);
+                        SendMessages.sendConectionBCMSNE(p);
                         File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
                         FileConfiguration config = DataManager.getConfiguration(file);
                         config.set("Event", false);

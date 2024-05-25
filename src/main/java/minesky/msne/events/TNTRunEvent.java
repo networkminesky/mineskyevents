@@ -6,11 +6,10 @@ import minesky.msne.commands.EventCommand;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.discord.EventsMessage;
+import minesky.msne.utils.EventItem;
+import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -25,7 +24,7 @@ public class TNTRunEvent {
     private static final List<String> mapas = Arrays.asList("Mapa1", "Mapa2");
     public static String selectedMap;
     private static final Random random = new Random();
-    public static boolean contagem;
+    public static boolean contagem = true;
     public static boolean contagemI = false;
     public static List<Player> playerson = new ArrayList<>();
     public static List<Player> mortos = new ArrayList<>();
@@ -35,7 +34,7 @@ public class TNTRunEvent {
     public static void iniciarEvento() {
         MineSkyEvents.event = "TNTRun";
         selectedMap = selectMapa();
-        Util.sendMessageBGMSNE("TNTRun");
+        SendMessages.sendMessageBGMSNE("TNTRun");
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.hasPermission("mineskyevents.bypass.join")) {
                 Bukkit.dispatchCommand(player, "event entrar");
@@ -49,7 +48,7 @@ public class TNTRunEvent {
                     MineSkyEvents.event = "OFF";
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(player) || Util.PDVES(player)) {
-                            Util.sendConectionBCMSNE(player);
+                            SendMessages.sendConectionBCMSNE(player);
                             File file = DataManager.getFile(player.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
                             config.set("Event", false);
@@ -62,7 +61,7 @@ public class TNTRunEvent {
                         }
                     }
                     TextComponent menorplayer = new TextComponent("§c§lTNTRUN §8| §aInfelizmente o evento não teve §l4§a players para iniciar.");
-                    Util.sendMessageBCMSNE(menorplayer);
+                    SendMessages.sendMessageBCMSNE(menorplayer);
                 }
                 tempoRestante--;
             }
@@ -100,8 +99,8 @@ public class TNTRunEvent {
                                 if (selectedMap.equals("Mapa2")) {
                                     p.teleport(Locations.tntrun2A, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 }
-                                p.getInventory().removeItem(Util.BedLeave);
-                                p.getInventory().removeItem(Util.Head);
+                                p.getInventory().removeItem(EventItem.BedLeave);
+                                p.getInventory().removeItem(EventItem.Head);
                                 this.cancel();
                             }
                         }
@@ -131,7 +130,7 @@ public class TNTRunEvent {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Util.PDVE(player) || Util.PDVES(player)) {
                 EventCommand.RevealPlayer(player);
-                Util.sendConectionBCMSNE(player);
+                SendMessages.sendConectionBCMSNE(player);
                 File file = DataManager.getFile(player.getName().toLowerCase(), "playerdata");
                 FileConfiguration config = DataManager.getConfiguration(file);
                 config.set("Event", false);
@@ -143,8 +142,9 @@ public class TNTRunEvent {
                 }
             }
         }
+        assert vencedor != null;
         TextComponent encerrar = new TextComponent("§c§lTNTRUN §8| §a1º Lugar §8- §a§l" + vencedor.getName() + " §8| §a2º Lugar §8- §a§l" + vencedores[1].getName() + " §8| §a3º Lugar §8- §a§l" + vencedores[0].getName());
-        Util.sendMessageBCMSNE(encerrar);
+        SendMessages.sendMessageBCMSNE(encerrar);
         Random random = new Random();
         int premio1 = random.nextInt(5500 - 4500 + 1) + 4500;
         int premio2 = random.nextInt(3500 - 2500 + 1) + 2500;
@@ -158,9 +158,9 @@ public class TNTRunEvent {
         TextComponent text1 = new TextComponent("§c§lTNTRUN §8| §aVocê ganhou o §lTNTRUN §ae como prêmio você ganhou: §l" + premio1);
         TextComponent text2 = new TextComponent("§c§lTNTRUN §8| §aVocê ganhou o §lTNTRUN §ae como prêmio você ganhou: §l" + premio2);
         TextComponent text3 = new TextComponent("§c§lTNTRUN §8| §aVocê ganhou o §lTNTRUN §ae como prêmio você ganhou: §l" + premio3);
-        Util.sendPlayermessage(vencedor, text1);
-        Util.sendPlayermessage(vencedores[1], text2);
-        Util.sendPlayermessage(vencedores[0], text3);
+        SendMessages.sendPlayermessage(vencedor, text1);
+        SendMessages.sendPlayermessage(vencedores[1], text2);
+        SendMessages.sendPlayermessage(vencedores[0], text3);
         EventsMessage.sendLogEvent("TNTRun", vencedor, vencedores, premio1, premio2, premio3);
         playerson.clear();
         mortos.clear();
@@ -192,7 +192,7 @@ public class TNTRunEvent {
                 FileConfiguration configfor = DataManager.getConfiguration(filefor);
                 if (configfor.getBoolean("Notification")) {
                     TextComponent text = new TextComponent("§c§lTNTRUN §8| §aA arena foi restaurada com sucesso!");
-                    Util.sendPlayermessage(player, text);
+                    SendMessages.sendPlayermessage(player, text);
                 } else {
                     return;
                 }
@@ -200,6 +200,7 @@ public class TNTRunEvent {
                 return;
             }
         }
+        blocksbreak.clear();
     }
     public static String selectMapa() {
         return mapas.get(random.nextInt(mapas.size()));

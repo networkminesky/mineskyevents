@@ -6,6 +6,8 @@ import minesky.msne.commands.EventCommand;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.discord.EventsMessage;
+import minesky.msne.utils.EventItem;
+import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -32,7 +34,7 @@ public class TijolãoWarsEvent {
     private static final Random random = new Random();
     public static void iniciarEvento() {
         MineSkyEvents.event = "TijolãoWars";
-        Util.sendMessageBGMSNE("TijolãoWars");
+        SendMessages.sendMessageBGMSNE("TijolãoWars");
         selectedMap = selectMapa();
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.hasPermission("mineskyevents.bypass.join")) {
@@ -47,7 +49,7 @@ public class TijolãoWarsEvent {
                     MineSkyEvents.event = "OFF";
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(player) || Util.PDVES(player)) {
-                            Util.sendConectionBCMSNE(player);
+                            SendMessages.sendConectionBCMSNE(player);
                             File file = DataManager.getFile(player.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
                             config.set("Event", false);
@@ -60,7 +62,7 @@ public class TijolãoWarsEvent {
                         }
                     }
                     TextComponent menorplayer = new TextComponent("§6§lTijolãoWars §8| §aInfelizmente o evento não teve §l4§a players para iniciar.");
-                    Util.sendMessageBCMSNE(menorplayer);
+                    SendMessages.sendMessageBCMSNE(menorplayer);
                 }
                 tempoRestante--;
             }
@@ -98,8 +100,8 @@ public class TijolãoWarsEvent {
                                 if (selectedMap.equals("Mapa2")) {
                                     p.teleport(Locations.tijolao2A, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 }
-                                p.getInventory().removeItem(Util.BedLeave);
-                                p.getInventory().removeItem(Util.Head);
+                                p.getInventory().removeItem(EventItem.BedLeave);
+                                p.getInventory().removeItem(EventItem.Head);
                                 ItemStack bricks = new ItemStack(Material.BRICK, 64);
                                 PlayerInventory inventory = p.getInventory();
 
@@ -138,7 +140,7 @@ public class TijolãoWarsEvent {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (Util.PDVE(player) || Util.PDVES(player)) {
                 EventCommand.RevealPlayer(player);
-                Util.sendConectionBCMSNE(player);
+                SendMessages.sendConectionBCMSNE(player);
                 File file = DataManager.getFile(player.getName().toLowerCase(), "playerdata");
                 FileConfiguration config = DataManager.getConfiguration(file);
                 config.set("Event", false);
@@ -150,8 +152,9 @@ public class TijolãoWarsEvent {
                 }
             }
         }
-            TextComponent encerrar = new TextComponent("§6§lTijolãoWars §8| §a1º Lugar §8- §a§l" + vencedor.getName() + " §8| §a2º Lugar §8- §a§l" + vencedores[1].getName() + " §8| §a3º Lugar §8- §a§l" + vencedores[0].getName());
-            Util.sendMessageBCMSNE(encerrar);
+        assert vencedor != null;
+        TextComponent encerrar = new TextComponent("§6§lTijolãoWars §8| §a1º Lugar §8- §a§l" + vencedor.getName() + " §8| §a2º Lugar §8- §a§l" + vencedores[1].getName() + " §8| §a3º Lugar §8- §a§l" + vencedores[0].getName());
+            SendMessages.sendMessageBCMSNE(encerrar);
             Random random = new Random();
             int premio1 = random.nextInt(5500 - 4500 + 1) + 4500;
             int premio2 = random.nextInt(3500 - 2500 + 1) + 2500;
@@ -165,9 +168,9 @@ public class TijolãoWarsEvent {
             TextComponent text1 = new TextComponent("§6§lTijolãoWars §8| §aVocê ganhou o §lTijolãoWars §ae como prêmio você ganhou: §l" + premio1);
             TextComponent text2 = new TextComponent("§6§lTijolãoWars §8| §aVocê ganhou o §lTijolãoWars §ae como prêmio você ganhou: §l" + premio2);
             TextComponent text3 = new TextComponent("§6§lTijolãoWars §8| §aVocê ganhou o §lTijolãoWars §ae como prêmio você ganhou: §l" + premio3);
-            Util.sendPlayermessage(vencedor, text1);
-            Util.sendPlayermessage(vencedores[1], text2);
-            Util.sendPlayermessage(vencedores[0], text3);
+            SendMessages.sendPlayermessage(vencedor, text1);
+            SendMessages.sendPlayermessage(vencedores[1], text2);
+            SendMessages.sendPlayermessage(vencedores[0], text3);
             EventsMessage.sendLogEvent("TijolãoWars", vencedor, vencedores, premio1, premio2, premio3);
             playerson.clear();
             mortos.clear();
@@ -179,8 +182,8 @@ public class TijolãoWarsEvent {
                 File file2 = DataManager.getFile(vencedor.getName().toLowerCase(), "playerdata");
                 FileConfiguration config2 = DataManager.getConfiguration(file2);
 
-                config.set("Events.Tijolao.win", config.getInt("Events.Tijolao.win")+1);
-                config2.set("Events.Tijolao.win", config.getInt("Events.Tijolao.win")+1);
+                config.set("Events.TijolãoWars.win", config.getInt("Events.TijolãoWars.win")+1);
+                config2.set("Events.TijolãoWars.win", config.getInt("Events.TijolãoWars.win")+1);
                 try {
                     config.save(file);
                     config2.save(file);

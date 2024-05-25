@@ -10,7 +10,7 @@ import minesky.msne.system.PlayerData;
 import minesky.msne.system.PlayerInfo;
 import minesky.msne.system.event.EventStopping;
 import minesky.msne.utils.Command;
-import minesky.msne.utils.Util;
+import minesky.msne.utils.EventItem;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
@@ -19,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MineSkyEvents extends JavaPlugin {
 
-    private static MineSkyEvents mineSkyEvents;
     public static FileConfiguration Blacklist;
     public static String event = "OFF";
     private static Version version;
@@ -35,13 +34,12 @@ public final class MineSkyEvents extends JavaPlugin {
         Commands();
         System();
         Vault.setupEconomy();
-        Util.BedLeave = Util.createBed();
-        Util.StoneShovel = Util.shovel();
-        Util.SumoItem = Util.sumo();
-        Util.Barco = Util.barco();
-        Util.TNT = Util.tnt();
-        Util.CheckP = Util.checkpoint();
-        event = "OFF";
+        EventItem.SpleefITEM = EventItem.Shovel();
+        EventItem.BedLeave = EventItem.createBed();
+        EventItem.SumoITEM = EventItem.Stick();
+        EventItem.BarcoITEM = EventItem.Boat();
+        EventItem.TNTHEAD = EventItem.Tnt();
+        EventItem.CheckPoint = EventItem.Plate();
         getServer().getMessenger().registerOutgoingPluginChannel(this, "minesky:proxy");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §aConfig loaded.");
         Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §aPlugin successfully initialized!");
@@ -49,7 +47,6 @@ public final class MineSkyEvents extends JavaPlugin {
     }
 
     private void enablePlugin() {
-        mineSkyEvents = this;
         version = Version.getServerVersion();
         jarType = JarType.getJarType();
     }
@@ -84,6 +81,7 @@ public final class MineSkyEvents extends JavaPlugin {
         ConfigManager.createConfig("messages.yml");
         ConfigManager.createConfig("locations.yml");
     }
+
     public static void carregarConfigs() {
         Messages.loadMessages();
         Config.loadConfig();
@@ -99,16 +97,7 @@ public final class MineSkyEvents extends JavaPlugin {
             return true;
         if (version == Version.v1_19)
             return true;
-        if (version == Version.v1_20)
-            return true;
-        return false;
-    }
-    public static JarType getTypeJar() {
-        return jarType;
-    }
-
-    public static Version getVersion() {
-        return version;
+        return version == Version.v1_20;
     }
 
     public static MineSkyEvents get() {

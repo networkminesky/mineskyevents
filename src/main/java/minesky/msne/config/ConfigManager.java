@@ -3,11 +3,11 @@ package minesky.msne.config;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 import minesky.msne.MineSkyEvents;
 import minesky.msne.utils.Util;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -29,9 +29,9 @@ public class ConfigManager {
         File configFolder = new File(dataFolder, file);
         yml = YamlConfiguration.loadConfiguration(configFolder);
         if (!configFolder.exists()) {
-            InputStreamReader defConfigFolder = new InputStreamReader(MineSkyEvents.get().getResource(file));
+            InputStreamReader defConfigFolder = new InputStreamReader(Objects.requireNonNull(MineSkyEvents.get().getResource(file)));
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(defConfigFolder);
-            yml.setDefaults((Configuration) defaultConfig);
+            yml.setDefaults(defaultConfig);
             try {
                 Util.InfoC("Creating a " + file + " config...");
                 defaultConfig.save(configFolder);

@@ -4,12 +4,13 @@ import minesky.msne.MineSkyEvents;
 import minesky.msne.config.*;
 import minesky.msne.events.*;
 import minesky.msne.system.event.EventVerification;
+import minesky.msne.utils.EventItem;
+import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.block.data.type.TNT;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,209 +27,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 
-public class EventCommand implements CommandExecutor, TabCompleter {
-    private static String selectedMap;
-    public List<String> strings = new ArrayList<>();
-    public List<String> id = new ArrayList<>();
-    public List<String> names = new ArrayList<>();
-    public List<String> namesA = new ArrayList<>();
-    public List<String> namesF = new ArrayList<>();
-    @Override
-    public List<String> onTabComplete(CommandSender s, Command cmd, String lbl, String[] args) {
-        id.add("anunciar");
-        id.add("blacklist");
-        id.add("entrar");
-        id.add("kick");
-        id.add("set");
-        id.add("start");
-        id.add("finalizar");
-        names.add("Spleef");
-        names.add("TijolãoWars");
-        names.add("Corrida");
-        names.add("TNTRun");
-        names.add("CorridaBoat");
-        names.add("Sumo");
-        names.add("TNTTag");
-        names.add("Parapente");
-        namesA.add("Mini-Wars");
-        namesA.add("Esconde-esconde");
-        namesA.add("Ruínas");
-        namesA.add("CopaPVP");
-        namesF.addAll(namesA);
-        namesF.addAll(names);
-        if (args.length == 1) {
-            for (String idif : id) {
-                for (int i = 1; i <= idif.length(); i++) {
-                    if (args[0].equalsIgnoreCase(idif.substring(0, i))) {
-                        strings.clear();
-                        strings.add(idif);
-                    } else if (args[0].isEmpty()) {
-                        strings.clear();
-                        if (s.hasPermission("mineskyevents.command.event.anunciar")) strings.add("anunciar");
-                        if (s.hasPermission("mineskyevents.command.event.blacklist")) strings.add("blacklist");
-                        strings.add("entrar");
-                        if (s.hasPermission("mineskyevents.command.event.kick")) strings.add("kick");
-                        if (s.hasPermission("mineskyevents.command.event.set")) strings.add("set");
-                        if (s.hasPermission("mineskyevents.command.event.start")) strings.add("start");
-                    }
-                }
-            }
-        }
-        if (args.length == 2 && args[0].equalsIgnoreCase("blacklist")) {
-            strings.clear();
-            if (!s.hasPermission("mineskyevents.command.event.blacklist")) return strings;
-            strings.add("Adicionar");
-            strings.add("Remover");
-        }
-        if (args.length == 2 && args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("anunciar")) {
-            for (String name : names) {
-                for (int i = 1; i <= name.length() ; i++) {
-                    if (args[1].equalsIgnoreCase(name.substring(0, i))) {
-                        strings.clear();
-                        if (!s.hasPermission("mineskyevents.command.event.set") || !s.hasPermission("mineskyevents.command.event.start")) return strings;
-                        strings.add(name);
-                    } else if (args[1].isEmpty()) {
-                        strings.clear();
-                        if (!s.hasPermission("mineskyevents.command.event.set") || !s.hasPermission("mineskyevents.command.event.start")) return strings;
-                        strings.addAll(names);
-                    }
-                }
-            }
-        }
-        if (args.length == 2 && args[0].equalsIgnoreCase("anunciar")) {
-            for (String name : namesA) {
-                for (int i = 1; i <= name.length() ; i++) {
-                    if (args[1].equalsIgnoreCase(name.substring(0, i))) {
-                        strings.clear();
-                        if (!s.hasPermission("mineskyevents.command.event.anunciar")) return strings;
-                        strings.add(name);
-                    } else if (args[1].isEmpty()) {
-                        strings.clear();
-                        if (!s.hasPermission("mineskyevents.command.event.anunciar")) return strings;
-                        strings.addAll(namesA);
-                    }
-                }
-            }
-        }
-        if (args.length == 2 && args[0].equalsIgnoreCase("finalizar")) {
-            for (String name : namesF) {
-                for (int i = 1; i <= name.length() ; i++) {
-                    if (args[1].equalsIgnoreCase(name.substring(0, i))) {
-                        strings.clear();
-                        if (!s.hasPermission("mineskyevents.command.event.finalizar")) return strings;
-                        strings.add(name);
-                    } else if (args[1].isEmpty()) {
-                        strings.clear();
-                        if (!s.hasPermission("mineskyevents.command.event.finalizar")) return strings;
-                        strings.addAll(namesF);
-                    }
-                }
-            }
-        }
-        if (args.length == 2 && args[0].equalsIgnoreCase("kick")) {
-            for (String ps : Util.PVE()) {
-                for (int i = 1; i <= ps.length() ; i++) {
-                    if (args[1].equalsIgnoreCase(ps.substring(0, i))) {
-                        strings.clear();
-                        strings.add(ps);
-                    } else if (args[1].isEmpty()) {
-                        strings.clear();
-                        if (!s.hasPermission("mineskyevents.command.event.kick")) return strings;
-                        strings.addAll(Util.PVE());
-                    }
-                }
-            }
-        }
-        if (args.length == 3 && args[0].equalsIgnoreCase("anunciar")) {
-            strings.clear();
-            if (!s.hasPermission("mineskyevents.command.event.anunciar")) return strings;
-            if (args[2].equalsIgnoreCase("Mini-Wars")) {
-                strings.clear();
-                strings.add("Mapa-1");
-                strings.add("Mapa-2");
-                strings.add("Mapa-3");
-                strings.add("Mapa-4");
-                strings.add("Mapa-5");
-                return strings;
-            }
-            if (args[2].equalsIgnoreCase("CopaPVP")) {
-                strings.clear();
-                strings.add("Mapa-1");
-                return strings;
-            }
-            if (args[0].equalsIgnoreCase("Esconde-Esconde")) {
-                strings.clear();
-                strings.add("Mapa-1");
-                strings.add("Mapa-2");
-                return strings;
-            }
-            if (args[0].equalsIgnoreCase("Ruínas")) {
-                strings.clear();
-                strings.add("Mapa-1");
-                return strings;
-            }
-        }
-        if (args.length == 3 && args[0].equalsIgnoreCase("set")) {
-            strings.clear();
-            if (!s.hasPermission("mineskyevents.command.event.set")) return strings;
-            strings.add("spawn");
-            strings.add("arena");
-        }
-        if (args.length == 3 && args[0].equalsIgnoreCase("blacklist")) {
-            for (String name : names) {
-                for (int i = 1; i <= name.length() ; i++) {
-                    if (args[2].equalsIgnoreCase(name.substring(0, i))) {
-                        strings.clear();
-                        if (!s.hasPermission("mineskyevents.command.event.blacklist")) return strings;
-                        strings.add(name);
-                    } else if (args[2].isEmpty()) {
-                        strings.clear();
-                        if (!s.hasPermission("mineskyevents.command.event.blacklist")) return strings;
-                        strings.addAll(names);
-                    }
-                }
-            }
-        }
-        if (args.length == 4 && args[0].equalsIgnoreCase("blacklist")) {
-            for (String ps : Util.getOnlinePlayerNames()) {
-                for (int i = 1; i <= ps.length(); i++) {
-                    if (args[3].equalsIgnoreCase(ps.substring(0, i))) {
-                        strings.clear();
-                        strings.add(ps);
-                    } else if (args[3].isEmpty()) {
-                        strings.clear();
-                        strings.addAll(Util.getOnlinePlayerNames());
-                    }
-                }
-            }
-        }
-        if (args.length == 4 && args[0].equalsIgnoreCase("set")) {
-            strings.clear();
-            if (!s.hasPermission("mineskyevents.command.event.set")) return strings;
-            strings.add("1");
-            strings.add("2");
-            strings.add("3");
-            strings.add("4");
-            strings.add("5");
-            strings.add("6");
-            strings.add("7");
-            strings.add("8");
-            strings.add("9");
-            strings.add("10");
-        }
-        if (args.length == 5 && args[0].equalsIgnoreCase("blacklist")) {
-            strings.clear();
-            if (!s.hasPermission("mineskyevents.command.event.blacklist")) return strings;
-            strings.add("IP");
-        }
-        return strings;
-    }
+public class EventCommand implements CommandExecutor {
+    public static String selectedMap = "Mapa-0";
+    public static boolean Spectator = false;
+    public static Location location = null;
+    public static int PlayerSize = 0;
+    public static int RequestPlayerSize = 1;
+    public static boolean EventsAgendados = false;
 
     @Override
     public boolean onCommand(CommandSender s, Command cmd, String lbl, String[] args) {
-     //   if (!(s instanceof Player))
         Player player = (Player) s;
         if (args.length < 1 || args[0].equalsIgnoreCase("entrar")) {
             if (MineSkyEvents.event.equalsIgnoreCase("OFF")) {
@@ -252,493 +63,237 @@ public class EventCommand implements CommandExecutor, TabCompleter {
             switch (MineSkyEvents.event) {
                 case "Spleef":
                     if (!SpleefEvent.contagem && SpleefEvent.contagemI) {
-                        player.teleport(Locations.spleef, PlayerTeleportEvent.TeleportCause.COMMAND);
-                        Util.Head = Util.head(player);
-                        player.getInventory().setItem(8, Util.BedLeave);
-                        player.getInventory().setItem(4, Util.Head);
-                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                            @Override
-                            public void run() {
-                                player.teleport(Locations.spleefA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
-                            }
-                        }, 20L);
-                        PlayerSpectator(player);
-                        config.set("EventSpect", true);
-                        try {
-                            config.save(file);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Spectator = true;
+                        location = Locations.spleefA;
                         return true;
                     }
-                    Util.Head = Util.head(player);
-                    clearInventory(player);
-                    player.getInventory().setItem(8, Util.BedLeave);
-                    player.getInventory().setItem(4, Util.Head);
                     if (SpleefEvent.playerson != null && !SpleefEvent.contagemI) {
                         SpleefEvent.playerson.add(player);
                     }
                     if (!SpleefEvent.contagemI) SpleefEvent.comtagemEvento();
-                    config.set("Event", true);
-                    try {
-                        config.save(file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            player.teleport(Locations.spleef, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (Util.PDVE(p)) {
-                            int playersone = SpleefEvent.playerson.size();
-                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
-                        }
-                    }
-                    break;
+                    location = Locations.spleef;
+                    assert SpleefEvent.playerson != null;
+                    PlayerSize = SpleefEvent.playerson.size();
+                    RequestPlayerSize = 4;
+                break;
                 case "TijolãoWars":
                     if (!TijolãoWarsEvent.contagem && TijolãoWarsEvent.contagemI) {
-                        Util.Head = Util.head(player);
-                        player.getInventory().setItem(8, Util.BedLeave);
-                        player.getInventory().setItem(4, Util.Head);
-                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                            @Override
-                            public void run() {
-                                if (TijolãoWarsEvent.selectedMap.equals("Mapa1")) {
-                                    player.teleport(Locations.tijolaoA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                }
-                                if (TijolãoWarsEvent.selectedMap.equals("Mapa2")) {
-                                    player.teleport(Locations.tijolao2A, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                }
-                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
-                            }
-                        }, 20L);
-                        PlayerSpectator(player);
-                        config.set("EventSpect", true);
-                        try {
-                            config.save(file);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        Spectator = true;
+                        if (TijolãoWarsEvent.selectedMap.equals("Mapa1")) {
+                            location = Locations.tijolaoA;
+                        }
+                        if (TijolãoWarsEvent.selectedMap.equals("Mapa2")) {
+                            location = Locations.tijolao2A;
                         }
                         return true;
                     }
-                    Util.Head = Util.head(player);
-                    clearInventory(player);
-                    player.getInventory().setItem(8, Util.BedLeave);
-                    player.getInventory().setItem(4, Util.Head);
                     if (TijolãoWarsEvent.playerson != null && !TijolãoWarsEvent.contagemI) {
                         TijolãoWarsEvent.playerson.add(player);
                     }
-                   if (!TijolãoWarsEvent.contagemI) TijolãoWarsEvent.comtagemEvento();
-                    config.set("Event", true);
-                    try {
-                        config.save(file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (!TijolãoWarsEvent.contagemI) TijolãoWarsEvent.comtagemEvento();
+                    if (TijolãoWarsEvent.selectedMap.equals("Mapa1")) {
+                        location = Locations.tijolao;
                     }
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            if (TijolãoWarsEvent.selectedMap.equals("Mapa1")) {
-                                player.teleport(Locations.tijolao, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            if (TijolãoWarsEvent.selectedMap.equals("Mapa2")) {
-                                player.teleport(Locations.tijolao2, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (Util.PDVE(p)) {
-                            int playersone = TijolãoWarsEvent.playerson.size();
-                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
-                        }
+                    if (TijolãoWarsEvent.selectedMap.equals("Mapa2")) {
+                        location = Locations.tijolao2;
                     }
-                    break;
+                    assert TijolãoWarsEvent.playerson != null;
+                    PlayerSize = TijolãoWarsEvent.playerson.size();
+                    RequestPlayerSize = 4;
+                break;
                 case "Corrida":
                     if (!CorridaEvent.contagem && CorridaEvent.contagemI) {
-                        Util.Head = Util.head(player);
-                        player.getInventory().setItem(8, Util.BedLeave);
-                        player.getInventory().setItem(4, Util.Head);
-                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                            @Override
-                            public void run() {
-                                player.teleport(Locations.corridaA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
-                            }
-                        }, 20L);
-                        PlayerSpectator(player);
-                        config.set("EventSpect", true);
-                        try {
-                            config.save(file);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Spectator = true;
+                        location = Locations.corridaA;
                         return true;
                     }
-                    Util.Head = Util.head(player);
-                    clearInventory(player);
-                    player.getInventory().setItem(8, Util.BedLeave);
-                    player.getInventory().setItem(4, Util.Head);
                     if (CorridaEvent.playerson != null && !CorridaEvent.contagemI) {
                         CorridaEvent.playerson.add(player);
                     }
                     if (!CorridaEvent.contagemI) CorridaEvent.comtagemEvento();
-                    config.set("Event", true);
-                    try {
-                        config.save(file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            player.teleport(Locations.corrida, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (Util.PDVE(p)) {
-                            int playersone = CorridaEvent.playerson.size();
-                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
-                        }
-                    }
-                    break;
+                    location = Locations.corrida;
+                    assert CorridaEvent.playerson != null;
+                    PlayerSize = CorridaEvent.playerson.size();
+                    RequestPlayerSize = 4;
+                break;
                 case "CorridaBoat":
                     if (!CorridaBoatEvent.contagem && CorridaBoatEvent.contagemI) {
-                        Util.Head = Util.head(player);
-                        player.getInventory().setItem(8, Util.BedLeave);
-                        player.getInventory().setItem(4, Util.Head);
-                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                            @Override
-                            public void run() {
-                                player.teleport(Locations.corridaboatA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
-                            }
-                        }, 20L);
-                        PlayerSpectator(player);
-                        config.set("EventSpect", true);
-                        try {
-                            config.save(file);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Spectator = true;
+                        location = Locations.corridaboatA;
                         return true;
                     }
-                    Util.Head = Util.head(player);
-                    clearInventory(player);
-                    player.getInventory().setItem(8, Util.BedLeave);
-                    player.getInventory().setItem(4, Util.Head);
                     if (CorridaBoatEvent.playerson != null && !CorridaBoatEvent.contagemI) {
                         CorridaBoatEvent.playerson.add(player);
                     }
                     if (!CorridaBoatEvent.contagemI) CorridaBoatEvent.comtagemEvento();
-                    config.set("Event", true);
-                    try {
-                        config.save(file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            player.teleport(Locations.corridaboat, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (Util.PDVE(p)) {
-                            int playersone = CorridaBoatEvent.playerson.size();
-                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
-                        }
-                    }
-                    break;
+                    location = Locations.corridaboat;
+                    assert CorridaBoatEvent.playerson != null;
+                    PlayerSize = CorridaBoatEvent.playerson.size();
+                    RequestPlayerSize = 4;
+                break;
                 case "Sumo":
                     if (!SumoEvent.contagem && SumoEvent.contagemI) {
-                        player.teleport(Locations.sumo, PlayerTeleportEvent.TeleportCause.COMMAND);
-                        Util.Head = Util.head(player);
-                        player.getInventory().setItem(8, Util.BedLeave);
-                        player.getInventory().setItem(4, Util.Head);
-                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                            @Override
-                            public void run() {
-                                player.teleport(Locations.sumoA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
-                            }
-                        }, 20L);
-                        PlayerSpectator(player);
-                        config.set("EventSpect", true);
-                        try {
-                            config.save(file);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Spectator = true;
+                        location = Locations.sumoA;
                         return true;
                     }
-                    Util.Head = Util.head(player);
-                    clearInventory(player);
-                    player.getInventory().setItem(8, Util.BedLeave);
-                    player.getInventory().setItem(4, Util.Head);
                     if (SumoEvent.playerson != null && !SumoEvent.contagemI) {
                         SumoEvent.playerson.add(player);
                     }
                     if (!SumoEvent.contagemI) SumoEvent.comtagemEvento();
-                    config.set("Event", true);
-                    try {
-                        config.save(file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            player.teleport(Locations.sumo, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (Util.PDVE(p)) {
-                            int playersone = SumoEvent.playerson.size();
-                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
-                        }
-                    }
-                    break;
+                    location = Locations.sumo;
+                    assert SumoEvent.playerson != null;
+                    PlayerSize = SumoEvent.playerson.size();
+                    RequestPlayerSize = 4;
+                break;
                 case "TNTRun":
                     if (!TNTRunEvent.contagem && TNTRunEvent.contagemI) {
-                        Util.Head = Util.head(player);
-                        player.getInventory().setItem(8, Util.BedLeave);
-                        player.getInventory().setItem(4, Util.Head);
-                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                            @Override
-                            public void run() {
-                                if (TNTRunEvent.selectedMap.equals("Mapa1")) {
-                                    player.teleport(Locations.tntrunA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                }
-                                if (TNTRunEvent.selectedMap.equals("Mapa2")) {
-                                    player.teleport(Locations.tntrun2A, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                }
-                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
-                            }
-                        }, 20L);
-                        PlayerSpectator(player);
-                        config.set("EventSpect", true);
-                        try {
-                            config.save(file);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        Spectator = true;
+                        if (TNTRunEvent.selectedMap.equals("Mapa1")) {
+                            location = Locations.tntrunA;
+                        }
+                        if (TNTRunEvent.selectedMap.equals("Mapa2")) {
+                            location = Locations.tntrun2A;
                         }
                         return true;
                     }
-                    Util.Head = Util.head(player);
-                    clearInventory(player);
-                    player.getInventory().setItem(8, Util.BedLeave);
-                    player.getInventory().setItem(4, Util.Head);
                     if (TNTRunEvent.playerson != null && !TNTRunEvent.contagemI) {
                         TNTRunEvent.playerson.add(player);
                     }
                     if (!TNTRunEvent.contagemI) TNTRunEvent.comtagemEvento();
-                    config.set("Event", true);
-                    try {
-                        config.save(file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (TNTRunEvent.selectedMap.equals("Mapa1")) {
+                        location = Locations.tntrun2;
                     }
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            if (TNTRunEvent.selectedMap.equals("Mapa1")) {
-                                player.teleport(Locations.tntrun, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            if (TNTRunEvent.selectedMap.equals("Mapa2")) {
-                                player.teleport(Locations.tntrun2, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (Util.PDVE(p)) {
-                            int playersone = TNTRunEvent.playerson.size();
-                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
-                        }
+                    if (TNTRunEvent.selectedMap.equals("Mapa2")) {
+                        location = Locations.tntrun;
                     }
-                    break;
+                    assert TNTRunEvent.playerson != null;
+                    PlayerSize = TNTRunEvent.playerson.size();
+                    RequestPlayerSize = 4;
+                break;
                 case "TNTTag":
                     if (!TNTTagEvent.contagem && TNTTagEvent.contagemI) {
-                        Util.Head = Util.head(player);
-                        player.getInventory().setItem(8, Util.BedLeave);
-                        player.getInventory().setItem(4, Util.Head);
-                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                            @Override
-                            public void run() {
-                                player.teleport(Locations.tnttagA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
-                            }
-                        }, 20L);
-                        PlayerSpectator(player);
-                        config.set("EventSpect", true);
-                        try {
-                            config.save(file);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Spectator = true;
+                        location = Locations.tnttagA;
                         return true;
                     }
-                    Util.Head = Util.head(player);
-                    clearInventory(player);
-                    player.getInventory().setItem(8, Util.BedLeave);
-                    player.getInventory().setItem(4, Util.Head);
                     if (TNTTagEvent.playerson != null && !TNTTagEvent.contagemI) {
                         TNTTagEvent.playerson.add(player);
                     }
                     if (!TNTTagEvent.contagemI) TNTTagEvent.comtagemEvento();
-                    config.set("Event", true);
-                    try {
-                        config.save(file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            player.teleport(Locations.tnttag, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (Util.PDVE(p)) {
-                            int playersone = TNTTagEvent.playerson.size();
-                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b8§e)");
-                        }
-                    }
-                    break;
+                    location = Locations.tnttag;
+                    assert TNTTagEvent.playerson != null;
+                    PlayerSize = TNTTagEvent.playerson.size();
+                    RequestPlayerSize = 8;
+                break;
                 case "Parapente":
                     if (!ParapenteEvent.contagem && ParapenteEvent.contagemI) {
-                        Util.Head = Util.head(player);
-                        player.getInventory().setItem(8, Util.BedLeave);
-                        player.getInventory().setItem(4, Util.Head);
-                        Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                            @Override
-                            public void run() {
-                                player.teleport(Locations.parapenteA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
-                            }
-                        }, 20L);
-                        PlayerSpectator(player);
-                        config.set("EventSpect", true);
-                        try {
-                            config.save(file);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Spectator = true;
+                        location = Locations.parapenteA;
                         return true;
                     }
-                    Util.Head = Util.head(player);
-                    clearInventory(player);
-                    player.getInventory().setItem(8, Util.BedLeave);
-                    player.getInventory().setItem(4, Util.Head);
                     if (ParapenteEvent.playerson != null && !ParapenteEvent.contagemI) {
                         ParapenteEvent.playerson.add(player);
                     }
                     if (!ParapenteEvent.contagemI) ParapenteEvent.comtagemEvento();
-                    config.set("Event", true);
-                    try {
-                        config.save(file);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            player.teleport(Locations.parapente, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (Util.PDVE(p)) {
-                            int playersone = ParapenteEvent.playerson.size();
-                            p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + playersone + "§e/§b4§e)");
-                        }
-                    }
-                    break;
+                    location = Locations.parapente;
+                    assert ParapenteEvent.playerson != null;
+                    PlayerSize = ParapenteEvent.playerson.size();
+                    RequestPlayerSize = 4;
+                break;
                 case "Mini-Wars":
-                    clearInventory(player);
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            if (selectedMap.equalsIgnoreCase("Mapa-1")) {
-                                player.teleport(Locations.miniwars, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            if (selectedMap.equalsIgnoreCase("Mapa-2")) {
-                                player.teleport(Locations.miniwars2, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            if (selectedMap.equalsIgnoreCase("Mapa-3")) {
-                                player.teleport(Locations.miniwars3, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            if (selectedMap.equalsIgnoreCase("Mapa-4")) {
-                                player.teleport(Locations.miniwars4, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            if (selectedMap.equalsIgnoreCase("Mapa-5")) {
-                                player.teleport(Locations.miniwars5, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage("§7" + player.getName() + " §eentrou no evento.");
+                    EventsAgendados = true;
+                    if (selectedMap.equalsIgnoreCase("Mapa-1")) {
+                        location = Locations.miniwars;
                     }
-                    break;
+                    if (selectedMap.equalsIgnoreCase("Mapa-2")) {
+                        location = Locations.miniwars2;
+                    }
+                    if (selectedMap.equalsIgnoreCase("Mapa-3")) {
+                        location = Locations.miniwars3;
+                    }
+                    if (selectedMap.equalsIgnoreCase("Mapa-4")) {
+                        location = Locations.miniwars4;
+                    }
+                    if (selectedMap.equalsIgnoreCase("Mapa-5")) {
+                        location = Locations.miniwars5;
+                    }
+                break;
                 case "CopaPVP":
-                    clearInventory(player);
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            if (selectedMap.equalsIgnoreCase("Mapa-1")) {
-                                player.teleport(Locations.copapvp, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage("§7" + player.getName() + " §eentrou no evento.");
+                    EventsAgendados = true;
+                    if (selectedMap.equalsIgnoreCase("Mapa-1")) {
+                        location = Locations.copapvp;
                     }
-                    break;
+                break;
                 case "Esconde-esconde":
-                    clearInventory(player);
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            if (selectedMap.equalsIgnoreCase("Mapa-1")) {
-                                player.teleport(Locations.esconde, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            if (selectedMap.equalsIgnoreCase("Mapa-2")) {
-                                player.teleport(Locations.esconde2, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage("§7" + player.getName() + " §eentrou no evento.");
+                    EventsAgendados = true;
+                    if (selectedMap.equalsIgnoreCase("Mapa-1")) {
+                        location = Locations.esconde;
                     }
-                    break;
+                    if (selectedMap.equalsIgnoreCase("Mapa-2")) {
+                        location = Locations.esconde2;
+                    }
+                break;
                 case "Ruínas":
+                    EventsAgendados = true;
+                    if (selectedMap.equalsIgnoreCase("Mapa-1")) {
+                        location = Locations.ruinas;
+                    }
+                break;
+            }
+            if (EventsAgendados) {
+                Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), () -> {
+                    player.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
+                    s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
+                }, 20L);
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    p.sendMessage("§7" + player.getName() + " §eentrou no evento.");
+                }
+                return true;
+            }
+            if (Spectator) {
+                PlayerSpectator(player);
+                clearInventory(player);
+                EventItem.Head = EventItem.HeadEvents(player);
+                player.getInventory().setItem(8, EventItem.BedLeave);
+                player.getInventory().setItem(4, EventItem.Head);
+                Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), () -> {
+                    player.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
+                    player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
+                }, 20L);
+                config.set("EventSpect", true);
+                try {
+                    config.save(file);
+                } catch (IOException e) {
+                    Bukkit.getLogger().warning("[MineSky-Events] Ocorreu um erro ao salvar a player do jogador " + player.getName());
+                    SendMessages.sendConectionBCMSNE(player);
+                    TextComponent erro = new TextComponent("§8[§c!§8] §cOcorreu um erro ao salvar sua playerdata para o evento!");
+                    SendMessages.sendPlayermessage(player, erro);
+                    e.printStackTrace();
+                }
+                return true;
+            } else {
+                config.set("Event", true);
+                try {
+                    config.save(file);
                     clearInventory(player);
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), new Runnable() {
-                        @Override
-                        public void run() {
-                            if (selectedMap.equalsIgnoreCase("Mapa-1")) {
-                                player.teleport(Locations.ruinas, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            }
-                            s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                        }
+                    EventItem.Head = EventItem.HeadEvents(player);
+                    player.getInventory().setItem(8, EventItem.BedLeave);
+                    player.getInventory().setItem(4, EventItem.Head);
+                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), () -> {
+                        player.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
+                        s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
                     }, 20L);
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage("§7" + player.getName() + " §eentrou no evento.");
+                        p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + PlayerSize + "§e/§b" + RequestPlayerSize + "§e)");
                     }
-                    break;
+                } catch (IOException e) {
+                    Bukkit.getLogger().warning("[MineSky-Events] Ocorreu um erro ao salvar a player do jogador " + player.getName());
+                    SendMessages.sendConectionBCMSNE(player);
+                    TextComponent erro = new TextComponent("§8[§c!§8] §cOcorreu um erro ao salvar sua playerdata para o evento!");
+                    SendMessages.sendPlayermessage(player, erro);
+                    e.printStackTrace();
+                }
             }
             return true;
         }
@@ -747,50 +302,60 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 s.sendMessage("§8[§c!§8] §cVocê não pode executar esse comando.");
                 return true;
             }
-            if (MineSkyEvents.event.equals("OFF") && args[1].isEmpty()) {
+            if (MineSkyEvents.event.equals("OFF") && args.length < 2) {
                 s.sendMessage("§8[§c!§8] §cNenhum evento esta acontecendo agora.");
                 return true;
             }
-                switch (MineSkyEvents.event) {
-                    case "Spleef":
-                        Util.sendMessageBGMSNE("Spleef");
-                        break;
-                    case "TijolãoWars":
-                        Util.sendMessageBGMSNE("TijolãoWars");
-                        break;
-                    case "Corrida":
-                        Util.sendMessageBGMSNE("Corrida");
-                        break;
-                    case "TNTRun":
-                        Util.sendMessageBGMSNE("TNTRun");
-                        break;
-                    case "CorridaBoat":
-                        Util.sendMessageBGMSNE("CorridaBoat");
-                        break;
-                    case "Sumo":
-                        Util.sendMessageBGMSNE("Sumo");
-                        break;
-                    case "TNTTag":
-                        Util.sendMessageBGMSNE("TNTTag");
-                        break;
-                    case "Parapente":
-                        Util.sendMessageBGMSNE("Parapente");
-                        break;
-                }
+            switch (MineSkyEvents.event) {
+                case "Spleef":
+                    SendMessages.sendMessageBGMSNE("Spleef");
+                    break;
+                case "TijolãoWars":
+                    SendMessages.sendMessageBGMSNE("TijolãoWars");
+                    break;
+                case "Corrida":
+                    SendMessages.sendMessageBGMSNE("Corrida");
+                    break;
+                case "TNTRun":
+                    SendMessages.sendMessageBGMSNE("TNTRun");
+                    break;
+                case "CorridaBoat":
+                    SendMessages.sendMessageBGMSNE("CorridaBoat");
+                    break;
+                case "Sumo":
+                    SendMessages.sendMessageBGMSNE("Sumo");
+                    break;
+                case "TNTTag":
+                    SendMessages.sendMessageBGMSNE("TNTTag");
+                    break;
+                case "Parapente":
+                    SendMessages.sendMessageBGMSNE("Parapente");
+                    break;
+            }
             switch (args[1].toLowerCase()) {
                 case "mini-wars":
                     if (args.length < 3) {
                         s.sendMessage("§8[§c!§8] §cVocê deve informar um mapa!");
                         return true;
                     }
-                    MineSkyEvents.event = "Mini-Wars";
-                    selectedMap = args[2];
-                    if (!selectedMap.equalsIgnoreCase("Mapa-1") || !selectedMap.equalsIgnoreCase("Mapa-2") || !selectedMap.equalsIgnoreCase("Mapa-3") || !selectedMap.equalsIgnoreCase("Mapa-4") || !selectedMap.equalsIgnoreCase("Mapa-5")) {
+                    int selectMap = Integer.parseInt(args[2]);
+                    if (selectMap == 1) {
+                        selectedMap = "Mapa-1";
+                    } else if (selectMap == 2) {
+                        selectedMap = "Mapa-2";
+                    } else if (selectMap == 3) {
+                        selectedMap = "Mapa-3";
+                    } else if (selectMap == 4) {
+                        selectedMap = "Mapa-4";
+                    } else if (selectMap == 5) {
+                        selectedMap = "Mapa-5";
+                    }
+                    if (selectMap > 5) {
                         s.sendMessage("§8[§c!§8] §cEste evento só tem 5 mapas!");
                         return true;
                     }
                     MineSkyEvents.event = "Mini-Wars";
-                    Util.sendMessageBGMSNE("Mini-Wars");
+                    SendMessages.sendMessageBGMSNE("Mini-Wars");
                     break;
                 case "copapvp":
                     if (args.length < 3) return true;
@@ -800,17 +365,22 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         return true;
                     }
                     MineSkyEvents.event = "CopaPVP";
-                    Util.sendMessageBGMSNE("CopaPVP");
+                    SendMessages.sendMessageBGMSNE("CopaPVP");
                     break;
                 case "esconde-esconde":
                     if (args.length < 3) return true;
-                    selectedMap = args[2];
-                    if (!selectedMap.equalsIgnoreCase("Mapa-1") || !selectedMap.equalsIgnoreCase("Mapa-2")) {
+                    int selectMapE = Integer.parseInt(args[2]);
+                    if (selectMapE == 1) {
+                        selectedMap = "Mapa-1";
+                    } else if (selectMapE == 2) {
+                        selectedMap = "Mapa-2";
+                    }
+                    if (selectMapE > 2) {
                         s.sendMessage("§8[§c!§8] §cEste evento só tem 2 mapas!");
                         return true;
                     }
                     MineSkyEvents.event = "Esconde-esconde";
-                    Util.sendMessageBGMSNE("Esconde-esconde");
+                    SendMessages.sendMessageBGMSNE("Esconde-esconde");
                     break;
                 case "ruínas":
                     if (args.length < 3) return true;
@@ -820,7 +390,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                         return true;
                     }
                     MineSkyEvents.event = "Ruínas";
-                    Util.sendMessageBGMSNE("Ruínas");
+                    SendMessages.sendMessageBGMSNE("Ruínas");
                     break;
             }
             return true;
@@ -840,7 +410,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -858,13 +428,16 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     SpleefEvent.contagem = true;
                     SpleefEvent.contagemI = false;
                     SpleefEvent.temporizador.cancel();
-                    SpleefEvent.contagemtemp.cancel();
+                    SpleefEvent.restaurar();
+                    if (SpleefEvent.contagemI) {
+                        SpleefEvent.contagemtemp.cancel();
+                    }
                     break;
                 case "TijolãoWars":
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -882,13 +455,15 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     TijolãoWarsEvent.contagem = true;
                     TijolãoWarsEvent.contagemI = false;
                     TijolãoWarsEvent.temporizador.cancel();
-                    TijolãoWarsEvent.contagemtemp.cancel();
+                    if (TijolãoWarsEvent.contagemI) {
+                        TijolãoWarsEvent.contagemtemp.cancel();
+                    }
                     break;
                 case "Corrida":
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -906,13 +481,15 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     CorridaEvent.contagem = true;
                     CorridaEvent.contagemI = false;
                     CorridaEvent.temporizador.cancel();
-                    CorridaEvent.contagemtemp.cancel();
+                    if (CorridaEvent.contagemI) {
+                        CorridaEvent.contagemtemp.cancel();
+                    }
                     break;
                 case "CorridaBoat":
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -931,13 +508,15 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     CorridaBoatEvent.contagem = true;
                     CorridaBoatEvent.contagemI = false;
                     CorridaBoatEvent.temporizador.cancel();
-                    CorridaBoatEvent.contagemtemp.cancel();
+                    if (CorridaBoatEvent.contagemI) {
+                        CorridaBoatEvent.contagemtemp.cancel();
+                    }
                     break;
                 case "Sumo":
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -955,13 +534,15 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     SumoEvent.contagem = true;
                     SumoEvent.contagemI = false;
                     SumoEvent.temporizador.cancel();
-                    SumoEvent.contagemtemp.cancel();
+                    if (SumoEvent.contagemI) {
+                        SumoEvent.contagemtemp.cancel();
+                    }
                     break;
                 case "TNTRun":
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -979,13 +560,16 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     TNTRunEvent.contagem = true;
                     TNTRunEvent.contagemI = false;
                     TNTRunEvent.temporizador.cancel();
-                    TNTRunEvent.contagemtemp.cancel();
+                    TNTRunEvent.restaurar();
+                    if (TNTRunEvent.contagemI) {
+                        TNTRunEvent.contagemtemp.cancel();
+                    }
                     break;
                 case "TNTTag":
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -1007,13 +591,15 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     TNTTagEvent.contagem = true;
                     TNTTagEvent.contagemI = false;
                     TNTTagEvent.temporizador.cancel();
-                    TNTTagEvent.contagemtemp.cancel();
+                    if (TNTTagEvent.contagemI) {
+                        TNTTagEvent.contagemtemp.cancel();
+                    }
                     break;
                 case "Parapente":
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -1033,13 +619,16 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     ParapenteEvent.contagem = true;
                     ParapenteEvent.contagemI = false;
                     ParapenteEvent.temporizador.cancel();
-                    ParapenteEvent.contagemtemp.cancel();
+                    if (ParapenteEvent.contagemI) {
+                        ParapenteEvent.contagemtemp.cancel();
+                    }
                     break;
                 case "Mini-Wars":
+                    EventsAgendados = false;
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -1054,10 +643,11 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     }
                     break;
                 case "CopaPVP":
+                    EventsAgendados = false;
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -1072,10 +662,11 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     }
                     break;
                 case "Esconde-esconde":
+                    EventsAgendados = false;
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -1090,10 +681,11 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     }
                     break;
                 case "Ruínas":
+                    EventsAgendados = false;
                     MineSkyEvents.event = "OFF";
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
-                            Util.sendConectionBCMSNE(j);
+                            SendMessages.sendConectionBCMSNE(j);
                             RevealPlayer(j);
                             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
@@ -1109,6 +701,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     break;
             }
             s.sendMessage("§8[§a!§8] §aVocê finalizou o evento: " + event);
+            return true;
         }
         if (args[0].equalsIgnoreCase("start")) {
             if (!s.hasPermission("mineskyevents.command.event.start")) {
@@ -1165,6 +758,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento não pode ser iniciado. Usage: /event anunciar Ruínas (mapa)");
                     break;
             }
+            return true;
         }
         if (args[0].equalsIgnoreCase("set")) {
             if (!s.hasPermission("mineskyevents.command.event.set")) {
@@ -1175,7 +769,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 s.sendMessage("§8[§c!§8] §cUso incorreto. Use /event set (Evento) (Arena/Spawn)");
                 return true;
             }
-            int arg = Integer.parseInt(args[1]);
+            int arg = Integer.parseInt(args[3]);
             if (args[1].equalsIgnoreCase("Spleef")) {
                 if (args[3].equalsIgnoreCase("1")) {
                     if (args[2].equalsIgnoreCase("spawn")) {
@@ -1224,98 +818,98 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
-                    if (args[1].equalsIgnoreCase("TijolãoWars")) {
-                        if (args[3].equalsIgnoreCase("1")) {
-                            if (args[2].equalsIgnoreCase("spawn")) {
-                                Location loc = ((Player) s).getLocation();
-                                File file = DataManager.getFile("locations.yml");
-                                FileConfiguration config = DataManager.getConfiguration(file);
+            if (args[1].equalsIgnoreCase("TijolãoWars")) {
+                if (args[3].equalsIgnoreCase("1")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
 
-                                Locations.tijolao = loc;
-                                config.set("TijolãoWars.1", loc);
-                                config.set("TijolãoWars.1.world", loc.getWorld().getName());
-                                config.set("TijolãoWars.1.x", Double.valueOf(loc.getX()));
-                                config.set("TijolãoWars.1.y", Double.valueOf(loc.getY()));
-                                config.set("TijolãoWars.1.z", Double.valueOf(loc.getZ()));
-                                config.set("TijolãoWars.1.yaw", Float.valueOf(loc.getYaw()));
-                                config.set("TijolãoWars.1.pitch", Float.valueOf(loc.getPitch()));
-                                try {
-                                    config.save(file);
-                                    s.sendMessage("§8[§a!§8] §aSpawn de §lTijolão Wars §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
-                                } catch (IOException e) {
-                                    Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
-                                }
-                                return true;
-                            }
-                            if (args[2].equalsIgnoreCase("arena")) {
-                                Location loc = ((Player) s).getLocation();
-                                File file = DataManager.getFile("locations.yml");
-                                FileConfiguration config = DataManager.getConfiguration(file);
-
-                                Locations.tijolaoA = loc;
-                                config.set("arena.TijolãoWars.1", loc);
-                                config.set("arena.TijolãoWars.1.world", loc.getWorld().getName());
-                                config.set("arena.TijolãoWars.1.x", Double.valueOf(loc.getX()));
-                                config.set("arena.TijolãoWars.1.y", Double.valueOf(loc.getY()));
-                                config.set("arena.TijolãoWars.1.z", Double.valueOf(loc.getZ()));
-                                config.set("arena.TijolãoWars.1.yaw", Float.valueOf(loc.getYaw()));
-                                config.set("arena.TijolãoWars.1.pitch", Float.valueOf(loc.getPitch()));
-                                try {
-                                    config.save(file);
-                                    s.sendMessage("§8[§a!§8] §aArena de §lTijolãoWars §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
-                                } catch (IOException e) {
-                                    Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
-                                }
-                                return true;
-                            }
-                        } else if (args[3].equalsIgnoreCase("2")) {
-                            if (args[2].equalsIgnoreCase("spawn")) {
-                                Location loc = ((Player) s).getLocation();
-                                File file = DataManager.getFile("locations.yml");
-                                FileConfiguration config = DataManager.getConfiguration(file);
-
-                                Locations.tijolao2 = loc;
-                                config.set("TijolãoWars.2", loc);
-                                config.set("TijolãoWars.2.world", loc.getWorld().getName());
-                                config.set("TijolãoWars.2.x", Double.valueOf(loc.getX()));
-                                config.set("TijolãoWars.2.y", Double.valueOf(loc.getY()));
-                                config.set("TijolãoWars.2.z", Double.valueOf(loc.getZ()));
-                                config.set("TijolãoWars.2.yaw", Float.valueOf(loc.getYaw()));
-                                config.set("TijolãoWars.2.pitch", Float.valueOf(loc.getPitch()));
-                                try {
-                                    config.save(file);
-                                    s.sendMessage("§8[§a!§8] §aSpawn de §lTijolão Wars §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
-                                } catch (IOException e) {
-                                    Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
-                                }
-                                return true;
-                            }
-                            if (args[2].equalsIgnoreCase("arena")) {
-                                Location loc = ((Player) s).getLocation();
-                                File file = DataManager.getFile("locations.yml");
-                                FileConfiguration config = DataManager.getConfiguration(file);
-
-                                Locations.tijolao2A = loc;
-                                config.set("arena.TijolãoWars.2", loc);
-                                config.set("arena.TijolãoWars.2.world", loc.getWorld().getName());
-                                config.set("arena.TijolãoWars.2.x", Double.valueOf(loc.getX()));
-                                config.set("arena.TijolãoWars.2.y", Double.valueOf(loc.getY()));
-                                config.set("arena.TijolãoWars.2.z", Double.valueOf(loc.getZ()));
-                                config.set("arena.TijolãoWars.2.yaw", Float.valueOf(loc.getYaw()));
-                                config.set("arena.TijolãoWars.2.pitch", Float.valueOf(loc.getPitch()));
-                                try {
-                                    config.save(file);
-                                    s.sendMessage("§8[§a!§8] §aArena de §lTijolãoWars §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
-                                } catch (IOException e) {
-                                    Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
-                                }
-                                return true;
-                            }
-                        } else {
-                            s.sendMessage("§8[§c!§8] §cEste evento só tem 2 mapa.");
+                        Locations.tijolao = loc;
+                        config.set("TijolãoWars.1", loc);
+                        config.set("TijolãoWars.1.world", loc.getWorld().getName());
+                        config.set("TijolãoWars.1.x", Double.valueOf(loc.getX()));
+                        config.set("TijolãoWars.1.y", Double.valueOf(loc.getY()));
+                        config.set("TijolãoWars.1.z", Double.valueOf(loc.getZ()));
+                        config.set("TijolãoWars.1.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("TijolãoWars.1.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lTijolão Wars §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
+                        return true;
                     }
-                    if (args[1].equalsIgnoreCase("Corrida")) {
+                    if (args[2].equalsIgnoreCase("arena")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.tijolaoA = loc;
+                        config.set("arena.TijolãoWars.1", loc);
+                        config.set("arena.TijolãoWars.1.world", loc.getWorld().getName());
+                        config.set("arena.TijolãoWars.1.x", Double.valueOf(loc.getX()));
+                        config.set("arena.TijolãoWars.1.y", Double.valueOf(loc.getY()));
+                        config.set("arena.TijolãoWars.1.z", Double.valueOf(loc.getZ()));
+                        config.set("arena.TijolãoWars.1.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("arena.TijolãoWars.1.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aArena de §lTijolãoWars §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else if (args[3].equalsIgnoreCase("2")) {
+                    if (args[2].equalsIgnoreCase("spawn")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.tijolao2 = loc;
+                        config.set("TijolãoWars.2", loc);
+                        config.set("TijolãoWars.2.world", loc.getWorld().getName());
+                        config.set("TijolãoWars.2.x", Double.valueOf(loc.getX()));
+                        config.set("TijolãoWars.2.y", Double.valueOf(loc.getY()));
+                        config.set("TijolãoWars.2.z", Double.valueOf(loc.getZ()));
+                        config.set("TijolãoWars.2.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("TijolãoWars.2.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aSpawn de §lTijolão Wars §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                    if (args[2].equalsIgnoreCase("arena")) {
+                        Location loc = ((Player) s).getLocation();
+                        File file = DataManager.getFile("locations.yml");
+                        FileConfiguration config = DataManager.getConfiguration(file);
+
+                        Locations.tijolao2A = loc;
+                        config.set("arena.TijolãoWars.2", loc);
+                        config.set("arena.TijolãoWars.2.world", loc.getWorld().getName());
+                        config.set("arena.TijolãoWars.2.x", Double.valueOf(loc.getX()));
+                        config.set("arena.TijolãoWars.2.y", Double.valueOf(loc.getY()));
+                        config.set("arena.TijolãoWars.2.z", Double.valueOf(loc.getZ()));
+                        config.set("arena.TijolãoWars.2.yaw", Float.valueOf(loc.getYaw()));
+                        config.set("arena.TijolãoWars.2.pitch", Float.valueOf(loc.getPitch()));
+                        try {
+                            config.save(file);
+                            s.sendMessage("§8[§a!§8] §aArena de §lTijolãoWars §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
+                        } catch (IOException e) {
+                            Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
+                        }
+                        return true;
+                    }
+                } else {
+                    s.sendMessage("§8[§c!§8] §cEste evento só tem 2 mapa.");
+                }
+            }
+            if (args[1].equalsIgnoreCase("Corrida")) {
                 if (args[3].equalsIgnoreCase("1")) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
@@ -1363,7 +957,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
-                    if (args[1].equalsIgnoreCase("CorridaBoat")) {
+            if (args[1].equalsIgnoreCase("CorridaBoat")) {
                 if (args[3].equalsIgnoreCase("1")) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
@@ -1411,7 +1005,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
-                    if (args[1].equalsIgnoreCase("Sumo")) {
+            if (args[1].equalsIgnoreCase("Sumo")) {
                 if (args[3].equalsIgnoreCase("1")) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
@@ -1817,7 +1411,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 5 mapa.");
                 }
             }
-                    if (args[1].equalsIgnoreCase("CopaPVP")) {
+            if (args[1].equalsIgnoreCase("CopaPVP")) {
                 if (args[3].equalsIgnoreCase("1")) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
@@ -1844,7 +1438,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
-                    if (args[1].equalsIgnoreCase("Esconde-esconde")) {
+            if (args[1].equalsIgnoreCase("Esconde-esconde")) {
                 if (arg == 1) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
@@ -1893,7 +1487,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 2 mapa.");
                 }
             }
-                    if (args[1].equalsIgnoreCase("Ruínas")) {
+            if (args[1].equalsIgnoreCase("Ruínas")) {
                 if (args[3].equalsIgnoreCase("1")) {
                     if (args[2].equalsIgnoreCase("spawn")) {
                         Location loc = ((Player) s).getLocation();
@@ -1920,34 +1514,35 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
-                }
+            return true;
+        }
         if (args[0].equalsIgnoreCase("kick")) {
-                    if (!s.hasPermission("mineskyevents.command.event.kick")) {
-                        s.sendMessage(Messages.No_permission);
-                        return true;
-                    }
-                    if (args.length < 2) {
-                        s.sendMessage("§8[§c!§8] §cUso incorreto. Use /event kick (Player) [Motivo]");
-                        return true;
-                    }
-                    Player j = Bukkit.getPlayer(args[1]);
-                    if (!j.isOnline()) {
-                        s.sendMessage("§8[§c!§8] §cO jogador não foi encontrado");
-                        return true;
-                    }
-                    if (!Util.PDVE(j)) {
-                        s.sendMessage("§8[§c!§8] §cO jogador não está online no evento.");
-                        return true;
-                    }
-                    String reason = "Sem motivo informado.";
-                    String[] argsSubset = Arrays.copyOfRange(args, 2, args.length);
-                    String result = String.join(" ", argsSubset).replace("&", "§");
-                    if (args.length == 3) reason = result;
-                    Util.sendConectionBCMSNE(j);
-                    TextComponent message = new TextComponent("§8[§c!§8] §cVocê foi expulso do evento. Motivo: " + reason);
-                    Util.sendPlayermessage(j, message);
+            if (!s.hasPermission("mineskyevents.command.event.kick")) {
+                s.sendMessage(Messages.No_permission);
+                return true;
+            }
+            if (args.length < 2) {
+                s.sendMessage("§8[§c!§8] §cUso incorreto. Use /event kick (Player) [Motivo]");
+                return true;
+            }
+            Player j = Bukkit.getPlayer(args[1]);
+            if (!j.isOnline()) {
+                s.sendMessage("§8[§c!§8] §cO jogador não foi encontrado");
+                return true;
+            }
+            if (!Util.PDVE(j)) {
+                s.sendMessage("§8[§c!§8] §cO jogador não está online no evento.");
+                return true;
+            }
+            String reason = "Sem motivo informado.";
+            String[] argsSubset = Arrays.copyOfRange(args, 2, args.length);
+            String result = String.join(" ", argsSubset).replace("&", "§");
+            if (args.length == 3) reason = result;
+            SendMessages.sendConectionBCMSNE(j);
+            TextComponent message = new TextComponent("§8[§c!§8] §cVocê foi expulso do evento. Motivo: " + reason);
+            SendMessages.sendPlayermessage(j, message);
 
-                    s.sendMessage("§8[§a!§8] §aO jogador foi expulso com sucesso do evento.");
+            s.sendMessage("§8[§a!§8] §aO jogador foi expulso com sucesso do evento.");
             for (Player player1 : Bukkit.getOnlinePlayers()) {
                 File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
                 FileConfiguration configfor = DataManager.getConfiguration(file);
@@ -1955,50 +1550,50 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 if (!configfor.getBoolean("Notification")) return true;
                 player1.sendMessage("§c" + j.getName() + "§f foi expulso do evento por§c " + s.getName() + "§f. Motivo: §c" + reason);
             }
-                    File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
-                    FileConfiguration config = DataManager.getConfiguration(file);
+            File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
+            FileConfiguration config = DataManager.getConfiguration(file);
 
-                    config.set("Event", false);
+            config.set("Event", false);
 
-                    try {
-                        config.save(file);
-                        switch (MineSkyEvents.event) {
-                            case "Spleef":
-                                SpleefEvent.playerson.remove(player);
-                                if (SpleefEvent.playerson.size() == 1 && !SpleefEvent.contagem && SpleefEvent.contagemI) SpleefEvent.finalizar();
-                                break;
-                            case "TijolãoWars":
-                               TijolãoWarsEvent.playerson.remove(player);
-                                if (TijolãoWarsEvent.playerson.size() == 1 && !TijolãoWarsEvent.contagem && TijolãoWarsEvent.contagemI) TijolãoWarsEvent.finalizar();
-                                break;
-                            case "Corrida":
-                                CorridaEvent.playerson.remove(j);
-                                break;
-                            case "CorridaBoat":
-                                CorridaBoatEvent.playerson.remove(j);
-                                break;
-                            case "Sumo":
-                                SumoEvent.playerson.remove(j);
-                                if (SumoEvent.playerson.size() == 1 && !SumoEvent.contagem && SumoEvent.contagemI) SumoEvent.finalizar();
-                                break;
-                            case "TNTRun":
-                                TNTRunEvent.playerson.remove(player);
-                                if (TNTRunEvent.playerson.size() == 1 && !TNTRunEvent.contagem && TNTRunEvent.contagemI) TNTRunEvent.finalizar();
-                                break;
-                            case "TNTTag":
-                                TNTTagEvent.playerson.remove(j);
-                                TNTTagEvent.jogadores.remove(j);
-                                if (TNTTagEvent.playerson.size() == 1 && !TNTTagEvent.contagem && TNTTagEvent.contagemI) TNTTagEvent.finalizar();
-                                break;
-                            case "Parapente":
-                                ParapenteEvent.playerson.remove(j);
-                                break;
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return true;
+            try {
+                config.save(file);
+                switch (MineSkyEvents.event) {
+                    case "Spleef":
+                        SpleefEvent.playerson.remove(player);
+                        if (SpleefEvent.playerson.size() == 1 && !SpleefEvent.contagem && SpleefEvent.contagemI) SpleefEvent.finalizar();
+                        break;
+                    case "TijolãoWars":
+                        TijolãoWarsEvent.playerson.remove(player);
+                        if (TijolãoWarsEvent.playerson.size() == 1 && !TijolãoWarsEvent.contagem && TijolãoWarsEvent.contagemI) TijolãoWarsEvent.finalizar();
+                        break;
+                    case "Corrida":
+                        CorridaEvent.playerson.remove(j);
+                        break;
+                    case "CorridaBoat":
+                        CorridaBoatEvent.playerson.remove(j);
+                        break;
+                    case "Sumo":
+                        SumoEvent.playerson.remove(j);
+                        if (SumoEvent.playerson.size() == 1 && !SumoEvent.contagem && SumoEvent.contagemI) SumoEvent.finalizar();
+                        break;
+                    case "TNTRun":
+                        TNTRunEvent.playerson.remove(player);
+                        if (TNTRunEvent.playerson.size() == 1 && !TNTRunEvent.contagem && TNTRunEvent.contagemI) TNTRunEvent.finalizar();
+                        break;
+                    case "TNTTag":
+                        TNTTagEvent.playerson.remove(j);
+                        TNTTagEvent.jogadores.remove(j);
+                        if (TNTTagEvent.playerson.size() == 1 && !TNTTagEvent.contagem && TNTTagEvent.contagemI) TNTTagEvent.finalizar();
+                        break;
+                    case "Parapente":
+                        ParapenteEvent.playerson.remove(j);
+                        break;
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
         if (args[0].equalsIgnoreCase("blacklist")) {
             if (!s.hasPermission("mineskyevents.command.event.blacklist")) {
                 s.sendMessage("§8[§c!§8] §cVocê não pode executar esse comando.");
@@ -2078,10 +1673,13 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                     }
                 }
             }
+            return true;
         }
 
-                return true;
-            }
+        s.sendMessage("§8[§c!§8] §cVocê não informou um agurmento valido.");
+        return true;
+    }
+
     private void clearInventory(Player p) {
         PlayerInventory inv = p.getInventory();
         p.setItemOnCursor(null);
@@ -2091,6 +1689,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
         inv.setLeggings(null);
         inv.setBoots(null);
     }
+
     private void PlayerSpectator(Player p) {
         for (Player jogador : Bukkit.getOnlinePlayers()) {
             jogador.hidePlayer(MineSkyEvents.get(), p);
@@ -2105,6 +1704,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
         p.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, Integer.MAX_VALUE, 1, false, false));
         p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, false, false));
     }
+
     public static void RevealPlayer(Player p) {
         for (Player jogador : Bukkit.getOnlinePlayers()) {
             jogador.showPlayer(MineSkyEvents.get(), p);

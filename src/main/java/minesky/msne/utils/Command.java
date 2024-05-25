@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import minesky.msne.MineSkyEvents;
+import minesky.msne.commands.tabcompleter.EventCommandTabCompleter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandMap;
@@ -19,6 +20,7 @@ public class Command {
     private String command;
     private List<String> aliases;
     private String description;
+    private String tabcomplete;
     private PluginCommand pluginCommand;
 
     public Command(String command, CommandExecutor executor) {
@@ -42,6 +44,9 @@ public class Command {
             cmd.setAliases(aliases);
             cmd.setDescription(description);
             cmd.setExecutor(executor);
+            if (command.equals("event")) {
+                cmd.setTabCompleter(new EventCommandTabCompleter());
+            }
 
             return cmd;
         } catch (Throwable e) {
@@ -86,10 +91,7 @@ public class Command {
             return false;
         Command other = (Command) obj;
         if (command == null) {
-            if (other.command != null)
-                return false;
-        } else if (!command.equals(other.command))
-            return false;
-        return true;
+            return other.command == null;
+        } else return command.equals(other.command);
     }
 }

@@ -106,9 +106,9 @@ public class EventsMessage {
         webhook.setTts(false);
         switch (event) {
             case "Corrida":
-                String messagec = "**Ganhadores:**";
+                StringBuilder messagec = new StringBuilder("**Ganhadores:**");
                 for (int i = 0; i < 3; i++) {
-                    messagec += "\\n**" + playerList.get(i) + "** - " + (i + 1) + "º lugar";
+                    messagec.append("\\n**").append(playerList.get(i)).append("** - ").append(i + 1).append("º lugar");
                 }
                 webhook.addEmbed(
                         new DiscordWebhook.EmbedObject()
@@ -127,9 +127,9 @@ public class EventsMessage {
                 }
                 break;
             case "CorridaBoat":
-                String messagecb = "**Ganhadores:**";
+                StringBuilder messagecb = new StringBuilder("**Ganhadores:**");
                 for (int i = 0; i < 3; i++) {
-                    messagecb += "\\n**" + playerList.get(i) + "** - " + (i + 1) + "º lugar";
+                    messagecb.append("\\n**").append(playerList.get(i)).append("** - ").append(i + 1).append("º lugar");
                 }
                 webhook.addEmbed(
                         new DiscordWebhook.EmbedObject()
@@ -146,9 +146,9 @@ public class EventsMessage {
                 }
                 break;
             case "Parapente":
-                String messagep = "**Ganhadores:**";
+                StringBuilder messagep = new StringBuilder("**Ganhadores:**");
                 for (int i = 0; i < 3; i++) {
-                    messagep += "\\n**" + playerList.get(i) + "** - " + (i + 1) + "º lugar";
+                    messagep.append("\\n**").append(playerList.get(i)).append("** - ").append(i + 1).append("º lugar");
                 }
                 webhook.addEmbed(
                         new DiscordWebhook.EmbedObject()

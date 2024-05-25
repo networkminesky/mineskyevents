@@ -23,6 +23,7 @@ public class PlayerData implements Listener {
             String oldPlayer = config.getString("Nick");
             if (!newPlayer.equals(oldPlayer)) {
                 e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+                assert oldPlayer != null;
                 e.setKickMessage(Messages.Similar_nickname.replace("%old%", oldPlayer).replace("%new%", newPlayer));
             }
         } else if (e.getResult() == PlayerLoginEvent.Result.ALLOWED) {
@@ -35,8 +36,8 @@ public class PlayerData implements Listener {
             config.set("Localizer", "Localizer OFF");
             config.set("Events.Spleef.win", 0);
             config.set("Events.Spleef.dead", 0);
-            config.set("Events.Tijolao.win", 0);
-            config.set("Events.Tijolao.dead", 0);
+            config.set("Events.TijolãoWars.win", 0);
+            config.set("Events.TijolãoWars.dead", 0);
             config.set("Events.Corrida.win", 0);
             config.set("Events.CorridaBoat.win", 0);
             config.set("Events.Sumo.win", 0);

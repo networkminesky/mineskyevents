@@ -1,6 +1,5 @@
 package minesky.msne.system.event;
 
-import minesky.msne.config.ConfigManager;
 import minesky.msne.config.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -8,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 public class EventVerification {
     public static boolean getBlacklist(Player player, String event) {
@@ -41,7 +41,7 @@ public class EventVerification {
         FileConfiguration config = DataManager.getConfiguration(file);
         List<String> Blacklist = config.getStringList("blacklist." + event + ".list");
         List<String> BlacklistIP = config.getStringList("blacklistip." + event + ".list");
-        if (Blacklist.contains(player.getName()) || BlacklistIP.contains(player.getAddress().getAddress().getHostAddress())) {
+        if (Blacklist.contains(player.getName()) || BlacklistIP.contains(Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress())) {
             player.sendMessage("§8[§c!§8] §cVocê está na blacklist do evento: " + event);
             for (Player player1 : Bukkit.getOnlinePlayers()) {
                 File filefor = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");

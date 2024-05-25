@@ -3,6 +3,8 @@ package minesky.msne.events;
 import minesky.msne.MineSkyEvents;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
+import minesky.msne.utils.EventItem;
+import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -15,9 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CorridaEvent {
     public static boolean contagem;
@@ -27,7 +27,7 @@ public class CorridaEvent {
     public static BukkitRunnable contagemtemp;
     public static void iniciarEvento() {
         MineSkyEvents.event = "Corrida";
-        Util.sendMessageBGMSNE("Corrida");
+        SendMessages.sendMessageBGMSNE("Corrida");
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!player.hasPermission("mineskyevents.bypass.join")) {
                 Bukkit.dispatchCommand(player, "event entrar");
@@ -41,7 +41,7 @@ public class CorridaEvent {
                     MineSkyEvents.event = "OFF";
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(player) || Util.PDVES(player)) {
-                            Util.sendConectionBCMSNE(player);
+                            SendMessages.sendConectionBCMSNE(player);
                             File file = DataManager.getFile(player.getName().toLowerCase(), "playerdata");
                             FileConfiguration config = DataManager.getConfiguration(file);
                             config.set("Event", false);
@@ -54,7 +54,7 @@ public class CorridaEvent {
                         }
                     }
                     TextComponent menorplayer = new TextComponent("§e§lCorrida §8| §aInfelizmente o evento não teve §l4§a players para iniciar.");
-                    Util.sendMessageBCMSNE(menorplayer);
+                    SendMessages.sendMessageBCMSNE(menorplayer);
                 }
                 tempoRestante--;
             }
@@ -87,7 +87,7 @@ public class CorridaEvent {
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (!Util.PDVE(p)) return;
                             p.teleport(Locations.corridaA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            p.getInventory().removeItem(Util.BedLeave);
+                            p.getInventory().removeItem(EventItem.BedLeave);
                             this.cancel();
                         }
                         this.cancel();

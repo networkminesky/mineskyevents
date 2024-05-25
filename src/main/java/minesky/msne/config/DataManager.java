@@ -34,22 +34,19 @@ public class DataManager {
     }
 
     public static File getFolder(String folder) {
-        File Arquivo = new File(MineSkyEvents.get().getDataFolder() + File.separator + folder);
-        return Arquivo;
+        return new File(MineSkyEvents.get().getDataFolder() + File.separator + folder);
     }
 
     public static File getFile(String file, String folder) {
-        File Arquivo = new File(MineSkyEvents.get().getDataFolder() + File.separator + folder, file);
-        return Arquivo;
+        return new File(MineSkyEvents.get().getDataFolder() + File.separator + folder, file);
     }
 
     public static File getFile(String file) {
-        File Arquivo = new File(MineSkyEvents.get().getDataFolder() + File.separator + file);
-        return Arquivo;
+        return new File(MineSkyEvents.get().getDataFolder() + File.separator + file);
     }
 
     public static FileConfiguration getConfiguration(File file) {
-        return (FileConfiguration)YamlConfiguration.loadConfiguration(file);
+        return YamlConfiguration.loadConfiguration(file);
     }
 
     public static void deleteFile(File file) {

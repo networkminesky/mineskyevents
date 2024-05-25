@@ -7,6 +7,8 @@ import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.config.Messages;
 import minesky.msne.events.*;
+import minesky.msne.utils.EventItem;
+import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -29,6 +31,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 
 public class PlayerInfo implements Listener {
@@ -41,7 +44,7 @@ public class PlayerInfo implements Listener {
 
         config.set("Event", false);
         config.set("EventSpect", false);
-        config.set("Address", p.getAddress().getAddress().getHostAddress());
+        config.set("Address", Objects.requireNonNull(p.getAddress()).getAddress().getHostAddress());
         try {
             config.save(Util.PlayerDataF(p));
         } catch (IOException ex) {
@@ -58,7 +61,7 @@ public class PlayerInfo implements Listener {
         EventCommand.RevealPlayer(p);
         Location location = p.getLocation();
         String loc = Util.serializeLocation(location);
-        if (!(MineSkyEvents.event == "OFF")) {
+        if (!(MineSkyEvents.event.equals("OFF"))) {
             switch (MineSkyEvents.event) {
                 case "Spleef":
                     if (!SpleefEvent.contagem && SpleefEvent.contagemI) {
@@ -90,7 +93,7 @@ public class PlayerInfo implements Listener {
                         FileConfiguration config = DataManager.getConfiguration(file);
                         if (config.getBoolean("Event")) {
                             if (TijolãoWarsEvent.playerson.size() == 1) TijolãoWarsEvent.finalizar();
-                            config.set("Events.Tijolao.dead", config.getInt("Events.Tijolao.dead")+1);
+                            config.set("Events.TijolãoWars.dead", config.getInt("Events.TijolãoWars.dead")+1);
                             TijolãoWarsEvent.playerson.remove(p);
                             for (Player player2 : Bukkit.getOnlinePlayers()) {
                                 if (Util.PDVE(player2)) {
@@ -232,7 +235,7 @@ public class PlayerInfo implements Listener {
                                     TNTTagEvent.tnt.add(p1);
                                     TNTTagEvent.temp1.cancel();
                                     TNTTagEvent.secoundsTNTTAGP1(p1);
-                                    p1.getInventory().setHelmet(Util.TNT);
+                                    p1.getInventory().setHelmet(EventItem.TNTHEAD);
                                     p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
                                     p1.sendMessage("§8[§c!§8] §cVocê está com a TNT na cabeça! Você tem apenas §l" + TNTTagEvent.TIME + " §csegundos.");
                                 } else {
@@ -251,8 +254,8 @@ public class PlayerInfo implements Listener {
                                     TNTTagEvent.temp2.cancel();
                                     TNTTagEvent.secoundsTNTTAGP1(p1);
                                     TNTTagEvent.secoundsTNTTAGP2(p2);
-                                    p1.getInventory().setHelmet(Util.TNT);
-                                    p2.getInventory().setHelmet(Util.TNT);
+                                    p1.getInventory().setHelmet(EventItem.TNTHEAD);
+                                    p2.getInventory().setHelmet(EventItem.TNTHEAD);
                                     p2.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
                                     p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
                                 } else {
@@ -269,7 +272,7 @@ public class PlayerInfo implements Listener {
                                         TNTTagEvent.temp2.cancel();
                                         TNTTagEvent.secoundsTNTTAGP2(p1);
                                     }
-                                    p1.getInventory().setHelmet(Util.TNT);
+                                    p1.getInventory().setHelmet(EventItem.TNTHEAD);
                                     p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
                                 }
                             }
@@ -350,10 +353,10 @@ public class PlayerInfo implements Listener {
     private void handleRightClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (Util.BedLeave.isSimilar(player.getInventory().getItemInMainHand())) {
+        if (EventItem.BedLeave.isSimilar(player.getInventory().getItemInMainHand())) {
             if (Util.PDVES(player)) {
                 EventCommand.RevealPlayer(player);
-                Util.sendConectionBCMSNE(player);
+                SendMessages.sendConectionBCMSNE(player);
                 File file = DataManager.getFile(player.getName().toLowerCase(), "playerdata");
                 FileConfiguration config = DataManager.getConfiguration(file);
                 config.set("EventSpect", false);
@@ -375,7 +378,7 @@ public class PlayerInfo implements Listener {
 
             if (!Util.PDVE(player)) return;
             EventCommand.RevealPlayer(player);
-            Util.sendConectionBCMSNE(player);
+            SendMessages.sendConectionBCMSNE(player);
 
             File file = DataManager.getFile(player.getName().toLowerCase(), "playerdata");
             FileConfiguration config = DataManager.getConfiguration(file);
@@ -431,7 +434,7 @@ public class PlayerInfo implements Listener {
                     return;
                 }
             }
-        } else if (Util.CheckP.isSimilar(player.getInventory().getItemInMainHand())) {
+        } else if (EventItem.CheckPoint.isSimilar(player.getInventory().getItemInMainHand())) {
             int listC = MSNECommand.playerCHECKPOINT.getOrDefault(player, 0);
             if (!(listC <= 0)) {
                 switch (listC) {
@@ -452,7 +455,36 @@ public class PlayerInfo implements Listener {
                 player.teleport(Locations.parapenteA, PlayerTeleportEvent.TeleportCause.COMMAND);
                 player.sendMessage("§8[§a!§8] §aVocê voltou para o seu checkpoint!");
             }
-        } else {
+        } else if (EventItem.Head.isSimilar(player.getInventory().getItemInMainHand())) {
+            File file = DataManager.getFile(player.getName().toLowerCase(), "playerdata");
+            FileConfiguration config = DataManager.getConfiguration(file);
+            switch (MineSkyEvents.event) {
+                case "Spleef":
+                    player.sendMessage("§b§lSpleef §8| §aSua informações:\n§b| §aVitórias§8: §7" + config.getInt("Events.Spleef.win") + "\n§b| §aDerrotas§8: §7" + config.getInt("Events.Spleef.dead"));
+                break;
+                case "TijolãoWars":
+                    player.sendMessage("§6§lTijolãoWars §8| §aSua informações:\n§6| §aVitórias§8: §7" + config.getInt("Events.TijolãoWars.win") + "\n§6| §aDerrotas§8: §7" + config.getInt("Events.TijolãoWars.dead"));
+                break;
+                case "Corrida":
+                    player.sendMessage("§e§lCorrida §8| §aSua informações:\n§e| §aVitórias§8: §7" + config.getInt("Events.Corrida.win"));
+                break;
+                case "CorridaBoat":
+                    player.sendMessage("§9§lCorrida de Barco §8| §aSua informações:\n§9| §aVitórias§8: §7" + config.getInt("Events.CorridaBoat.win"));
+                break;
+                case "Sumo":
+                    player.sendMessage("§4§lSumo §8| §aSua informações:\n§4| §aVitórias§8: §7" + config.getInt("Events.Sumo.win") + "\n§4| §aDerrotas§8: §7" + config.getInt("Events.Sumo.dead"));
+                break;
+                case "TNTRun":
+                    player.sendMessage("§c§lTNTRUN §8| §aSua informações:\n§c| §aVitórias§8: §7" + config.getInt("Events.TNTRun.win") + "\n§c| §aDerrotas§8: §7" + config.getInt("Events.TNTRun.dead"));
+                break;
+                case "TNTTag":
+                    player.sendMessage("§c§lTNT-TAG §8| §aSua informações:\n§c| §aVitórias§8: §7" + config.getInt("Events.TNTTag.win") + "\n§c| §aDerrotas§8: §7" + config.getInt("Events.TNTTag.dead"));
+                break;
+                case "Parapente":
+                    player.sendMessage("§3§lCorrida de Parapente §8| §aSua informações:\n§3| §aVitórias§8: §7" + config.getInt("Events.Parapente.win"));
+                break;
+            }
+        }else {
             if (Util.PDVES(player)) {
                 event.setCancelled(true);
             }
@@ -465,7 +497,7 @@ public class PlayerInfo implements Listener {
 
         if (event.getClickedInventory() != null && event.getClickedInventory().getHolder() == event.getWhoClicked()) {
 
-            if (event.getCurrentItem() != null && event.getCurrentItem().isSimilar(Util.BedLeave) || event.getCurrentItem().isSimilar(Util.StoneShovel) || event.getCurrentItem().getType() == Material.PLAYER_HEAD || event.getCurrentItem().isSimilar(Util.Barco) || event.getCurrentItem().isSimilar(Util.SumoItem) || event.getCurrentItem().isSimilar(Util.TNT) || event.getCurrentItem().isSimilar(Util.CheckP)) {
+            if (event.getCurrentItem() != null && event.getCurrentItem().isSimilar(EventItem.BedLeave) || Objects.requireNonNull(event.getCurrentItem()).isSimilar(EventItem.SpleefITEM) || event.getCurrentItem().getType() == Material.PLAYER_HEAD || event.getCurrentItem().isSimilar(EventItem.BarcoITEM) || event.getCurrentItem().isSimilar(EventItem.SumoITEM) || event.getCurrentItem().isSimilar(EventItem.TNTHEAD) || event.getCurrentItem().isSimilar(EventItem.CheckPoint)) {
                 if (Util.PDVES((Player) event.getWhoClicked())) {
                     event.setCancelled(true);
                     return;
@@ -479,7 +511,7 @@ public class PlayerInfo implements Listener {
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         ItemStack droppedItem = event.getItemDrop().getItemStack();
-        if (droppedItem.isSimilar(Util.StoneShovel) || droppedItem.isSimilar(Util.BedLeave) || droppedItem.getType() == Material.BRICK || droppedItem.getType() == Material.PLAYER_HEAD || droppedItem.isSimilar(Util.Barco) || droppedItem.isSimilar(Util.SumoItem) || droppedItem.isSimilar(Util.TNT) || droppedItem.isSimilar(Util.CheckP)) {
+        if (droppedItem.isSimilar(EventItem.SpleefITEM) || droppedItem.isSimilar(EventItem.BedLeave) || droppedItem.getType() == Material.BRICK || droppedItem.getType() == Material.PLAYER_HEAD || droppedItem.isSimilar(EventItem.BarcoITEM) || droppedItem.isSimilar(EventItem.SumoITEM) || droppedItem.isSimilar(EventItem.TNTHEAD) || droppedItem.isSimilar(EventItem.CheckPoint)) {
             if (Util.PDVES(event.getPlayer())) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage("§8[§c!§8] §cVocê não pode dropar esse item.");
@@ -509,192 +541,193 @@ public class PlayerInfo implements Listener {
             return;
         }
         if (!Util.PDVE(p)) return;
-        if (MineSkyEvents.event == "Spleef") {
-            SpleefEvent.playerson.remove(p);
-            SpleefEvent.mortos.add(p);
-            if (SpleefEvent.playerson.size() == 1) SpleefEvent.finalizar();
-            p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
-            event.setDeathMessage(null);
-            File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
-            FileConfiguration config = DataManager.getConfiguration(file);
+        switch (MineSkyEvents.event) {
+            case "Spleef": {
+                SpleefEvent.playerson.remove(p);
+                SpleefEvent.mortos.add(p);
+                if (SpleefEvent.playerson.size() == 1) SpleefEvent.finalizar();
+                p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
+                event.setDeathMessage(null);
+                File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
+                FileConfiguration config = DataManager.getConfiguration(file);
 
-            config.set("Event", false);
-            config.set("Events.Spleef.dead", config.getInt("Events.Spleef.dead")+1);
-            try {
-                config.save(Util.PlayerDataF(p));
-            } catch (IOException e) {
-                e.printStackTrace();
+                config.set("Event", false);
+                config.set("Events.Spleef.dead", config.getInt("Events.Spleef.dead") + 1);
+                try {
+                    config.save(Util.PlayerDataF(p));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Bukkit.dispatchCommand(p, "event entrar");
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getName().equals(p.getName())) return;
+                    player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7morreu.");
+                }
+                return;
             }
-            Bukkit.dispatchCommand(p, "event entrar");
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getName().equals(p.getName())) return;
-                player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7morreu.");
-            }
-            return;
-        }
-        if (MineSkyEvents.event == "TijolãoWars") {
-            TijolãoWarsEvent.playerson.remove(p);
-            TijolãoWarsEvent.mortos.add(p);
-            if (TijolãoWarsEvent.playerson.size() == 1) TijolãoWarsEvent.finalizar();
-            p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
-            event.setDeathMessage(null);
-            File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
-            FileConfiguration config = DataManager.getConfiguration(file);
+            case "TijolãoWars": {
+                TijolãoWarsEvent.playerson.remove(p);
+                TijolãoWarsEvent.mortos.add(p);
+                if (TijolãoWarsEvent.playerson.size() == 1) TijolãoWarsEvent.finalizar();
+                p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
+                event.setDeathMessage(null);
+                File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
+                FileConfiguration config = DataManager.getConfiguration(file);
 
-            config.set("Event", false);
-            config.set("Events.Tijolao.dead", config.getInt("Events.Tijolao.dead")+1);
-            try {
-                config.save(Util.PlayerDataF(p));
-            } catch (IOException e) {
-                e.printStackTrace();
+                config.set("Event", false);
+                config.set("Events.TijolãoWars.dead", config.getInt("Events.TijolãoWars.dead") + 1);
+                try {
+                    config.save(Util.PlayerDataF(p));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Bukkit.dispatchCommand(p, "event entrar");
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getName().equals(p.getName())) return;
+                    player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7morreu.");
+                }
+                return;
             }
-            Bukkit.dispatchCommand(p, "event entrar");
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getName().equals(p.getName())) return;
-                player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7morreu.");
-            }
-            return;
-        }
-        if (MineSkyEvents.event == "Corrida") {
-            CorridaEvent.playerson.remove(p);
-            p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
-            event.setDeathMessage(null);
-            File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
-            FileConfiguration config = DataManager.getConfiguration(file);
+            case "Corrida": {
+                CorridaEvent.playerson.remove(p);
+                p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
+                event.setDeathMessage(null);
+                File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
+                FileConfiguration config = DataManager.getConfiguration(file);
 
-            config.set("Event", false);
-            try {
-                config.save(Util.PlayerDataF(p));
-            } catch (IOException e) {
-                e.printStackTrace();
+                config.set("Event", false);
+                try {
+                    config.save(Util.PlayerDataF(p));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Bukkit.dispatchCommand(p, "event entrar");
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getName().equals(p.getName())) return;
+                    player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7morreu.");
+                }
+                return;
             }
-            Bukkit.dispatchCommand(p, "event entrar");
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getName().equals(p.getName())) return;
-                player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7morreu.");
-            }
-            return;
-        }
-        if (MineSkyEvents.event == "Sumo") {
-            SumoEvent.playerson.remove(p);
-            SumoEvent.mortos.add(p);
-            if (SumoEvent.playerson.size() == 1) SumoEvent.finalizar();
-            p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
-            event.setDeathMessage(null);
-            File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
-            FileConfiguration config = DataManager.getConfiguration(file);
+            case "Sumo": {
+                SumoEvent.playerson.remove(p);
+                SumoEvent.mortos.add(p);
+                if (SumoEvent.playerson.size() == 1) SumoEvent.finalizar();
+                p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
+                event.setDeathMessage(null);
+                File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
+                FileConfiguration config = DataManager.getConfiguration(file);
 
-            config.set("Event", false);
-            config.set("Events.Sumo.dead", config.getInt("Events.Sumo.dead")+1);
-            try {
-                config.save(Util.PlayerDataF(p));
-            } catch (IOException e) {
-                e.printStackTrace();
+                config.set("Event", false);
+                config.set("Events.Sumo.dead", config.getInt("Events.Sumo.dead") + 1);
+                try {
+                    config.save(Util.PlayerDataF(p));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Bukkit.dispatchCommand(p, "event entrar");
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getName().equals(p.getName())) return;
+                    player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7morreu.");
+                }
+                return;
             }
-            Bukkit.dispatchCommand(p, "event entrar");
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getName().equals(p.getName())) return;
-                player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7morreu.");
-            }
-            return;
-        }
-        if (MineSkyEvents.event == "TNTRun") {
-            TNTRunEvent.playerson.remove(p);
-            TNTRunEvent.mortos.add(p);
-            if (TNTRunEvent.playerson.size() == 1) TNTRunEvent.finalizar();
-            p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
-            event.setDeathMessage(null);
-            File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
-            FileConfiguration config = DataManager.getConfiguration(file);
+            case "TNTRun": {
+                TNTRunEvent.playerson.remove(p);
+                TNTRunEvent.mortos.add(p);
+                if (TNTRunEvent.playerson.size() == 1) TNTRunEvent.finalizar();
+                p.sendMessage("§8[§f☠§8] §cVocê §7morreu.");
+                event.setDeathMessage(null);
+                File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
+                FileConfiguration config = DataManager.getConfiguration(file);
 
-            config.set("Event", false);
-            config.set("Events.TNTRun.dead", config.getInt("Events.TNTRun.dead")+1);
-            try {
-                config.save(Util.PlayerDataF(p));
-            } catch (IOException e) {
-                e.printStackTrace();
+                config.set("Event", false);
+                config.set("Events.TNTRun.dead", config.getInt("Events.TNTRun.dead") + 1);
+                try {
+                    config.save(Util.PlayerDataF(p));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Bukkit.dispatchCommand(p, "event entrar");
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getName().equals(p.getName())) return;
+                    player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7morreu.");
+                }
+                return;
             }
-            Bukkit.dispatchCommand(p, "event entrar");
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getName().equals(p.getName())) return;
-                player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7morreu.");
-            }
-            return;
-        }
-        if (MineSkyEvents.event == "TNTTag") {
-            TNTTagEvent.playerson.remove(p);
-            TNTTagEvent.mortos.add(p);
-            TNTTagEvent.jogadores.remove(p);
-            p.getInventory().setHelmet(null);
-            if (TNTTagEvent.playerson.size() == 1) TNTTagEvent.finalizar();
-            if (TNTTagEvent.tnt.contains(p)) {
-                TNTTagEvent.tnt.remove(p);
-                if (TNTTagEvent.playerson.size() < 8) {
-                    if (TNTTagEvent.tnt.isEmpty()) {
-                        Player p1 = TNTTagEvent.jogadores.get(TNTTagEvent.random.nextInt(TNTTagEvent.jogadores.size()));
-                        TNTTagEvent.tnt.add(p1);
-                        TNTTagEvent.temp1.cancel();
-                        TNTTagEvent.secoundsTNTTAGP1(p1);
-                        p1.getInventory().setHelmet(Util.TNT);
-                        p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
-                        p1.sendMessage("§8[§c!§8] §cVocê está com a TNT na cabeça! Você tem apenas §l" + TNTTagEvent.TIME + " §csegundos.");
-                    } else {
-                        Bukkit.getLogger().warning("O TNT-TAG ainda está com 1 player com tnt na cabeça");
-                    }
-                } else {
-                    if (TNTTagEvent.tnt.isEmpty()) {
-                        Player p1 = TNTTagEvent.jogadores.get(TNTTagEvent.random.nextInt(TNTTagEvent.jogadores.size()));
-                        Player p2;
-                        do {
-                            p2 = TNTTagEvent.jogadores.get(TNTTagEvent.random.nextInt(TNTTagEvent.jogadores.size()));
-                        } while (p1.equals(p2));
-                        TNTTagEvent.tnt.add(p1);
-                        TNTTagEvent.tnt.add(p2);
-                        TNTTagEvent.temp1.cancel();
-                        TNTTagEvent.temp2.cancel();
-                        TNTTagEvent.secoundsTNTTAGP1(p1);
-                        TNTTagEvent.secoundsTNTTAGP2(p2);
-                        p1.getInventory().setHelmet(Util.TNT);
-                        p2.getInventory().setHelmet(Util.TNT);
-                        p2.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
-                        p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
-                    } else {
-                        Player p1;
-                        do {
-                            p1 = TNTTagEvent.jogadores.get(TNTTagEvent.random.nextInt(TNTTagEvent.jogadores.size()));
-                        } while (p1.equals(TNTTagEvent.tnt.get(0)));
-                        TNTTagEvent.tnt.add(p1);
-                        if (TNTTagEvent.PEGOS.getName().equalsIgnoreCase(p.getName())) {
+            case "TNTTag": {
+                TNTTagEvent.playerson.remove(p);
+                TNTTagEvent.mortos.add(p);
+                TNTTagEvent.jogadores.remove(p);
+                p.getInventory().setHelmet(null);
+                if (TNTTagEvent.playerson.size() == 1) TNTTagEvent.finalizar();
+                if (TNTTagEvent.tnt.contains(p)) {
+                    TNTTagEvent.tnt.remove(p);
+                    if (TNTTagEvent.playerson.size() < 8) {
+                        if (TNTTagEvent.tnt.isEmpty()) {
+                            Player p1 = TNTTagEvent.jogadores.get(TNTTagEvent.random.nextInt(TNTTagEvent.jogadores.size()));
+                            TNTTagEvent.tnt.add(p1);
                             TNTTagEvent.temp1.cancel();
                             TNTTagEvent.secoundsTNTTAGP1(p1);
+                            p1.getInventory().setHelmet(EventItem.TNTHEAD);
+                            p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
+                            p1.sendMessage("§8[§c!§8] §cVocê está com a TNT na cabeça! Você tem apenas §l" + TNTTagEvent.TIME + " §csegundos.");
+                        } else {
+                            Bukkit.getLogger().warning("O TNT-TAG ainda está com 1 player com tnt na cabeça");
                         }
-                        if (TNTTagEvent.PEGOS2.getName().equalsIgnoreCase(p.getName())){
+                    } else {
+                        if (TNTTagEvent.tnt.isEmpty()) {
+                            Player p1 = TNTTagEvent.jogadores.get(TNTTagEvent.random.nextInt(TNTTagEvent.jogadores.size()));
+                            Player p2;
+                            do {
+                                p2 = TNTTagEvent.jogadores.get(TNTTagEvent.random.nextInt(TNTTagEvent.jogadores.size()));
+                            } while (p1.equals(p2));
+                            TNTTagEvent.tnt.add(p1);
+                            TNTTagEvent.tnt.add(p2);
+                            TNTTagEvent.temp1.cancel();
                             TNTTagEvent.temp2.cancel();
-                            TNTTagEvent.secoundsTNTTAGP2(p1);
+                            TNTTagEvent.secoundsTNTTAGP1(p1);
+                            TNTTagEvent.secoundsTNTTAGP2(p2);
+                            p1.getInventory().setHelmet(EventItem.TNTHEAD);
+                            p2.getInventory().setHelmet(EventItem.TNTHEAD);
+                            p2.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
+                            p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
+                        } else {
+                            Player p1;
+                            do {
+                                p1 = TNTTagEvent.jogadores.get(TNTTagEvent.random.nextInt(TNTTagEvent.jogadores.size()));
+                            } while (p1.equals(TNTTagEvent.tnt.get(0)));
+                            TNTTagEvent.tnt.add(p1);
+                            if (TNTTagEvent.PEGOS.getName().equalsIgnoreCase(p.getName())) {
+                                TNTTagEvent.temp1.cancel();
+                                TNTTagEvent.secoundsTNTTAGP1(p1);
+                            }
+                            if (TNTTagEvent.PEGOS2.getName().equalsIgnoreCase(p.getName())) {
+                                TNTTagEvent.temp2.cancel();
+                                TNTTagEvent.secoundsTNTTAGP2(p1);
+                            }
+                            p1.getInventory().setHelmet(EventItem.TNTHEAD);
+                            p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
                         }
-                        p1.getInventory().setHelmet(Util.TNT);
-                        p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
                     }
+                    p.sendMessage("§8[§f☠§8] §cVocê §7foi explodido.");
                 }
-                p.sendMessage("§8[§f☠§8] §cVocê §7foi explodido.");
-            }
-            event.setDeathMessage(null);
-            File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
-            FileConfiguration config = DataManager.getConfiguration(file);
+                event.setDeathMessage(null);
+                File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
+                FileConfiguration config = DataManager.getConfiguration(file);
 
-            config.set("Event", false);
-            config.set("Events.TNTTag.dead", config.getInt("Events.TNTTag.dead")+1);
-            try {
-                config.save(Util.PlayerDataF(p));
-            } catch (IOException e) {
-                e.printStackTrace();
+                config.set("Event", false);
+                config.set("Events.TNTTag.dead", config.getInt("Events.TNTTag.dead") + 1);
+                try {
+                    config.save(Util.PlayerDataF(p));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Bukkit.dispatchCommand(p, "event entrar");
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (player.getName().equals(p.getName())) return;
+                    player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7Foi explodido.");
+                }
             }
-            Bukkit.dispatchCommand(p, "event entrar");
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getName().equals(p.getName())) return;
-                player.sendMessage("§8[§f☠§8] §c" + p.getName() + " §7Foi explodido.");
-            }
-            return;
         }
     }
 
@@ -719,7 +752,6 @@ public class PlayerInfo implements Listener {
         Player player = event.getPlayer();
         if (Util.PDVES(player)) {
             event.setCancelled(true);
-            return;
         }
     }
 
@@ -729,7 +761,6 @@ public class PlayerInfo implements Listener {
             Player player = (Player) event.getEntity();
             if (Util.PDVES(player)) {
                 event.setCancelled(true);
-                return;
             }
         }
     }
@@ -742,7 +773,7 @@ public class PlayerInfo implements Listener {
                 event.setCancelled(true);
                 return;
             }
-            if (MineSkyEvents.event == "TNTTag") {
+            if (MineSkyEvents.event.equals("TNTTag")) {
                 if (event.getEntity() instanceof Player) {
                     Player entity = (Player) event.getEntity();
                     if (Util.PDVE(damager)) {
@@ -763,11 +794,10 @@ public class PlayerInfo implements Listener {
                             }
                             entity.sendMessage("§8[§c!§8] §cVocê foi pego e tem §l" + TNTTagEvent.TIME + " §csegundos para pegar alguém.");
                             damager.getInventory().setHelmet(null);
-                            entity.getInventory().setHelmet(Util.TNT);
+                            entity.getInventory().setHelmet(EventItem.TNTHEAD);
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
                             damager.removePotionEffect(PotionEffectType.SPEED);
                             damager.sendMessage("§8[§a!§8] §aVocê pegou o jogador §l" + entity.getName());
-                            return;
                         }
                     }
                 }
@@ -780,7 +810,6 @@ public class PlayerInfo implements Listener {
             Player player = (Player) event.getEntity();
             if (Util.PDVES(player)) {
                 event.setCancelled(true);
-                return;
             }
         }
     }
@@ -792,13 +821,15 @@ public class PlayerInfo implements Listener {
         Location block2 = pl.clone().subtract(0, 2, 0);
         if (MineSkyEvents.event.equals("TNTRun")) {
             if (!Util.PDVE(p)) return;
-            if (!(block1.getBlock().getType() == Material.AIR)) return;
+            if (TNTRunEvent.contagem) return;
+            if(!TNTRunEvent.contagemI) {
+                return;
+            }
+            if (!(block1.getBlock().getType() == Material.AIR) || !(block1.getBlock().getType() == Material.LIGHT)) return;
             TNTRunEvent.blocksbreak.put(block1, block1.getBlock().getType());
             TNTRunEvent.blocksbreak.put(block2, block2.getBlock().getType());
             block2.getBlock().setType(Material.AIR);
             block1.getBlock().setType(Material.AIR);
-        } else {
-            return;
         }
     }
 }
