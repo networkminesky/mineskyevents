@@ -13,10 +13,12 @@ public class EventCommandTabCompleter implements TabCompleter {
     private final List<String> id = Arrays.asList("anunciar", "blacklist", "entrar", "kick", "set", "start", "finalizar");
     private final List<String> names = Arrays.asList("Spleef", "TijolãoWars", "Corrida", "TNTRun", "CorridaBoat", "Sumo", "TNTTag", "Parapente");
     private final List<String> namesA = Arrays.asList("Mini-Wars", "Esconde-esconde", "Ruínas", "CopaPVP");
-    private final List<String> namesF = new ArrayList<>(namesA);
+    private final List<String> namesF = new ArrayList<>();
 
     @Override
     public List<String> onTabComplete(CommandSender s, Command cmd, String lbl, String[] args) {
+        namesF.addAll(namesA);
+        namesF.addAll(names);
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
@@ -29,12 +31,15 @@ public class EventCommandTabCompleter implements TabCompleter {
                 addIfPermitted(s, completions, "mineskyevents.command.event.kick", "kick");
                 addIfPermitted(s, completions, "mineskyevents.command.event.set", "set");
                 addIfPermitted(s, completions, "mineskyevents.command.event.start", "start");
+                addIfPermitted(s, completions, "mineskyevents.command.event.finalizar", "finalizar");
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("blacklist")) {
                 completions = getMatches(args[1], Arrays.asList("Adicionar", "Remover"), s, "mineskyevents.command.event.blacklist");
-            } else if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("anunciar")) {
-                completions = getMatches(args[1], names, s, "mineskyevents.command.event." + args[0]);
+            } else if (args[0].equalsIgnoreCase("start")) {
+                completions = getMatches(args[1], names, s, "mineskyevents.command.event.start");
+            } else if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("anunciar")) {
+                completions = getMatches(args[1], namesF, s, "mineskyevents.command.event." + args[0]);
             } else if (args[0].equalsIgnoreCase("finalizar")) {
                 completions = getMatches(args[1], namesF, s, "mineskyevents.command.event.finalizar");
             } else if (args[0].equalsIgnoreCase("kick")) {
@@ -46,16 +51,16 @@ public class EventCommandTabCompleter implements TabCompleter {
                 if (!s.hasPermission("mineskyevents.command.event.anunciar")) return completions;
                 switch (args[2]) {
                     case "Mini-Wars":
-                        completions.addAll(Arrays.asList("Mapa-1", "Mapa-2", "Mapa-3", "Mapa-4", "Mapa-5"));
+                        completions.addAll(Arrays.asList("1", "2", "3", "4", "5"));
                         break;
                     case "CopaPVP":
-                        completions.add("Mapa-1");
+                        completions.add("1");
                         break;
                     case "Esconde-Esconde":
-                        completions.addAll(Arrays.asList("Mapa-1", "Mapa-2"));
+                        completions.addAll(Arrays.asList("1", "2"));
                         break;
                     case "Ruínas":
-                        completions.add("Mapa-1");
+                        completions.add("1");
                         break;
                     default:
                         break;

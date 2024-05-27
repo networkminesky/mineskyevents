@@ -6,6 +6,7 @@ import minesky.msne.commands.EventCommand;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.discord.EventsMessage;
+import minesky.msne.system.event.EventPlayerManager;
 import minesky.msne.utils.EventItem;
 import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
@@ -27,7 +28,6 @@ import java.util.*;
 public class TNTTagEvent {
     public static boolean contagem;
     public static boolean contagemI = false;
-    public static List<Player> playerson = new ArrayList<>();
     public static List<Player> mortos = new ArrayList<>();
     public static BukkitRunnable temporizador;
     public static BukkitRunnable contagemtemp;
@@ -42,11 +42,6 @@ public class TNTTagEvent {
     public static void iniciarEvento() {
         MineSkyEvents.event = "TNTTag";
         SendMessages.sendMessageBGMSNE("TNTTag");
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!player.hasPermission("mineskyevents.bypass.join")) {
-                Bukkit.dispatchCommand(player, "event entrar");
-            }
-        }
         TIME = getRandomTime();
         temporizador = new BukkitRunnable() {
             int tempoRestante = 600;
@@ -75,12 +70,17 @@ public class TNTTagEvent {
             }
         };
         temporizador.runTaskTimer(MineSkyEvents.get(), 0, 20);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.hasPermission("mineskyevents.bypass.join")) {
+                Bukkit.dispatchCommand(player, "event entrar");
+            }
+        }
     }
     public static void comtagemEvento() {
-        if (!contagemI && playerson.size() >= 4) {
+        if (!contagemI && EventPlayerManager.getPlayerCount() >= 8) {
             temporizador.cancel();
             contagemtemp = new BukkitRunnable() {
-                int tempoRestante = 60;
+                int tempoRestante = 180;
 
                 @Override
                 public void run() {
@@ -97,11 +97,12 @@ public class TNTTagEvent {
                     if (tempoRestante == 0) {
                         contagem = false;
                         for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (!Util.PDVE(p)) return;
-                            p.teleport(Locations.tnttagA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                            p.getInventory().removeItem(EventItem.BedLeave);
-                            p.getInventory().removeItem(EventItem.Head);
-                            jogadores.add(p);
+                            if (Util.PDVE(p)) {
+                                p.teleport(Locations.tnttagA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                                p.getInventory().removeItem(EventItem.BedLeave);
+                                p.getInventory().removeItem(EventItem.HeadEvents(p));
+                                jogadores.add(p);
+                            }
                         }
                             Player p1 = jogadores.get(random.nextInt(jogadores.size()));
                             Player p2;
@@ -125,7 +126,7 @@ public class TNTTagEvent {
         }
     }
     public static void finalizar() {
-        Player vencedor = playerson.stream()
+        Player vencedor = EventPlayerManager.getPlayerManager().stream()
                 .filter(player -> !mortos.contains(player))
                 .findFirst()
                 .orElse(null);
@@ -173,7 +174,7 @@ public class TNTTagEvent {
         SendMessages.sendPlayermessage(vencedores[1], text2);
         SendMessages.sendPlayermessage(vencedores[0], text3);
         EventsMessage.sendLogEvent("TNTTag", vencedor, vencedores, premio1, premio2, premio3);
-        playerson.clear();
+        EventPlayerManager.clearPlayerManager();
         mortos.clear();
         jogadores.clear();
         tnt.clear();

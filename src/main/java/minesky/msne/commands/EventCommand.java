@@ -1,8 +1,10 @@
 package minesky.msne.commands;
 
 import minesky.msne.MineSkyEvents;
+import minesky.msne.commands.console.EventCommandConsole;
 import minesky.msne.config.*;
 import minesky.msne.events.*;
+import minesky.msne.system.event.EventPlayerManager;
 import minesky.msne.system.event.EventVerification;
 import minesky.msne.utils.EventItem;
 import minesky.msne.utils.SendMessages;
@@ -11,16 +13,14 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,9 +37,14 @@ public class EventCommand implements CommandExecutor {
     public static int PlayerSize = 0;
     public static int RequestPlayerSize = 1;
     public static boolean EventsAgendados = false;
+    public static TextComponent textfinalizar = new TextComponent("EVENTO FINALIZADO");
 
     @Override
     public boolean onCommand(CommandSender s, Command cmd, String lbl, String[] args) {
+        if (s instanceof ConsoleCommandSender || s instanceof RemoteConsoleCommandSender || s instanceof BlockCommandSender) {
+            new EventCommandConsole(s, cmd, lbl, args);
+            return true;
+        }
         Player player = (Player) s;
         if (args.length < 1 || args[0].equalsIgnoreCase("entrar")) {
             if (MineSkyEvents.event.equalsIgnoreCase("OFF")) {
@@ -67,13 +72,12 @@ public class EventCommand implements CommandExecutor {
                         location = Locations.spleefA;
                         return true;
                     }
-                    if (SpleefEvent.playerson != null && !SpleefEvent.contagemI) {
-                        SpleefEvent.playerson.add(player);
-                    }
+                    Spectator = false;
+                    EventsAgendados = false;
+                    EventPlayerManager.addPlayer(player);
                     if (!SpleefEvent.contagemI) SpleefEvent.comtagemEvento();
                     location = Locations.spleef;
-                    assert SpleefEvent.playerson != null;
-                    PlayerSize = SpleefEvent.playerson.size();
+                    PlayerSize = EventPlayerManager.getPlayerCount();
                     RequestPlayerSize = 4;
                 break;
                 case "TijolãoWars":
@@ -87,9 +91,9 @@ public class EventCommand implements CommandExecutor {
                         }
                         return true;
                     }
-                    if (TijolãoWarsEvent.playerson != null && !TijolãoWarsEvent.contagemI) {
-                        TijolãoWarsEvent.playerson.add(player);
-                    }
+                    Spectator = false;
+                    EventsAgendados = false;
+                    EventPlayerManager.addPlayer(player);
                     if (!TijolãoWarsEvent.contagemI) TijolãoWarsEvent.comtagemEvento();
                     if (TijolãoWarsEvent.selectedMap.equals("Mapa1")) {
                         location = Locations.tijolao;
@@ -97,8 +101,7 @@ public class EventCommand implements CommandExecutor {
                     if (TijolãoWarsEvent.selectedMap.equals("Mapa2")) {
                         location = Locations.tijolao2;
                     }
-                    assert TijolãoWarsEvent.playerson != null;
-                    PlayerSize = TijolãoWarsEvent.playerson.size();
+                    PlayerSize = EventPlayerManager.getPlayerCount();
                     RequestPlayerSize = 4;
                 break;
                 case "Corrida":
@@ -107,13 +110,12 @@ public class EventCommand implements CommandExecutor {
                         location = Locations.corridaA;
                         return true;
                     }
-                    if (CorridaEvent.playerson != null && !CorridaEvent.contagemI) {
-                        CorridaEvent.playerson.add(player);
-                    }
+                    Spectator = false;
+                    EventsAgendados = false;
+                    EventPlayerManager.addPlayer(player);
                     if (!CorridaEvent.contagemI) CorridaEvent.comtagemEvento();
                     location = Locations.corrida;
-                    assert CorridaEvent.playerson != null;
-                    PlayerSize = CorridaEvent.playerson.size();
+                    PlayerSize = EventPlayerManager.getPlayerCount();
                     RequestPlayerSize = 4;
                 break;
                 case "CorridaBoat":
@@ -122,13 +124,12 @@ public class EventCommand implements CommandExecutor {
                         location = Locations.corridaboatA;
                         return true;
                     }
-                    if (CorridaBoatEvent.playerson != null && !CorridaBoatEvent.contagemI) {
-                        CorridaBoatEvent.playerson.add(player);
-                    }
+                    Spectator = false;
+                    EventsAgendados = false;
+                    EventPlayerManager.addPlayer(player);
                     if (!CorridaBoatEvent.contagemI) CorridaBoatEvent.comtagemEvento();
                     location = Locations.corridaboat;
-                    assert CorridaBoatEvent.playerson != null;
-                    PlayerSize = CorridaBoatEvent.playerson.size();
+                    PlayerSize = EventPlayerManager.getPlayerCount();
                     RequestPlayerSize = 4;
                 break;
                 case "Sumo":
@@ -137,13 +138,12 @@ public class EventCommand implements CommandExecutor {
                         location = Locations.sumoA;
                         return true;
                     }
-                    if (SumoEvent.playerson != null && !SumoEvent.contagemI) {
-                        SumoEvent.playerson.add(player);
-                    }
+                    Spectator = false;
+                    EventsAgendados = false;
+                    EventPlayerManager.addPlayer(player);
                     if (!SumoEvent.contagemI) SumoEvent.comtagemEvento();
                     location = Locations.sumo;
-                    assert SumoEvent.playerson != null;
-                    PlayerSize = SumoEvent.playerson.size();
+                    PlayerSize = EventPlayerManager.getPlayerCount();
                     RequestPlayerSize = 4;
                 break;
                 case "TNTRun":
@@ -157,9 +157,9 @@ public class EventCommand implements CommandExecutor {
                         }
                         return true;
                     }
-                    if (TNTRunEvent.playerson != null && !TNTRunEvent.contagemI) {
-                        TNTRunEvent.playerson.add(player);
-                    }
+                    Spectator = false;
+                    EventsAgendados = false;
+                    EventPlayerManager.addPlayer(player);
                     if (!TNTRunEvent.contagemI) TNTRunEvent.comtagemEvento();
                     if (TNTRunEvent.selectedMap.equals("Mapa1")) {
                         location = Locations.tntrun2;
@@ -167,8 +167,7 @@ public class EventCommand implements CommandExecutor {
                     if (TNTRunEvent.selectedMap.equals("Mapa2")) {
                         location = Locations.tntrun;
                     }
-                    assert TNTRunEvent.playerson != null;
-                    PlayerSize = TNTRunEvent.playerson.size();
+                    PlayerSize = EventPlayerManager.getPlayerCount();
                     RequestPlayerSize = 4;
                 break;
                 case "TNTTag":
@@ -177,13 +176,12 @@ public class EventCommand implements CommandExecutor {
                         location = Locations.tnttagA;
                         return true;
                     }
-                    if (TNTTagEvent.playerson != null && !TNTTagEvent.contagemI) {
-                        TNTTagEvent.playerson.add(player);
-                    }
+                    Spectator = false;
+                    EventsAgendados = false;
+                    EventPlayerManager.addPlayer(player);
                     if (!TNTTagEvent.contagemI) TNTTagEvent.comtagemEvento();
                     location = Locations.tnttag;
-                    assert TNTTagEvent.playerson != null;
-                    PlayerSize = TNTTagEvent.playerson.size();
+                    PlayerSize = EventPlayerManager.getPlayerCount();
                     RequestPlayerSize = 8;
                 break;
                 case "Parapente":
@@ -192,17 +190,17 @@ public class EventCommand implements CommandExecutor {
                         location = Locations.parapenteA;
                         return true;
                     }
-                    if (ParapenteEvent.playerson != null && !ParapenteEvent.contagemI) {
-                        ParapenteEvent.playerson.add(player);
-                    }
+                    Spectator = false;
+                    EventsAgendados = false;
+                    EventPlayerManager.addPlayer(player);
                     if (!ParapenteEvent.contagemI) ParapenteEvent.comtagemEvento();
                     location = Locations.parapente;
-                    assert ParapenteEvent.playerson != null;
-                    PlayerSize = ParapenteEvent.playerson.size();
+                    PlayerSize = EventPlayerManager.getPlayerCount();
                     RequestPlayerSize = 4;
                 break;
                 case "Mini-Wars":
                     EventsAgendados = true;
+                    Spectator = false;
                     if (selectedMap.equalsIgnoreCase("Mapa-1")) {
                         location = Locations.miniwars;
                     }
@@ -221,12 +219,14 @@ public class EventCommand implements CommandExecutor {
                 break;
                 case "CopaPVP":
                     EventsAgendados = true;
+                    Spectator = false;
                     if (selectedMap.equalsIgnoreCase("Mapa-1")) {
                         location = Locations.copapvp;
                     }
                 break;
                 case "Esconde-esconde":
                     EventsAgendados = true;
+                    Spectator = false;
                     if (selectedMap.equalsIgnoreCase("Mapa-1")) {
                         location = Locations.esconde;
                     }
@@ -236,6 +236,7 @@ public class EventCommand implements CommandExecutor {
                 break;
                 case "Ruínas":
                     EventsAgendados = true;
+                    Spectator = false;
                     if (selectedMap.equalsIgnoreCase("Mapa-1")) {
                         location = Locations.ruinas;
                     }
@@ -254,9 +255,8 @@ public class EventCommand implements CommandExecutor {
             if (Spectator) {
                 PlayerSpectator(player);
                 clearInventory(player);
-                EventItem.Head = EventItem.HeadEvents(player);
                 player.getInventory().setItem(8, EventItem.BedLeave);
-                player.getInventory().setItem(4, EventItem.Head);
+                player.getInventory().setItem(4, EventItem.HeadEvents(player));
                 Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), () -> {
                     player.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
                     player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
@@ -277,9 +277,8 @@ public class EventCommand implements CommandExecutor {
                 try {
                     config.save(file);
                     clearInventory(player);
-                    EventItem.Head = EventItem.HeadEvents(player);
                     player.getInventory().setItem(8, EventItem.BedLeave);
-                    player.getInventory().setItem(4, EventItem.Head);
+                    player.getInventory().setItem(4, EventItem.HeadEvents(player));
                     Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), () -> {
                         player.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
                         s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
@@ -359,8 +358,11 @@ public class EventCommand implements CommandExecutor {
                     break;
                 case "copapvp":
                     if (args.length < 3) return true;
-                    selectedMap = args[2];
-                    if (!selectedMap.equalsIgnoreCase("Mapa-1")) {
+                    int selectMapC = Integer.parseInt(args[2]);
+                    if (selectMapC == 1) {
+                        selectedMap = "Mapa-1";
+                    }
+                    if (selectMapC > 1) {
                         s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapas!");
                         return true;
                     }
@@ -384,8 +386,11 @@ public class EventCommand implements CommandExecutor {
                     break;
                 case "ruínas":
                     if (args.length < 3) return true;
-                    selectedMap = args[2];
-                    if (!selectedMap.equalsIgnoreCase("Mapa-1")) {
+                    int selectMapR = Integer.parseInt(args[2]);
+                    if (selectMapR == 1) {
+                        selectedMap = "Mapa-1";
+                    }
+                        if (selectMapR > 1) {
                         s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapas!");
                         return true;
                     }
@@ -393,6 +398,7 @@ public class EventCommand implements CommandExecutor {
                     SendMessages.sendMessageBGMSNE("Ruínas");
                     break;
             }
+            Bukkit.getLogger().warning("[MineSky-Events] " + player.getName() + " anúnciou o evento: " + MineSkyEvents.event);
             return true;
         }
         if (args[0].equalsIgnoreCase("finalizar")) {
@@ -405,9 +411,11 @@ public class EventCommand implements CommandExecutor {
                 return true;
             }
             String event = MineSkyEvents.event;
+
             switch (MineSkyEvents.event) {
                 case "Spleef":
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§b§lSpleef §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -424,7 +432,7 @@ public class EventCommand implements CommandExecutor {
                         }
                     }
                     SpleefEvent.mortos.clear();
-                    SpleefEvent.playerson.clear();
+                    EventPlayerManager.clearPlayerManager();
                     SpleefEvent.contagem = true;
                     SpleefEvent.contagemI = false;
                     SpleefEvent.temporizador.cancel();
@@ -435,6 +443,7 @@ public class EventCommand implements CommandExecutor {
                     break;
                 case "TijolãoWars":
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§6§lTijolãoWars §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -451,7 +460,7 @@ public class EventCommand implements CommandExecutor {
                         }
                     }
                     TijolãoWarsEvent.mortos.clear();
-                    TijolãoWarsEvent.playerson.clear();
+                    EventPlayerManager.clearPlayerManager();
                     TijolãoWarsEvent.contagem = true;
                     TijolãoWarsEvent.contagemI = false;
                     TijolãoWarsEvent.temporizador.cancel();
@@ -461,6 +470,7 @@ public class EventCommand implements CommandExecutor {
                     break;
                 case "Corrida":
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§e§lCorrida §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -477,7 +487,7 @@ public class EventCommand implements CommandExecutor {
                         }
                     }
                     MSNECommand.playerList.clear();
-                    CorridaEvent.playerson.clear();
+                    EventPlayerManager.clearPlayerManager();
                     CorridaEvent.contagem = true;
                     CorridaEvent.contagemI = false;
                     CorridaEvent.temporizador.cancel();
@@ -487,6 +497,7 @@ public class EventCommand implements CommandExecutor {
                     break;
                 case "CorridaBoat":
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§9§lCorrida de barco §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -504,7 +515,7 @@ public class EventCommand implements CommandExecutor {
                     }
                     MSNECommand.playerList.clear();
                     MSNECommand.playerBOATLIST.clear();
-                    CorridaBoatEvent.playerson.clear();
+                    EventPlayerManager.clearPlayerManager();
                     CorridaBoatEvent.contagem = true;
                     CorridaBoatEvent.contagemI = false;
                     CorridaBoatEvent.temporizador.cancel();
@@ -514,6 +525,7 @@ public class EventCommand implements CommandExecutor {
                     break;
                 case "Sumo":
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§4§lSumo §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -530,7 +542,7 @@ public class EventCommand implements CommandExecutor {
                         }
                     }
                     SumoEvent.mortos.clear();
-                    SumoEvent.playerson.clear();
+                    EventPlayerManager.clearPlayerManager();
                     SumoEvent.contagem = true;
                     SumoEvent.contagemI = false;
                     SumoEvent.temporizador.cancel();
@@ -540,6 +552,7 @@ public class EventCommand implements CommandExecutor {
                     break;
                 case "TNTRun":
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§c§lTNTRUN §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -556,7 +569,7 @@ public class EventCommand implements CommandExecutor {
                         }
                     }
                     TNTRunEvent.mortos.clear();
-                    TNTRunEvent.playerson.clear();
+                    EventPlayerManager.clearPlayerManager();
                     TNTRunEvent.contagem = true;
                     TNTRunEvent.contagemI = false;
                     TNTRunEvent.temporizador.cancel();
@@ -567,6 +580,7 @@ public class EventCommand implements CommandExecutor {
                     break;
                 case "TNTTag":
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§c§lTNT-TAG §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -583,20 +597,23 @@ public class EventCommand implements CommandExecutor {
                         }
                     }
                     TNTTagEvent.mortos.clear();
-                    TNTTagEvent.playerson.clear();
+                    EventPlayerManager.clearPlayerManager();
                     TNTTagEvent.jogadores.clear();
                     TNTTagEvent.tnt.clear();
-                    TNTTagEvent.temp1.cancel();
-                    TNTTagEvent.temp2.cancel();
                     TNTTagEvent.contagem = true;
                     TNTTagEvent.contagemI = false;
                     TNTTagEvent.temporizador.cancel();
                     if (TNTTagEvent.contagemI) {
                         TNTTagEvent.contagemtemp.cancel();
+                        if (!TNTTagEvent.contagem && TNTTagEvent.contagemI) {
+                            TNTTagEvent.temp1.cancel();
+                            TNTTagEvent.temp2.cancel();
+                        }
                     }
                     break;
                 case "Parapente":
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§3§lCorrida de parapente §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -615,7 +632,7 @@ public class EventCommand implements CommandExecutor {
                     MSNECommand.playerList.clear();
                     MSNECommand.playerCHECKPOINT.clear();
                     MSNECommand.playerARCOLIST.clear();
-                    ParapenteEvent.playerson.clear();
+                    EventPlayerManager.clearPlayerManager();
                     ParapenteEvent.contagem = true;
                     ParapenteEvent.contagemI = false;
                     ParapenteEvent.temporizador.cancel();
@@ -626,6 +643,7 @@ public class EventCommand implements CommandExecutor {
                 case "Mini-Wars":
                     EventsAgendados = false;
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§6§lMINI-WARS §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -645,6 +663,7 @@ public class EventCommand implements CommandExecutor {
                 case "CopaPVP":
                     EventsAgendados = false;
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§6§lCopaPVP §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -664,6 +683,7 @@ public class EventCommand implements CommandExecutor {
                 case "Esconde-esconde":
                     EventsAgendados = false;
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§d§lEsconde-esconde §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -683,6 +703,7 @@ public class EventCommand implements CommandExecutor {
                 case "Ruínas":
                     EventsAgendados = false;
                     MineSkyEvents.event = "OFF";
+                    textfinalizar = new TextComponent("§5§lRuínas §8| §aEvento finalizado!");
                     for (Player j : Bukkit.getOnlinePlayers()) {
                         if (Util.PDVE(j) || Util.PDVES(j)) {
                             SendMessages.sendConectionBCMSNE(j);
@@ -700,6 +721,8 @@ public class EventCommand implements CommandExecutor {
                     }
                     break;
             }
+            SendMessages.sendMessageBCMSNE(textfinalizar);
+            Bukkit.getLogger().warning("[MineSky-Events] " + player.getName() + " finalizou o evento: " + event);
             s.sendMessage("§8[§a!§8] §aVocê finalizou o evento: " + event);
             return true;
         }
@@ -712,6 +735,7 @@ public class EventCommand implements CommandExecutor {
                 s.sendMessage("§8[§c!§8] §cInforme um evento");
                 return true;
             }
+            Bukkit.getLogger().warning("[MineSky-Events] " + player.getName() + " iniciou o evento: " + args[1]);
             switch (args[1].toLowerCase()) {
                 case "spleef":
                     SpleefEvent.iniciarEvento();
@@ -1538,18 +1562,7 @@ public class EventCommand implements CommandExecutor {
             String[] argsSubset = Arrays.copyOfRange(args, 2, args.length);
             String result = String.join(" ", argsSubset).replace("&", "§");
             if (args.length == 3) reason = result;
-            SendMessages.sendConectionBCMSNE(j);
-            TextComponent message = new TextComponent("§8[§c!§8] §cVocê foi expulso do evento. Motivo: " + reason);
-            SendMessages.sendPlayermessage(j, message);
 
-            s.sendMessage("§8[§a!§8] §aO jogador foi expulso com sucesso do evento.");
-            for (Player player1 : Bukkit.getOnlinePlayers()) {
-                File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
-                FileConfiguration configfor = DataManager.getConfiguration(file);
-                if (!player1.hasPermission("mineskyevents.notify.moderation")) return true;
-                if (!configfor.getBoolean("Notification")) return true;
-                player1.sendMessage("§c" + j.getName() + "§f foi expulso do evento por§c " + s.getName() + "§f. Motivo: §c" + reason);
-            }
             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
             FileConfiguration config = DataManager.getConfiguration(file);
 
@@ -1557,39 +1570,53 @@ public class EventCommand implements CommandExecutor {
 
             try {
                 config.save(file);
+                SendMessages.sendConectionBCMSNE(j);
+                TextComponent message = new TextComponent("§8[§c!§8] §cVocê foi expulso do evento. Motivo: " + reason);
+                SendMessages.sendPlayermessage(j, message);
+                s.sendMessage("§8[§a!§8] §aO jogador foi expulso com sucesso do evento.");
+                s.sendMessage("§8[§a!§8] §aO jogador foi expulso com sucesso do evento.");
+                for (Player player1 : Bukkit.getOnlinePlayers()) {
+                    File filefor = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
+                    FileConfiguration configfor = DataManager.getConfiguration(filefor);
+                    if (!player1.hasPermission("mineskyevents.notify.moderation")) return true;
+                    if (!configfor.getBoolean("Notification")) return true;
+                    player1.sendMessage("§c" + j.getName() + "§f foi expulso do evento por§c " + s.getName() + "§f. Motivo: §c" + reason);
+                }
                 switch (MineSkyEvents.event) {
                     case "Spleef":
-                        SpleefEvent.playerson.remove(player);
-                        if (SpleefEvent.playerson.size() == 1 && !SpleefEvent.contagem && SpleefEvent.contagemI) SpleefEvent.finalizar();
+                        EventPlayerManager.removePlayer(j);
+                        if (EventPlayerManager.getPlayerCount()== 1 && !SpleefEvent.contagem && SpleefEvent.contagemI) SpleefEvent.finalizar();
                         break;
                     case "TijolãoWars":
-                        TijolãoWarsEvent.playerson.remove(player);
-                        if (TijolãoWarsEvent.playerson.size() == 1 && !TijolãoWarsEvent.contagem && TijolãoWarsEvent.contagemI) TijolãoWarsEvent.finalizar();
+                        EventPlayerManager.removePlayer(j);
+                        if (EventPlayerManager.getPlayerCount() == 1 && !TijolãoWarsEvent.contagem && TijolãoWarsEvent.contagemI) TijolãoWarsEvent.finalizar();
                         break;
                     case "Corrida":
-                        CorridaEvent.playerson.remove(j);
+                        EventPlayerManager.removePlayer(j);
                         break;
                     case "CorridaBoat":
-                        CorridaBoatEvent.playerson.remove(j);
+                        EventPlayerManager.removePlayer(j);
                         break;
                     case "Sumo":
-                        SumoEvent.playerson.remove(j);
-                        if (SumoEvent.playerson.size() == 1 && !SumoEvent.contagem && SumoEvent.contagemI) SumoEvent.finalizar();
+                        EventPlayerManager.removePlayer(j);
+                        if (EventPlayerManager.getPlayerCount() == 1 && !SumoEvent.contagem && SumoEvent.contagemI) SumoEvent.finalizar();
                         break;
                     case "TNTRun":
-                        TNTRunEvent.playerson.remove(player);
-                        if (TNTRunEvent.playerson.size() == 1 && !TNTRunEvent.contagem && TNTRunEvent.contagemI) TNTRunEvent.finalizar();
+                        EventPlayerManager.removePlayer(j);
+                        if (EventPlayerManager.getPlayerCount() == 1 && !TNTRunEvent.contagem && TNTRunEvent.contagemI) TNTRunEvent.finalizar();
                         break;
                     case "TNTTag":
-                        TNTTagEvent.playerson.remove(j);
+                        EventPlayerManager.removePlayer(j);
                         TNTTagEvent.jogadores.remove(j);
-                        if (TNTTagEvent.playerson.size() == 1 && !TNTTagEvent.contagem && TNTTagEvent.contagemI) TNTTagEvent.finalizar();
+                        if (EventPlayerManager.getPlayerCount() == 1 && !TNTTagEvent.contagem && TNTTagEvent.contagemI) TNTTagEvent.finalizar();
                         break;
                     case "Parapente":
-                        ParapenteEvent.playerson.remove(j);
+                        EventPlayerManager.removePlayer(j);
                         break;
                 }
             } catch (IOException e) {
+                Bukkit.getLogger().warning("[MineSky-Events] Ocorreu um erro ao tentar salvar a playerdata do jogador: " + j.getName());
+                s.sendMessage("§8[§c!§8] §cOcorreu um erro ao tentar salvar a playerdata do jogador: " + j.getName());
                 e.printStackTrace();
             }
             return true;

@@ -6,6 +6,7 @@ import minesky.msne.commands.EventCommand;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.discord.EventsMessage;
+import minesky.msne.system.event.EventPlayerManager;
 import minesky.msne.utils.EventItem;
 import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
@@ -23,7 +24,6 @@ import java.util.*;
 public class SpleefEvent {
     public static boolean contagem;
     public static boolean contagemI = false;
-    public static List<Player> playerson = new ArrayList<>();
     public static List<Player> mortos = new ArrayList<>();
     public static Map<Location, Material> blocksbreak = new HashMap<>();
     public static BukkitRunnable temporizador;
@@ -31,11 +31,6 @@ public class SpleefEvent {
     public static void iniciarEvento() {
         MineSkyEvents.event = "Spleef";
         SendMessages.sendMessageBGMSNE("Spleef");
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!player.hasPermission("mineskyevents.bypass.join")) {
-                Bukkit.dispatchCommand(player, "event entrar");
-            }
-        }
         temporizador = new BukkitRunnable() {
             int tempoRestante = 600;
             @Override
@@ -63,9 +58,14 @@ public class SpleefEvent {
             }
         };
         temporizador.runTaskTimer(MineSkyEvents.get(), 0, 20);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.hasPermission("mineskyevents.bypass.join")) {
+                Bukkit.dispatchCommand(player, "event entrar");
+            }
+        }
     }
     public static void comtagemEvento() {
-        if (!contagemI && playerson.size() >= 4) {
+        if (!contagemI && EventPlayerManager.getPlayerCount() >= 4) {
             temporizador.cancel();
             contagemtemp = new BukkitRunnable() {
                 int tempoRestante = 180;
@@ -91,7 +91,7 @@ public class SpleefEvent {
                             if (Util.PDVE(p)) {
                                 p.teleport(Locations.spleefA, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 p.getInventory().removeItem(EventItem.BedLeave);
-                                p.getInventory().removeItem(EventItem.Head);
+                                p.getInventory().removeItem(EventItem.HeadEvents(p));
                                 p.getInventory().addItem(EventItem.SpleefITEM);
                                 this.cancel();
                             }
@@ -106,7 +106,7 @@ public class SpleefEvent {
         }
     }
     public static void finalizar() {
-        Player vencedor = playerson.stream()
+        Player vencedor = EventPlayerManager.getPlayerManager().stream()
                 .filter(player -> !mortos.contains(player))
                 .findFirst()
                 .orElse(null);
@@ -154,7 +154,7 @@ public class SpleefEvent {
         SendMessages.sendPlayermessage(vencedores[1], text2);
         SendMessages.sendPlayermessage(vencedores[0], text3);
         EventsMessage.sendLogEvent("Spleef", vencedor, vencedores, premio1, premio2, premio3);
-        playerson.clear();
+        EventPlayerManager.clearPlayerManager();
         mortos.clear();
         restaurar();
         contagem = true;
@@ -178,6 +178,7 @@ public class SpleefEvent {
             Material material = entry.getValue();
             location.getBlock().setType(material);
         }
+        Bukkit.getLogger().warning("[MineSky-Events] Spleef | A arena foi restaurada com sucesso!");
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.hasPermission("mineskyevents.notify.restored")) {
                 File filefor = DataManager.getFile(player.getName().toLowerCase(), "playerdata");

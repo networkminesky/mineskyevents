@@ -1,5 +1,5 @@
 name: MineSky-Events
-version: 1.0.0-ALPHA
+version: 1.0.0-BETA
 main: minesky.msne.MineSkyEvents
 api-version: '1.19'
 author: zBrunoC_

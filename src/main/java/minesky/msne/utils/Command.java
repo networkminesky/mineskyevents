@@ -20,7 +20,6 @@ public class Command {
     private String command;
     private List<String> aliases;
     private String description;
-    private String tabcomplete;
     private PluginCommand pluginCommand;
 
     public Command(String command, CommandExecutor executor) {

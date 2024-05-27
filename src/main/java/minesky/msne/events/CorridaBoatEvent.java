@@ -4,6 +4,7 @@ import minesky.msne.MineSkyEvents;
 import minesky.msne.commands.MSNECommand;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
+import minesky.msne.system.event.EventPlayerManager;
 import minesky.msne.utils.EventItem;
 import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
@@ -23,17 +24,11 @@ import java.util.List;
 public class CorridaBoatEvent {
     public static boolean contagem;
     public static boolean contagemI = false;
-    public static List<Player> playerson = new ArrayList<>();
     public static BukkitRunnable temporizador;
     public static BukkitRunnable contagemtemp;
     public static void iniciarEvento() {
         MineSkyEvents.event = "CorridaBoat";
         SendMessages.sendMessageBGMSNE("CorridaBoat");
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!player.hasPermission("mineskyevents.bypass.join")) {
-                Bukkit.dispatchCommand(player, "event entrar");
-            }
-        }
         temporizador = new BukkitRunnable() {
             int tempoRestante = 600;
             @Override
@@ -61,9 +56,14 @@ public class CorridaBoatEvent {
             }
         };
         temporizador.runTaskTimer(MineSkyEvents.get(), 0, 20);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.hasPermission("mineskyevents.bypass.join")) {
+                Bukkit.dispatchCommand(player, "event entrar");
+            }
+        }
     }
     public static void comtagemEvento() {
-        if (!contagemI && playerson.size() >= 4) {
+        if (!contagemI && EventPlayerManager.getPlayerCount() >= 4) {
             temporizador.cancel();
            contagemtemp = new BukkitRunnable() {
                 int tempoRestante = 180;

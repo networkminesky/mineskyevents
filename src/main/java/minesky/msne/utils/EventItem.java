@@ -17,7 +17,6 @@ import java.util.List;
 public class EventItem {
     public static ItemStack SpleefITEM;
     public static ItemStack BedLeave;
-    public static ItemStack Head;
     public static ItemStack SumoITEM;
     public static ItemStack BarcoITEM;
     public static ItemStack TNTHEAD;

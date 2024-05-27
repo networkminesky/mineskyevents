@@ -1,5 +1,6 @@
 package minesky.msne.config;
 
+import minesky.msne.events.CorridaBoatEvent;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class Config {

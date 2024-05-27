@@ -6,6 +6,7 @@ import minesky.msne.commands.EventCommand;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.discord.EventsMessage;
+import minesky.msne.system.event.EventPlayerManager;
 import minesky.msne.utils.EventItem;
 import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
@@ -25,7 +26,6 @@ import java.util.*;
 public class TijolãoWarsEvent {
     public static boolean contagem;
     public static boolean contagemI = false;
-    public static List<Player> playerson = new ArrayList<>();
     public static List<Player> mortos = new ArrayList<>();
     public static BukkitRunnable temporizador;
     public static BukkitRunnable contagemtemp;
@@ -36,11 +36,6 @@ public class TijolãoWarsEvent {
         MineSkyEvents.event = "TijolãoWars";
         SendMessages.sendMessageBGMSNE("TijolãoWars");
         selectedMap = selectMapa();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!player.hasPermission("mineskyevents.bypass.join")) {
-                Bukkit.dispatchCommand(player, "event entrar");
-            }
-        }
         temporizador = new BukkitRunnable() {
             int tempoRestante = 600;
             @Override
@@ -68,9 +63,14 @@ public class TijolãoWarsEvent {
             }
         };
         temporizador.runTaskTimer(MineSkyEvents.get(), 0, 20);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.hasPermission("mineskyevents.bypass.join")) {
+                Bukkit.dispatchCommand(player, "event entrar");
+            }
+        }
     }
     public static void comtagemEvento() {
-        if (!contagemI && playerson.size() >= 4) {
+        if (!contagemI && EventPlayerManager.getPlayerCount() >= 4) {
             temporizador.cancel();
             contagemtemp =new BukkitRunnable() {
                 int tempoRestante = 180;
@@ -101,7 +101,7 @@ public class TijolãoWarsEvent {
                                     p.teleport(Locations.tijolao2A, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 }
                                 p.getInventory().removeItem(EventItem.BedLeave);
-                                p.getInventory().removeItem(EventItem.Head);
+                                p.getInventory().removeItem(EventItem.HeadEvents(p));
                                 ItemStack bricks = new ItemStack(Material.BRICK, 64);
                                 PlayerInventory inventory = p.getInventory();
 
@@ -124,7 +124,7 @@ public class TijolãoWarsEvent {
         }
     }
     public static void finalizar() {
-        Player vencedor = playerson.stream()
+        Player vencedor = EventPlayerManager.getPlayerManager().stream()
                 .filter(player -> !mortos.contains(player))
                 .findFirst()
                 .orElse(null);
@@ -172,7 +172,7 @@ public class TijolãoWarsEvent {
             SendMessages.sendPlayermessage(vencedores[1], text2);
             SendMessages.sendPlayermessage(vencedores[0], text3);
             EventsMessage.sendLogEvent("TijolãoWars", vencedor, vencedores, premio1, premio2, premio3);
-            playerson.clear();
+            EventPlayerManager.clearPlayerManager();
             mortos.clear();
             contagem = true;
             contagemI = false;

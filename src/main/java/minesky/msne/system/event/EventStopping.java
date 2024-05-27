@@ -12,6 +12,7 @@ import java.io.IOException;
 public class EventStopping {
     public static void Files() {
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
+        if (Bukkit.getOnlinePlayers().size() == 1) return;
         for (Player p : Bukkit.getOnlinePlayers()) {
             File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
             FileConfiguration config = DataManager.getConfiguration(file);

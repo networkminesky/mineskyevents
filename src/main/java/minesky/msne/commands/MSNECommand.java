@@ -2,12 +2,15 @@ package minesky.msne.commands;
 
 import minesky.msne.MineSkyEvents;
 import minesky.msne.addons.Vault;
+import minesky.msne.commands.console.EventCommandConsole;
+import minesky.msne.commands.console.MSNECommandConsole;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.discord.EventsMessage;
 import minesky.msne.events.CorridaBoatEvent;
 import minesky.msne.events.CorridaEvent;
 import minesky.msne.events.ParapenteEvent;
+import minesky.msne.system.event.EventPlayerManager;
 import minesky.msne.utils.EventItem;
 import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
@@ -48,6 +51,10 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender s, Command cmd, String lbl, String[] args) {
+        if (s instanceof ConsoleCommandSender || s instanceof RemoteConsoleCommandSender || s instanceof BlockCommandSender) {
+            new MSNECommandConsole(s, cmd, lbl, args);
+            return true;
+        }
         Player player = (Player) s;
         String version = MineSkyEvents.get().getDescription().getVersion();
         if (args.length < 1) {
@@ -130,7 +137,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                 SendMessages.sendMessageBCMSNE(text);
                 EventsMessage.sendLogEventPLIST("Corrida", playerList, premio1, premio2, premio3);
                 playerList.clear();
-                CorridaEvent.playerson.clear();
+                EventPlayerManager.clearPlayerManager();
                 CorridaEvent.contagem = true;
                 CorridaEvent.contagemI = false;
                 for (Player p : Bukkit.getOnlinePlayers()) {
@@ -211,7 +218,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                     EventsMessage.sendLogEventPLIST("CorridaBoat", playerList, premio1, premio2, premio3);
                     playerList.clear();
                     playerBOATLIST.clear();
-                    CorridaBoatEvent.playerson.clear();
+                    EventPlayerManager.clearPlayerManager();
                     CorridaBoatEvent.contagem = true;
                     CorridaBoatEvent.contagemI = false;
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -390,7 +397,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                 playerList.clear();
                 playerARCOLIST.clear();
                 playerCHECKPOINT.clear();
-                ParapenteEvent.playerson.clear();
+                EventPlayerManager.clearPlayerManager();
                 ParapenteEvent.contagem = true;
                 ParapenteEvent.contagemI = false;
                 for (Player p : Bukkit.getOnlinePlayers()) {
@@ -436,6 +443,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                 config.set("Notification", false);
                 try {
                     config.save(file);
+                    s.sendMessage("§8[§c!§8] §cVocê desativou as notificações!");
                 } catch (IOException e) {
                     s.sendMessage("§8[§c!§8] §cOcorreu um erro ao salvar sua playerdata!");
                     Bukkit.getLogger().warning("[PlayerData] Ocorreu um erro ao tentar salvar a playerdata do " + player.getName() + e);
@@ -444,6 +452,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter {
                 config.set("Notification", true);
                 try {
                     config.save(file);
+                    s.sendMessage("§8[§a!§8] §aVocê ativou as notificações!");
                 } catch (IOException e) {
                     s.sendMessage("§8[§c!§8] §cOcorreu um erro ao salvar sua playerdata!");
                     Bukkit.getLogger().warning("[PlayerData] Ocorreu um erro ao tentar salvar a playerdata do " + player.getName() + e);
