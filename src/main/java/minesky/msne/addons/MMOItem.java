@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class MMOItem {
     public static void darParaglider(Player player) {
-        net.Indyuce.mmoitems.api.item.mmoitem.MMOItem paraglider = MMOItems.plugin.getMMOItem(Type.MISCELLANEOUS, "evento");
+        net.Indyuce.mmoitems.api.item.mmoitem.MMOItem paraglider = MMOItems.plugin.getMMOItem(Type.MISCELLANEOUS, "EVENTO");
         if (paraglider != null) {
             ItemStackBuilder itemStackBuilder = new ItemStackBuilder(paraglider);
             ItemStack itemStack = itemStackBuilder.build();
@@ -21,7 +21,7 @@ public class MMOItem {
         }
     }
     public static ItemStack getParaglider() {
-        net.Indyuce.mmoitems.api.item.mmoitem.MMOItem paraglider = MMOItems.plugin.getMMOItem(Type.MISCELLANEOUS, "evento");
+        net.Indyuce.mmoitems.api.item.mmoitem.MMOItem paraglider = MMOItems.plugin.getMMOItem(Type.MISCELLANEOUS, "EVENTO");
         if (paraglider != null) {
             ItemStackBuilder itemStackBuilder = new ItemStackBuilder(paraglider);
             return itemStackBuilder.build();
