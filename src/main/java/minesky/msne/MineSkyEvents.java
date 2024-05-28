@@ -1,6 +1,7 @@
 package minesky.msne;
 
 import minesky.msne.addons.Vault;
+import minesky.msne.addons.WorldGuard;
 import minesky.msne.commands.EventCommand;
 import minesky.msne.commands.MSNECommand;
 import minesky.msne.config.*;
@@ -8,6 +9,7 @@ import minesky.msne.enums.JarType;
 import minesky.msne.enums.Version;
 import minesky.msne.system.PlayerData;
 import minesky.msne.system.PlayerInfo;
+import minesky.msne.system.PlayerMove;
 import minesky.msne.system.event.EventStopping;
 import minesky.msne.utils.Command;
 import minesky.msne.utils.EventItem;
@@ -23,6 +25,11 @@ public final class MineSkyEvents extends JavaPlugin {
     public static String event = "OFF";
     private static Version version;
     private static JarType jarType;
+
+    @Override
+    public void onLoad() {
+        WorldGuard.Registry();
+    }
 
     @Override
     public void onEnable() {
@@ -72,6 +79,7 @@ public final class MineSkyEvents extends JavaPlugin {
         PluginManager system = Bukkit.getServer().getPluginManager();
         system.registerEvents(new PlayerData(), this);
         system.registerEvents(new PlayerInfo(), this);
+        PlayerMove.PlayerMoveCheck.runTaskTimer(this, 0, 3);
     }
 
     private void gerarConfigs() {

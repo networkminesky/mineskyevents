@@ -1,6 +1,14 @@
 package minesky.msne.system;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import minesky.msne.MineSkyEvents;
+import minesky.msne.addons.MMOItem;
 import minesky.msne.commands.EventCommand;
 import minesky.msne.commands.MSNECommand;
 import minesky.msne.config.DataManager;
@@ -9,6 +17,7 @@ import minesky.msne.config.Messages;
 import minesky.msne.events.*;
 import minesky.msne.system.event.EventPlayerManager;
 import minesky.msne.utils.EventItem;
+import minesky.msne.utils.RegionPlayerManager;
 import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
 import org.bukkit.*;
@@ -39,9 +48,6 @@ import java.util.UUID;
 
 
 public class PlayerInfo implements Listener {
-    private static final HashMap<UUID, BukkitRunnable> playerIdleTasks = new HashMap<>();
-    private static HashMap<UUID, Location> lastPlayerLocation = new HashMap<>();
-    public static BukkitRunnable tempNOTMOVE;
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
@@ -370,7 +376,7 @@ public class PlayerInfo implements Listener {
                     p.sendMessage("§7" + player.getName() + " §esaiu do evento. (§b" + playersone + "§e/§b4§e)");
             }
         } else if (EventItem.CheckPoint.isSimilar(player.getInventory().getItemInMainHand())) {
-            int listC = MSNECommand.playerCHECKPOINT.getOrDefault(player, 0);
+            int listC = ParapenteEvent.playerCHECKPOINT.getOrDefault(player, 0);
             if (!(listC <= 0)) {
                 switch (listC) {
                     case 1:
@@ -432,7 +438,7 @@ public class PlayerInfo implements Listener {
 
         if (event.getClickedInventory() != null && event.getClickedInventory().getHolder() == event.getWhoClicked()) {
 
-            if (event.getCurrentItem() != null && event.getCurrentItem().isSimilar(EventItem.BedLeave) || Objects.requireNonNull(event.getCurrentItem()).isSimilar(EventItem.SpleefITEM) || event.getCurrentItem().getType() == Material.PLAYER_HEAD || event.getCurrentItem().isSimilar(EventItem.BarcoITEM) || event.getCurrentItem().isSimilar(EventItem.SumoITEM) || event.getCurrentItem().isSimilar(EventItem.TNTHEAD) || event.getCurrentItem().isSimilar(EventItem.CheckPoint)) {
+            if (event.getCurrentItem() != null && event.getCurrentItem().isSimilar(EventItem.BedLeave) || Objects.requireNonNull(event.getCurrentItem()).isSimilar(EventItem.SpleefITEM) || event.getCurrentItem().getType() == Material.PLAYER_HEAD || event.getCurrentItem().isSimilar(EventItem.BarcoITEM) || event.getCurrentItem().isSimilar(EventItem.SumoITEM) || event.getCurrentItem().isSimilar(EventItem.TNTHEAD) || event.getCurrentItem().isSimilar(EventItem.CheckPoint) || event.getCurrentItem().isSimilar(MMOItem.getParaglider())) {
                 if (Util.PDVES((Player) event.getWhoClicked())) {
                     event.setCancelled(true);
                     return;
@@ -446,7 +452,7 @@ public class PlayerInfo implements Listener {
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         ItemStack droppedItem = event.getItemDrop().getItemStack();
-        if (droppedItem.isSimilar(EventItem.SpleefITEM) || droppedItem.isSimilar(EventItem.BedLeave) || droppedItem.getType() == Material.BRICK || droppedItem.getType() == Material.PLAYER_HEAD || droppedItem.isSimilar(EventItem.BarcoITEM) || droppedItem.isSimilar(EventItem.SumoITEM) || droppedItem.isSimilar(EventItem.TNTHEAD) || droppedItem.isSimilar(EventItem.CheckPoint)) {
+        if (droppedItem.isSimilar(EventItem.SpleefITEM) || droppedItem.isSimilar(EventItem.BedLeave) || droppedItem.getType() == Material.BRICK || droppedItem.getType() == Material.PLAYER_HEAD || droppedItem.isSimilar(EventItem.BarcoITEM) || droppedItem.isSimilar(EventItem.SumoITEM) || droppedItem.isSimilar(EventItem.TNTHEAD) || droppedItem.isSimilar(EventItem.CheckPoint) || droppedItem.isSimilar(MMOItem.getParaglider())) {
             if (Util.PDVES(event.getPlayer())) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage("§8[§c!§8] §cVocê não pode dropar esse item.");
@@ -747,62 +753,5 @@ public class PlayerInfo implements Listener {
                 event.setCancelled(true);
             }
         }
-    }
-    @EventHandler
-    public void onMovePlayer(PlayerMoveEvent e) {
-        Player p = e.getPlayer();
-        UUID playerId = p.getUniqueId();
-        Location pl = e.getPlayer().getLocation();
-        Location block1 = pl.clone().subtract(0, 1, 0);
-        Location block2 = pl.clone().subtract(0, 2, 0);
-        if (MineSkyEvents.event.equals("TNTRun")) {
-            if (!Util.PDVE(p)) return;
-            if (TNTRunEvent.contagem) return;
-            if(!TNTRunEvent.contagemI) return;
-
-            if (playerIdleTasks.containsKey(playerId)) {
-                playerIdleTasks.get(playerId).cancel();
-            }
-
-            lastPlayerLocation.put(playerId, pl);
-
-            if (block1.getBlock().getType() == Material.AIR || block1.getBlock().getType() == Material.LIGHT) return;
-            TNTRunEvent.blocksbreak.put(block1, block1.getBlock().getType());
-            TNTRunEvent.blocksbreak.put(block2, block2.getBlock().getType());
-            block2.getBlock().setType(Material.AIR);
-            block1.getBlock().setType(Material.AIR);
-            onNotMovePlayer(p, e);
-        }
-    }
-
-    public static void onNotMovePlayer(Player player, PlayerMoveEvent e) {
-        Location pl = e.getPlayer().getLocation();
-        Location block1 = pl.clone().subtract(0, 1, 0);
-        Location block2 = pl.clone().subtract(0, 2, 0);
-        UUID playerId = player.getUniqueId();
-
-        tempNOTMOVE = new BukkitRunnable() {
-            int tempoRestante = 3;
-            @Override
-            public void run() {
-                if (lastPlayerLocation.get(playerId).distance(pl) < 0.1) {
-                    tempoRestante--;
-                } else {
-                    tempoRestante = 3;
-                }
-                if (tempoRestante == 0) {
-                    if (block1.getBlock().getType() == Material.AIR || block1.getBlock().getType() == Material.LIGHT) return;
-                    TNTRunEvent.blocksbreak.put(block1, block1.getBlock().getType());
-                    TNTRunEvent.blocksbreak.put(block2, block2.getBlock().getType());
-                    block2.getBlock().setType(Material.AIR);
-                    block1.getBlock().setType(Material.AIR);
-                    this.cancel();
-                }
-                lastPlayerLocation.put(playerId, player.getLocation());
-            }
-        };
-
-        playerIdleTasks.put(playerId, tempNOTMOVE);
-        tempNOTMOVE.runTaskTimer(MineSkyEvents.get(), 0, 20);
     }
 }

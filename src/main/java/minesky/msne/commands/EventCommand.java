@@ -4,6 +4,7 @@ import minesky.msne.MineSkyEvents;
 import minesky.msne.commands.console.EventCommandConsole;
 import minesky.msne.config.*;
 import minesky.msne.events.*;
+import minesky.msne.system.event.EventCorridasPlayerManager;
 import minesky.msne.system.event.EventPlayerManager;
 import minesky.msne.system.event.EventVerification;
 import minesky.msne.utils.EventItem;
@@ -486,7 +487,7 @@ public class EventCommand implements CommandExecutor {
                             }
                         }
                     }
-                    MSNECommand.playerList.clear();
+                    EventCorridasPlayerManager.clearPlayerManager();
                     EventPlayerManager.clearPlayerManager();
                     CorridaEvent.contagem = true;
                     CorridaEvent.contagemI = false;
@@ -513,8 +514,8 @@ public class EventCommand implements CommandExecutor {
                             }
                         }
                     }
-                    MSNECommand.playerList.clear();
-                    MSNECommand.playerBOATLIST.clear();
+                    EventCorridasPlayerManager.clearPlayerManager();
+                    CorridaBoatEvent.playerBOATLIST.clear();
                     EventPlayerManager.clearPlayerManager();
                     CorridaBoatEvent.contagem = true;
                     CorridaBoatEvent.contagemI = false;
@@ -629,9 +630,9 @@ public class EventCommand implements CommandExecutor {
                             }
                         }
                     }
-                    MSNECommand.playerList.clear();
-                    MSNECommand.playerCHECKPOINT.clear();
-                    MSNECommand.playerARCOLIST.clear();
+                    EventCorridasPlayerManager.clearPlayerManager();
+                    ParapenteEvent.playerCHECKPOINT.clear();
+                    ParapenteEvent.playerARCOLIST.clear();
                     EventPlayerManager.clearPlayerManager();
                     ParapenteEvent.contagem = true;
                     ParapenteEvent.contagemI = false;
