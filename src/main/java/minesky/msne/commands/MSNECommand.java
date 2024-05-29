@@ -67,6 +67,10 @@ public class MSNECommand implements CommandExecutor, TabCompleter { ;
             return true;
         }
         if (args[0].equalsIgnoreCase("give")) {
+            if (!player.hasPermission("mineskyevents.give")) {
+                player.sendMessage("§8[§c!§8] §cVocê não pode executar esse comando.");
+                return true;
+            }
             player.getInventory().addItem(EventItem.SpleefITEM);
             player.getInventory().addItem(EventItem.SumoITEM);
             player.getInventory().addItem(EventItem.TNTHEAD);

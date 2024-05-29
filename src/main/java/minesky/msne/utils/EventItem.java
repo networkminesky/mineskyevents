@@ -27,7 +27,7 @@ public class EventItem {
         ItemMeta meta = pa.getItemMeta();
 
         if (meta != null) {
-            meta.setDisplayName("§e§lQuebra TUDO!");
+            meta.setDisplayName("§eQuebra TUDO!");
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.DIG_SPEED, 2, true);
 
@@ -49,7 +49,7 @@ public class EventItem {
         ItemMeta meta = stick.getItemMeta();
 
         if (meta != null) {
-            meta.setDisplayName("§4§lIrei te pegar!");
+            meta.setDisplayName("§4Irei te pegar!");
             meta.setUnbreakable(true);
             meta.addEnchant(Enchantment.KNOCKBACK, 3, true);
 
@@ -71,7 +71,7 @@ public class EventItem {
         ItemMeta meta = boat.getItemMeta();
 
         if (meta != null) {
-            meta.setDisplayName("§d§lCarro esportivo");
+            meta.setDisplayName("§dCarro esportivo");
             meta.setUnbreakable(true);
 
             List<String> lore = new ArrayList<>();
@@ -160,7 +160,7 @@ public class EventItem {
         FileConfiguration config = DataManager.getConfiguration(file);
         switch (MineSkyEvents.event) {
             case "Spleef": {
-                skullMeta.setDisplayName("§c§lInformações " + p.getName());
+                skullMeta.setDisplayName("§cInformações de " + p.getName());
                 skullMeta.setUnbreakable(true);
 
                 List<String> lore = new ArrayList<>();
