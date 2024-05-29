@@ -73,7 +73,7 @@ public class CorridaEvent {
         }
     }
     public static void comtagemEvento() {
-        if (!contagemI && EventPlayerManager.getPlayerCount() >= 1) {
+        if (!contagemI && EventPlayerManager.getPlayerCount() >= 4) {
             temporizador.cancel();
             contagemtemp = new BukkitRunnable() {
                 int tempoRestante = 180;
