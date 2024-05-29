@@ -17,6 +17,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -88,10 +89,12 @@ public class CorridaBoatEvent {
                     if (tempoRestante == 180 ||tempoRestante == 60 || tempoRestante == 30 || tempoRestante == 15 || tempoRestante == 10 || tempoRestante == 5 || tempoRestante == 4 || tempoRestante == 3 || tempoRestante == 2 || tempoRestante == 1) {
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(player)) {
+                                player.sendTitle("§8[§9Corrida de Barco§8]", "§7INICIANDO EM§8: §9" + tempoRestante + "s", 10, 70, 20);
+                                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
                                 if (tempoRestante == 180) {
-                                    player.sendTitle("§a3m", "", 10, 70, 20);
+                                    player.sendTitle("§8[§9Corrida de Barco§8]", "§7INICIANDO EM§8: §93m", 10, 70, 20);
+                                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
                                 }
-                                player.sendTitle(ChatColor.RED + String.valueOf(tempoRestante) + "s", "", 10, 70, 20);
                             }
                         }
                     }
@@ -128,16 +131,19 @@ public class CorridaBoatEvent {
         if (!podeRenovar(player)) return;
         String playerName = player.getName();
         if (playerBOATLIST.getOrDefault(playerName, 0) >= 3) {
+            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
             player.sendMessage("§8[§c!§8] §cVocê já completou as 3 voltas!");
             return;
         }
         int lapCount = playerBOATLIST.getOrDefault(playerName, 0);
         int lapCountADD = lapCount + 1;
         playerBOATLIST.put(playerName, lapCount + 1);
+        player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_FALL, 1.0f , 1.0f);
         player.sendMessage("§8[§a!§8] §aVocê completou a sua §l" + lapCountADD + "º volta!");
         renovarTempo(player);
         if (lapCount + 1 == 3) {
             EventCorridasPlayerManager.addPlayer(player);
+            player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_FALL, 1.0f , 1.0f);
             player.sendMessage("§8[§a!§8] §aVocê completou as§l 3 §avoltas!");
             if (EventCorridasPlayerManager.getPlayerCount() >= 3) {
                 MineSkyEvents.event = "OFF";

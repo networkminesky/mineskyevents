@@ -18,6 +18,7 @@ import minesky.msne.utils.Util;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -49,25 +50,30 @@ public class MSNECommand implements CommandExecutor, TabCompleter { ;
         Player player = (Player) s;
         String version = MineSkyEvents.get().getDescription().getVersion();
         if (args.length < 1) {
+            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
             player.sendMessage("§6§lMinesky Events §8» §6v" + version + "\n§6Notification §8- §7Enable and disable notifications\n§6Reload §8- §7Reload the plugin.\n\n§6Author§8: §7zBrunoC_");
             return true;
         }
         if (args[0].equalsIgnoreCase("adopt")) {
             if (args.length < 2) {
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                 player.sendMessage("§8[§c!§8] §cInforme um player");
                 return true;
             }
             Player adotar = Bukkit.getPlayer(args[1]);
             if (adotar != null && adotar.isOnline()) {
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                 TextComponent messageADOPT = new TextComponent("§b" + player.getName() + " §7adotou §b" + adotar.getName());
                 SendMessages.sendMessageBCMSNE(messageADOPT);
             } else {
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                 player.sendMessage("§8[§c!§8] §cEste player não está online no momento");
             }
             return true;
         }
         if (args[0].equalsIgnoreCase("give")) {
             if (!player.hasPermission("mineskyevents.give")) {
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                 player.sendMessage("§8[§c!§8] §cVocê não pode executar esse comando.");
                 return true;
             }
@@ -77,6 +83,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter { ;
             player.getInventory().addItem(EventItem.BarcoITEM);
             player.getInventory().addItem(EventItem.CheckPoint);
             MMOItem.darParaglider(player);
+            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
             s.sendMessage("§8[§a!§8] §aVocê recebeu todos os itens de eventos.");
             return true;
         }
@@ -87,15 +94,18 @@ public class MSNECommand implements CommandExecutor, TabCompleter { ;
         }
         if (args[0].equalsIgnoreCase("reload")) {
             if (!s.hasPermission("mineskyevents.reload")) {
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                 s.sendMessage("§8[§c!§8] §Você não pode executar esse comando.");
                 return true;
             }
             MineSkyEvents.carregarConfigs();
+            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
             player.sendMessage("§6§lMinesky Events §8» §6v" + version + "\n§6Author§8: §7zBrunoC_\n§6Version§8: §7" + version + "\n\n§6MineSky Events §7reloaded successfully.\n§7NOTE: Some changes will only take effect when the server is restarted.");
             return true;
         }
         if (args[0].equalsIgnoreCase("notification")) {
             if (!s.hasPermission("mineskyevents.notify.enabled")) {
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                 s.sendMessage("§8[§c!§8] §cVocê não pode executar esse comando");
                 return true;
             }
@@ -106,7 +116,9 @@ public class MSNECommand implements CommandExecutor, TabCompleter { ;
                 try {
                     config.save(file);
                     s.sendMessage("§8[§c!§8] §cVocê desativou as notificações!");
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                 } catch (IOException e) {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cOcorreu um erro ao salvar sua playerdata!");
                     Bukkit.getLogger().warning("[PlayerData] Ocorreu um erro ao tentar salvar a playerdata do " + player.getName() + e);
                 }
@@ -115,13 +127,16 @@ public class MSNECommand implements CommandExecutor, TabCompleter { ;
                 try {
                     config.save(file);
                     s.sendMessage("§8[§a!§8] §aVocê ativou as notificações!");
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                 } catch (IOException e) {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cOcorreu um erro ao salvar sua playerdata!");
                     Bukkit.getLogger().warning("[PlayerData] Ocorreu um erro ao tentar salvar a playerdata do " + player.getName() + e);
                 }
             }
             return true;
         }
+        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
         player.sendMessage("§8[§c!§8] §cVocê não informou um argumento certo.");
         return true;
     }

@@ -14,6 +14,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -33,7 +34,7 @@ import java.util.Objects;
 
 public class EventCommand implements CommandExecutor {
     public static String selectedMap = "Mapa-0";
-    public static boolean Spectator = false;
+    public static boolean Spectator;
     public static Location location = null;
     public static int PlayerSize = 0;
     public static int RequestPlayerSize = 1;
@@ -71,7 +72,7 @@ public class EventCommand implements CommandExecutor {
                     if (!SpleefEvent.contagem && SpleefEvent.contagemI) {
                         Spectator = true;
                         location = Locations.spleefA;
-                        return true;
+                        break;
                     }
                     Spectator = false;
                     EventsAgendados = false;
@@ -90,7 +91,7 @@ public class EventCommand implements CommandExecutor {
                         if (TijolãoWarsEvent.selectedMap.equals("Mapa2")) {
                             location = Locations.tijolao2A;
                         }
-                        return true;
+                        break;
                     }
                     Spectator = false;
                     EventsAgendados = false;
@@ -109,7 +110,7 @@ public class EventCommand implements CommandExecutor {
                     if (!CorridaEvent.contagem && CorridaEvent.contagemI) {
                         Spectator = true;
                         location = Locations.corridaA;
-                        return true;
+                        break;
                     }
                     Spectator = false;
                     EventsAgendados = false;
@@ -123,7 +124,7 @@ public class EventCommand implements CommandExecutor {
                     if (!CorridaBoatEvent.contagem && CorridaBoatEvent.contagemI) {
                         Spectator = true;
                         location = Locations.corridaboatA;
-                        return true;
+                        break;
                     }
                     Spectator = false;
                     EventsAgendados = false;
@@ -137,7 +138,7 @@ public class EventCommand implements CommandExecutor {
                     if (!SumoEvent.contagem && SumoEvent.contagemI) {
                         Spectator = true;
                         location = Locations.sumoA;
-                        return true;
+                        break;
                     }
                     Spectator = false;
                     EventsAgendados = false;
@@ -156,7 +157,7 @@ public class EventCommand implements CommandExecutor {
                         if (TNTRunEvent.selectedMap.equals("Mapa2")) {
                             location = Locations.tntrun2A;
                         }
-                        return true;
+                        break;
                     }
                     Spectator = false;
                     EventsAgendados = false;
@@ -175,7 +176,7 @@ public class EventCommand implements CommandExecutor {
                     if (!TNTTagEvent.contagem && TNTTagEvent.contagemI) {
                         Spectator = true;
                         location = Locations.tnttagA;
-                        return true;
+                        break;
                     }
                     Spectator = false;
                     EventsAgendados = false;
@@ -189,7 +190,7 @@ public class EventCommand implements CommandExecutor {
                     if (!ParapenteEvent.contagem && ParapenteEvent.contagemI) {
                         Spectator = true;
                         location = Locations.parapenteA;
-                        return true;
+                        break;
                     }
                     Spectator = false;
                     EventsAgendados = false;
@@ -246,6 +247,7 @@ public class EventCommand implements CommandExecutor {
             if (EventsAgendados) {
                 Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), () -> {
                     player.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                     s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
                 }, 20L);
                 for (Player p : Bukkit.getOnlinePlayers()) {
@@ -261,6 +263,7 @@ public class EventCommand implements CommandExecutor {
                 Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), () -> {
                     player.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
                     player.sendMessage("§8[§a!§8] §aVocê começou a assistir o evento!");
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                 }, 20L);
                 config.set("EventSpect", true);
                 try {
@@ -273,27 +276,27 @@ public class EventCommand implements CommandExecutor {
                     e.printStackTrace();
                 }
                 return true;
-            } else {
-                config.set("Event", true);
-                try {
-                    config.save(file);
-                    clearInventory(player);
-                    player.getInventory().setItem(8, EventItem.BedLeave);
-                    player.getInventory().setItem(4, EventItem.HeadEvents(player));
-                    Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), () -> {
-                        player.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
-                        s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
-                    }, 20L);
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + PlayerSize + "§e/§b" + RequestPlayerSize + "§e)");
-                    }
-                } catch (IOException e) {
-                    Bukkit.getLogger().warning("[MineSky-Events] Ocorreu um erro ao salvar a player do jogador " + player.getName());
-                    SendMessages.sendConectionBCMSNE(player);
-                    TextComponent erro = new TextComponent("§8[§c!§8] §cOcorreu um erro ao salvar sua playerdata para o evento!");
-                    SendMessages.sendPlayermessage(player, erro);
-                    e.printStackTrace();
+            }
+            config.set("Event", true);
+            try {
+                config.save(file);
+                clearInventory(player);
+                player.getInventory().setItem(8, EventItem.BedLeave);
+                player.getInventory().setItem(4, EventItem.HeadEvents(player));
+                Bukkit.getScheduler().runTaskLater(MineSkyEvents.get(), () -> {
+                    player.teleport(location, PlayerTeleportEvent.TeleportCause.COMMAND);
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
+                    s.sendMessage("§8[§a!§8] §aVocê entrou no evento!");
+                }, 20L);
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    p.sendMessage("§7" + player.getName() + " §eentrou no evento. (§b" + PlayerSize + "§e/§b" + RequestPlayerSize + "§e)");
                 }
+            } catch (IOException e) {
+                Bukkit.getLogger().warning("[MineSky-Events] Ocorreu um erro ao salvar a player do jogador " + player.getName());
+                SendMessages.sendConectionBCMSNE(player);
+                TextComponent erro = new TextComponent("§8[§c!§8] §cOcorreu um erro ao salvar sua playerdata para o evento!");
+                SendMessages.sendPlayermessage(player, erro);
+                e.printStackTrace();
             }
             return true;
         }
@@ -400,6 +403,7 @@ public class EventCommand implements CommandExecutor {
                     break;
             }
             Bukkit.getLogger().warning("[MineSky-Events] " + player.getName() + " anúnciou o evento: " + MineSkyEvents.event);
+            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
             return true;
         }
         if (args[0].equalsIgnoreCase("finalizar")) {
@@ -723,6 +727,7 @@ public class EventCommand implements CommandExecutor {
                     break;
             }
             SendMessages.sendMessageBCMSNE(textfinalizar);
+            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
             Bukkit.getLogger().warning("[MineSky-Events] " + player.getName() + " finalizou o evento: " + event);
             s.sendMessage("§8[§a!§8] §aVocê finalizou o evento: " + event);
             return true;
@@ -783,6 +788,7 @@ public class EventCommand implements CommandExecutor {
                     s.sendMessage("§8[§c!§8] §cEste evento não pode ser iniciado. Usage: /event anunciar Ruínas (mapa)");
                     break;
             }
+            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
             return true;
         }
         if (args[0].equalsIgnoreCase("set")) {
@@ -812,6 +818,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Spleef.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lSpleef §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -833,6 +840,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.Spleef.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aArena de §lSpleef §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -840,6 +848,7 @@ public class EventCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
@@ -860,6 +869,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("TijolãoWars.1.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lTijolão Wars §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -881,6 +891,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.TijolãoWars.1.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aArena de §lTijolãoWars §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -903,6 +914,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("TijolãoWars.2.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lTijolão Wars §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -924,6 +936,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.TijolãoWars.2.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aArena de §lTijolãoWars §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -931,6 +944,7 @@ public class EventCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 2 mapa.");
                 }
             }
@@ -951,6 +965,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Corrida.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lCorrida §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -972,6 +987,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.Corrida.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aArena de §lCorrida §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -979,6 +995,7 @@ public class EventCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
@@ -999,6 +1016,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("CorridaBoat.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lCorrida de barco §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1020,6 +1038,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.CorridaBoat.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aArena de §lCorrida de barco §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1027,6 +1046,7 @@ public class EventCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
@@ -1047,6 +1067,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Sumo.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lSumo §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1068,6 +1089,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.Sumo.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aArena de §lSumo §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1075,6 +1097,7 @@ public class EventCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
@@ -1095,6 +1118,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("TNTRun.1.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lTNTRUN §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1116,6 +1140,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.TNTRun.1.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aArena de §lTNTRUN §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1138,6 +1163,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("TNTRun.2.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lTNTRUN §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1159,6 +1185,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.TNTRun.2.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aArena de §lTNTRUN §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1166,6 +1193,7 @@ public class EventCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 2 mapa.");
                 }
             }
@@ -1186,6 +1214,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("TNTTag.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lTNTTag §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1207,6 +1236,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.TNTTag.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aArena de §lTNTTag §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1214,6 +1244,7 @@ public class EventCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
@@ -1233,6 +1264,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.Parapente.checkpoint.1.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aCheckPoint de §lParapente §8(§a§l1§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1249,6 +1281,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.Parapente.checkpoint.2.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aCheckPoint de §lParapente §8(§a§l2§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1265,12 +1298,14 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.Parapente.checkpoint.3.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aCheckPoint de §lParapente §8(§a§l3§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
                         }
                         return true;
                     } else {
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         s.sendMessage("§8[§c!§8] §cEste evento só tem 3 checkpoints.");
                     }
                 }
@@ -1290,6 +1325,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Parapente.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lParapente §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1311,6 +1347,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("arena.Parapente.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aArena de §lParapente §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1318,6 +1355,7 @@ public class EventCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
@@ -1338,6 +1376,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Mini-Wars.1.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lMini-Wars §8(§aMapa 1§8)§a setado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1360,6 +1399,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Mini-Wars.2.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lMini-Wars §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1382,6 +1422,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Mini-Wars.3.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lMini-Wars §8(§aMapa 3§8)§a setado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1404,6 +1445,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Mini-Wars.4.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lMini-Wars §8(§aMapa 4§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1426,6 +1468,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Mini-Wars.5.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lMini-Wars §8(§aMapa 5§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1433,6 +1476,7 @@ public class EventCommand implements CommandExecutor {
                         return true;
                     }
                 } else if (arg > 5) {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 5 mapa.");
                 }
             }
@@ -1453,6 +1497,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("CopaPVP.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn da §lCopaPVP §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1460,6 +1505,7 @@ public class EventCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
@@ -1480,6 +1526,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Esconde-esconde.1.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lEsconde-esconde §8(§aMapa 1§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1502,6 +1549,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Esconde-esconde.2.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lEsconde-esconde §8(§aMapa 2§8) §asetado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1529,6 +1577,7 @@ public class EventCommand implements CommandExecutor {
                         config.set("Ruínas.pitch", Float.valueOf(loc.getPitch()));
                         try {
                             config.save(file);
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                             s.sendMessage("§8[§a!§8] §aSpawn de §lRuínas§a setado para os eventos com sucesso.");
                         } catch (IOException e) {
                             Bukkit.getConsoleSender().sendMessage(Messages.Falied_to_save.replace("%arquivo%", "locations.yml"));
@@ -1536,6 +1585,7 @@ public class EventCommand implements CommandExecutor {
                         return true;
                     }
                 } else {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                     s.sendMessage("§8[§c!§8] §cEste evento só tem 1 mapa.");
                 }
             }
@@ -1544,25 +1594,29 @@ public class EventCommand implements CommandExecutor {
         if (args[0].equalsIgnoreCase("kick")) {
             if (!s.hasPermission("mineskyevents.command.event.kick")) {
                 s.sendMessage(Messages.No_permission);
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                 return true;
             }
             if (args.length < 2) {
                 s.sendMessage("§8[§c!§8] §cUso incorreto. Use /event kick (Player) [Motivo]");
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                 return true;
             }
             Player j = Bukkit.getPlayer(args[1]);
             if (!j.isOnline()) {
                 s.sendMessage("§8[§c!§8] §cO jogador não foi encontrado");
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                 return true;
             }
             if (!Util.PDVE(j)) {
                 s.sendMessage("§8[§c!§8] §cO jogador não está online no evento.");
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                 return true;
             }
             String reason = "Sem motivo informado.";
             String[] argsSubset = Arrays.copyOfRange(args, 2, args.length);
             String result = String.join(" ", argsSubset).replace("&", "§");
-            if (args.length == 3) reason = result;
+            if (args.length >= 3) reason = result;
 
             File file = DataManager.getFile(j.getName().toLowerCase(), "playerdata");
             FileConfiguration config = DataManager.getConfiguration(file);
@@ -1574,7 +1628,7 @@ public class EventCommand implements CommandExecutor {
                 SendMessages.sendConectionBCMSNE(j);
                 TextComponent message = new TextComponent("§8[§c!§8] §cVocê foi expulso do evento. Motivo: " + reason);
                 SendMessages.sendPlayermessage(j, message);
-                s.sendMessage("§8[§a!§8] §aO jogador foi expulso com sucesso do evento.");
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                 s.sendMessage("§8[§a!§8] §aO jogador foi expulso com sucesso do evento.");
                 for (Player player1 : Bukkit.getOnlinePlayers()) {
                     File filefor = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
@@ -1618,6 +1672,7 @@ public class EventCommand implements CommandExecutor {
             } catch (IOException e) {
                 Bukkit.getLogger().warning("[MineSky-Events] Ocorreu um erro ao tentar salvar a playerdata do jogador: " + j.getName());
                 s.sendMessage("§8[§c!§8] §cOcorreu um erro ao tentar salvar a playerdata do jogador: " + j.getName());
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                 e.printStackTrace();
             }
             return true;
@@ -1625,6 +1680,7 @@ public class EventCommand implements CommandExecutor {
         if (args[0].equalsIgnoreCase("blacklist")) {
             if (!s.hasPermission("mineskyevents.command.event.blacklist")) {
                 s.sendMessage("§8[§c!§8] §cVocê não pode executar esse comando.");
+                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                 return true;
             }
             File file = DataManager.getFile("config.yml");
@@ -1636,23 +1692,28 @@ public class EventCommand implements CommandExecutor {
                     List<String> blacklistname = config.getStringList("blacklist." + event + ".list");
                     if (blacklistname.contains(pb.getName())) {
                         s.sendMessage("§8[§c!§8] §cEste player já está na blacklist.");
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         return true;
                     }
                     blacklistname.add(pb.getName());
                     config.set("blacklist." + event + ".list", blacklistname);
                     try {
                         config.save(file);
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                         s.sendMessage("§8[§a!§8] §aVocê adicionar o " + pb.getName() + " na blacklist do evento " + event + " com sucesso!");
                     } catch (IOException e) {
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         s.sendMessage("§8[§c!§8] §cOcorreu um erro ao adicionar o player à blacklist");
                     }
                 } else {
                     if (!args[4].equalsIgnoreCase("ip")) {
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         s.sendMessage("§8[§c!§8] §cUsage: /event blacklist adicionar (event) (player) ip");
                         return true;
                     }
                     List<String> blacklistname = config.getStringList("blacklistip." + event + ".list");
                     if (blacklistname.contains(pb.getAddress().getAddress().getHostAddress())) {
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         s.sendMessage("§8[§c!§8] §cEste player já está na blacklist.");
                         return true;
                     }
@@ -1660,8 +1721,10 @@ public class EventCommand implements CommandExecutor {
                     config.set("blacklistip." + event + ".list", blacklistname);
                     try {
                         config.save(file);
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                         s.sendMessage("§8[§a!§8] §aVocê adicionou o " + pb.getName() + " na blacklist por ip do evento " + event + " com sucesso!");
                     } catch (IOException e) {
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         s.sendMessage("§8[§c!§8] §cOcorreu um erro ao adicionar o player à blacklist por ip");
                     }
                 }
@@ -1670,6 +1733,7 @@ public class EventCommand implements CommandExecutor {
                 if (!(args.length == 5)) {
                     List<String> blacklistname = config.getStringList("blacklist." + event + ".list");
                     if (!blacklistname.contains(pb.getName())) {
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         s.sendMessage("§8[§c!§8] §cEste player não está na blacklist.");
                         return true;
                     }
@@ -1677,17 +1741,21 @@ public class EventCommand implements CommandExecutor {
                     config.set("blacklist." + event + ".list", blacklistname);
                     try {
                         config.save(file);
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                         s.sendMessage("§8[§a!§8] §aVocê removeu o " + pb.getName() + " na blacklist do evento " + event + " com sucesso!");
                     } catch (IOException e) {
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         s.sendMessage("§8[§c!§8] §cOcorreu um erro ao remover o player à blacklist");
                     }
                 } else {
                     if (!args[4].equalsIgnoreCase("ip")) {
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         s.sendMessage("§8[§c!§8] §cUsage: /event blacklist remover (event) (player) ip");
                         return true;
                     }
                     List<String> blacklistname = config.getStringList("blacklistip." + event + ".list");
                     if (!blacklistname.contains(pb.getAddress().getAddress().getHostAddress())) {
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         s.sendMessage("§8[§c!§8] §cEste player não está na blacklist por ip.");
                         return true;
                     }
@@ -1695,15 +1763,17 @@ public class EventCommand implements CommandExecutor {
                     config.set("blacklistip." + event + ".list", blacklistname);
                     try {
                         config.save(file);
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
                         s.sendMessage("§8[§a!§8] §aVocê removeu o " + pb.getName() + " na blacklist por ip do evento " + event + " com sucesso!");
                     } catch (IOException e) {
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         s.sendMessage("§8[§c!§8] §cOcorreu um erro ao remover o player à blacklist por ip");
                     }
                 }
             }
             return true;
         }
-
+        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
         s.sendMessage("§8[§c!§8] §cVocê não informou um agurmento valido.");
         return true;
     }

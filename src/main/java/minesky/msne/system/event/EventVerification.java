@@ -2,6 +2,7 @@ package minesky.msne.system.event;
 
 import minesky.msne.config.DataManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -48,6 +49,7 @@ public class EventVerification {
                 FileConfiguration configfor = DataManager.getConfiguration(filefor);
                 if (player1.hasPermission("mineskyevents.notify.blacklist")) {
                     if (configfor.getBoolean("Notification")) {
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         player1.sendMessage("§c" + player.getName() + " §fTentou entrar no evento. §8(§fBlackList§8)");
                     }
                 }

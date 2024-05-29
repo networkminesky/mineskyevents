@@ -17,6 +17,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -90,10 +91,12 @@ public class ParapenteEvent {
                     if (tempoRestante == 180 ||tempoRestante == 60 || tempoRestante == 30 || tempoRestante == 15 || tempoRestante == 10 || tempoRestante == 5 || tempoRestante == 4 || tempoRestante == 3 || tempoRestante == 2 || tempoRestante == 1) {
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(player)) {
+                                player.sendTitle("§8[§3Corrida de Parapente§8]", "§7INICIANDO EM§8: §3" + tempoRestante + "s", 10, 70, 20);
+                                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
                                 if (tempoRestante == 180) {
-                                    player.sendTitle("§a3m", "", 10, 70, 20);
+                                    player.sendTitle("§8[§3Corrida de Parapente§8]", "§7INICIANDO EM§8: §33m", 10, 70, 20);
+                                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
                                 }
-                                player.sendTitle(ChatColor.RED + String.valueOf(tempoRestante) + "s", "", 10, 70, 20);
                             }
                         }
                     }
@@ -124,6 +127,7 @@ public class ParapenteEvent {
             return;
         }
         if (playerARCOLIST.getOrDefault(player, 0) < 22) {
+            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
             player.sendMessage("§8[§c!§8] §cVocê não completou todos os arcos! §8(§c§l" + playerARCOLIST.getOrDefault(player, 0) + "§8/§c§l22§8)");
             int listC = playerCHECKPOINT.getOrDefault(player, 0);
             if (!(listC <= 0)) {
@@ -149,6 +153,7 @@ public class ParapenteEvent {
         }
         if (playerARCOLIST.getOrDefault(player, 0) >= 22) {
             EventCorridasPlayerManager.addPlayer(player);
+            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
             player.sendMessage("§8[§a!§8] §aVocê completou todos os arcos!");
         }
 
@@ -221,6 +226,7 @@ public class ParapenteEvent {
 
     public static void CheckPoint(Player player, Integer id) {
         if (id > 3) {
+            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
             player.sendMessage("§8[§c!§8] §cSó existe apenas §l3 §ccheckpoints");
             return;
         }
@@ -233,16 +239,19 @@ public class ParapenteEvent {
         if (id == 1) {
             if (listC > 1 || listC == id) return;
             playerCHECKPOINT.put(player, 1);
+            player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_FALL, 1.0f , 1.0f);
             player.sendMessage("§8[§a!§8] §aVocê marcou o checkpoint!");
         }
         if (id == 2) {
             if (listC > 2|| listC == id) return;
             playerCHECKPOINT.put(player, 2);
+            player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_FALL, 1.0f , 1.0f);
             player.sendMessage("§8[§a!§8] §aVocê marcou o checkpoint!");
         }
         if (id == 3) {
             if (listC > 3 || listC == id) return;
             playerCHECKPOINT.put(player, 3);
+            player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_FALL, 1.0f , 1.0f);
             player.sendMessage("§8[§a!§8] §aVocê marcou o checkpoint!");
         }
     }
@@ -263,25 +272,30 @@ public class ParapenteEvent {
                 switch (listC) {
                     case 1:
                         player.teleport(Locations.parapenteC1, PlayerTeleportEvent.TeleportCause.COMMAND);
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         player.sendMessage("§8[§c!§8] §cVocê não completou um arco!");
                         break;
                     case 2:
                         player.teleport(Locations.parapenteC2, PlayerTeleportEvent.TeleportCause.COMMAND);
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         player.sendMessage("§8[§c!§8] §cVocê não completou um arco!");
                         break;
                     case 3:
                         player.teleport(Locations.parapenteC3, PlayerTeleportEvent.TeleportCause.COMMAND);
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
                         player.sendMessage("§8[§c!§8] §cVocê não completou um arco!");
                         break;
                 }
                 return;
             }
             player.teleport(Locations.parapenteA, PlayerTeleportEvent.TeleportCause.COMMAND);
+            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
             player.sendMessage("§8[§c!§8] §cVocê não completou um arco!");
             return;
         }
         playerARCOLIST.put(player, listA + 1);
         int listAadd = listA+1;
+        player.playSound(player, Sound.BLOCK_AMETHYST_BLOCK_FALL, 1.0f , 1.0f);
         player.sendMessage("§eVocê completou mais um arco! (§b" + listAadd + "§e/§b22§e)");
     }
 }

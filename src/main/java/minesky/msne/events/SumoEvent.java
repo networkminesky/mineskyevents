@@ -14,6 +14,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -78,10 +79,12 @@ public class SumoEvent {
                     if (tempoRestante == 180 ||tempoRestante == 60 || tempoRestante == 30 || tempoRestante == 15 || tempoRestante == 10 || tempoRestante == 5 || tempoRestante == 4 || tempoRestante == 3 || tempoRestante == 2 || tempoRestante == 1) {
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(player)) {
+                                player.sendTitle("§8[§4Sumo§8]", "§7INICIANDO EM§8: §4" + tempoRestante + "s", 10, 70, 20);
+                                player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
                                 if (tempoRestante == 180) {
-                                    player.sendTitle("§a3m", "", 10, 70, 20);
+                                    player.sendTitle("§8[§4Sumo§8]", "§7INICIANDO EM§8: §43m", 10, 70, 20);
+                                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
                                 }
-                                player.sendTitle(ChatColor.RED + String.valueOf(tempoRestante) + "s", "", 10, 70, 20);
                             }
                         }
                     }
