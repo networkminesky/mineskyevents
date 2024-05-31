@@ -40,11 +40,6 @@ public class ParapenteEvent {
     public static void iniciarEvento() {
         MineSkyEvents.event = "Parapente";
         SendMessages.sendMessageBGMSNE("Parapente");
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!player.hasPermission("mineskyevents.bypass.join")) {
-                Bukkit.dispatchCommand(player, "event entrar");
-            }
-        }
         temporizador = new BukkitRunnable() {
             int tempoRestante = 600;
             @Override
@@ -107,8 +102,11 @@ public class ParapenteEvent {
                             if (!Util.PDVE(p)) return;
                             p.teleport(Locations.parapenteA, PlayerTeleportEvent.TeleportCause.COMMAND);
                             p.getInventory().removeItem(EventItem.BedLeave);
-                            p.getInventory().setItem(3, EventItem.CheckPoint);
-                            MMOItem.darParaglider(p);
+                            if (!EventPlayerManager.getPlayerCheck(p)) {
+                                p.getInventory().setItem(3, EventItem.CheckPoint);
+                                MMOItem.darParaglider(p);
+                                EventPlayerManager.addPlayerITEM(p, true);
+                            }
                             this.cancel();
                         }
                         this.cancel();
@@ -204,6 +202,7 @@ public class ParapenteEvent {
             playerARCOLIST.clear();
             playerCHECKPOINT.clear();
             EventPlayerManager.clearPlayerManager();
+            EventPlayerManager.clearPlayerItem();
             ParapenteEvent.contagem = true;
             ParapenteEvent.contagemI = false;
             for (Player p : Bukkit.getOnlinePlayers()) {

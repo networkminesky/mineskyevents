@@ -174,7 +174,7 @@ public class EventItem {
                 return head;
             }
             case "TijolãoWars": {
-                skullMeta.setDisplayName("§cInformações de" + p.getName());
+                skullMeta.setDisplayName("§cInformações de " + p.getName());
                 skullMeta.setUnbreakable(true);
 
                 List<String> lore = new ArrayList<>();
@@ -188,7 +188,7 @@ public class EventItem {
                 return head;
             }
             case "Corrida": {
-                skullMeta.setDisplayName("§cInformações de" + p.getName());
+                skullMeta.setDisplayName("§cInformações de " + p.getName());
                 skullMeta.setUnbreakable(true);
 
                 List<String> lore = new ArrayList<>();
@@ -201,7 +201,7 @@ public class EventItem {
                 return head;
             }
             case "CorridaBoat": {
-                skullMeta.setDisplayName("§cInformações de" + p.getName());
+                skullMeta.setDisplayName("§cInformações de " + p.getName());
                 skullMeta.setUnbreakable(true);
 
                 List<String> lore = new ArrayList<>();
@@ -214,7 +214,7 @@ public class EventItem {
                 return head;
             }
             case "Sumo": {
-                skullMeta.setDisplayName("§cInformações de" + p.getName());
+                skullMeta.setDisplayName("§cInformações de " + p.getName());
                 skullMeta.setUnbreakable(true);
 
                 List<String> lore = new ArrayList<>();
@@ -228,7 +228,7 @@ public class EventItem {
                 return head;
             }
             case "TNTRun": {
-                skullMeta.setDisplayName("§cInformações de" + p.getName());
+                skullMeta.setDisplayName("§cInformações de " + p.getName());
                 skullMeta.setUnbreakable(true);
 
                 List<String> lore = new ArrayList<>();
@@ -242,7 +242,7 @@ public class EventItem {
                 return head;
             }
             case "TNTTag": {
-                skullMeta.setDisplayName("§cInformações de" + p.getName());
+                skullMeta.setDisplayName("§cInformações de " + p.getName());
                 skullMeta.setUnbreakable(true);
 
                 List<String> lore = new ArrayList<>();
@@ -256,7 +256,7 @@ public class EventItem {
                 return head;
             }
             case "Parapente": {
-                skullMeta.setDisplayName("§cInformações de" + p.getName());
+                skullMeta.setDisplayName("§cInformações de " + p.getName());
                 skullMeta.setUnbreakable(true);
 
                 List<String> lore = new ArrayList<>();

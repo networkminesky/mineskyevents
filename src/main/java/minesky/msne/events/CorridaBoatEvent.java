@@ -104,15 +104,18 @@ public class CorridaBoatEvent {
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(p)) {
                                 p.teleport(Locations.corridaboatA, PlayerTeleportEvent.TeleportCause.COMMAND);
-                                p.getInventory().removeItem(EventItem.BedLeave);
-                                p.getInventory().addItem(EventItem.BarcoITEM);
-                                p.getInventory().addItem(EventItem.BarcoITEM);
-                                p.getInventory().addItem(EventItem.BarcoITEM);
-                                p.getInventory().addItem(EventItem.BarcoITEM);
-                                p.getInventory().addItem(EventItem.BarcoITEM);
-                                p.getInventory().addItem(EventItem.BarcoITEM);
-                                p.getInventory().addItem(EventItem.BarcoITEM);
-                                p.getInventory().addItem(EventItem.BarcoITEM);
+                                if (!EventPlayerManager.getPlayerCheck(p)) {
+                                    p.getInventory().removeItem(EventItem.BedLeave);
+                                    p.getInventory().addItem(EventItem.BarcoITEM);
+                                    p.getInventory().addItem(EventItem.BarcoITEM);
+                                    p.getInventory().addItem(EventItem.BarcoITEM);
+                                    p.getInventory().addItem(EventItem.BarcoITEM);
+                                    p.getInventory().addItem(EventItem.BarcoITEM);
+                                    p.getInventory().addItem(EventItem.BarcoITEM);
+                                    p.getInventory().addItem(EventItem.BarcoITEM);
+                                    p.getInventory().addItem(EventItem.BarcoITEM);
+                                    EventPlayerManager.addPlayerITEM(p, true);
+                                }
                                 renovarTempo(p);
                                 this.cancel();
                             }
@@ -192,6 +195,7 @@ public class CorridaBoatEvent {
                 playerBOATLIST.clear();
                 EventPlayerManager.clearPlayerManager();
                 RegionPlayerManager.clearPlayerManager();
+                EventPlayerManager.clearPlayerItem();
                 CorridaBoatEvent.contagem = true;
                 CorridaBoatEvent.contagemI = false;
                 for (Player p : Bukkit.getOnlinePlayers()) {

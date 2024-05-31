@@ -169,6 +169,7 @@ public class CorridaEvent {
             EventCorridasPlayerManager.clearPlayerManager();
             EventPlayerManager.clearPlayerManager();
             RegionPlayerManager.clearPlayerManager();
+            EventPlayerManager.clearPlayerItem();
             CorridaEvent.contagem = true;
             CorridaEvent.contagemI = false;
             for (Player p : Bukkit.getOnlinePlayers()) {

@@ -438,6 +438,7 @@ public class EventCommand implements CommandExecutor {
                     }
                     SpleefEvent.mortos.clear();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     SpleefEvent.contagem = true;
                     SpleefEvent.contagemI = false;
                     SpleefEvent.temporizador.cancel();
@@ -466,6 +467,7 @@ public class EventCommand implements CommandExecutor {
                     }
                     TijolãoWarsEvent.mortos.clear();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     TijolãoWarsEvent.contagem = true;
                     TijolãoWarsEvent.contagemI = false;
                     TijolãoWarsEvent.temporizador.cancel();
@@ -493,6 +495,7 @@ public class EventCommand implements CommandExecutor {
                     }
                     EventCorridasPlayerManager.clearPlayerManager();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     CorridaEvent.contagem = true;
                     CorridaEvent.contagemI = false;
                     CorridaEvent.temporizador.cancel();
@@ -519,6 +522,7 @@ public class EventCommand implements CommandExecutor {
                         }
                     }
                     EventCorridasPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     CorridaBoatEvent.playerBOATLIST.clear();
                     EventPlayerManager.clearPlayerManager();
                     CorridaBoatEvent.contagem = true;
@@ -548,6 +552,7 @@ public class EventCommand implements CommandExecutor {
                     }
                     SumoEvent.mortos.clear();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     SumoEvent.contagem = true;
                     SumoEvent.contagemI = false;
                     SumoEvent.temporizador.cancel();
@@ -575,6 +580,7 @@ public class EventCommand implements CommandExecutor {
                     }
                     TNTRunEvent.mortos.clear();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     TNTRunEvent.contagem = true;
                     TNTRunEvent.contagemI = false;
                     TNTRunEvent.temporizador.cancel();
@@ -603,6 +609,7 @@ public class EventCommand implements CommandExecutor {
                     }
                     TNTTagEvent.mortos.clear();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     TNTTagEvent.jogadores.clear();
                     TNTTagEvent.tnt.clear();
                     TNTTagEvent.contagem = true;
@@ -635,6 +642,7 @@ public class EventCommand implements CommandExecutor {
                         }
                     }
                     EventCorridasPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     ParapenteEvent.playerCHECKPOINT.clear();
                     ParapenteEvent.playerARCOLIST.clear();
                     EventPlayerManager.clearPlayerManager();

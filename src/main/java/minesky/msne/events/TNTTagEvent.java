@@ -36,7 +36,7 @@ public class TNTTagEvent {
     public static BukkitRunnable temp2;
     public static int TIME;
     public static List<Player> jogadores = new ArrayList<>();
-    public static List<Player> tnt = new ArrayList<>();
+    public static Set<Player> tnt = new HashSet<>();
     public static Player PEGOS;
     public static Player PEGOS2;
     public static final Random random = new Random();
@@ -96,7 +96,15 @@ public class TNTTagEvent {
                                     player.sendTitle("§8[§cTNT-TAG§8]", "§7INICIANDO EM§8: §c3m", 10, 70, 20);
                                     player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
                                 }
-                             }
+                            }
+                        }
+                    }
+
+                    if (tempoRestante == 5) {
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (Util.PDVE(p)) {
+                                p.teleport(Locations.tnttagA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
                         }
                     }
 
@@ -104,26 +112,25 @@ public class TNTTagEvent {
                         contagem = false;
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(p)) {
-                                p.teleport(Locations.tnttagA, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 p.getInventory().removeItem(EventItem.BedLeave);
                                 p.getInventory().removeItem(EventItem.HeadEvents(p));
                                 jogadores.add(p);
                             }
                         }
-                            Player p1 = jogadores.get(random.nextInt(jogadores.size()));
-                            Player p2;
-                            do {
-                                p2 = jogadores.get(random.nextInt(jogadores.size()));
-                            } while (p1.equals(p2));
-                            tnt.add(p1);
-                            tnt.add(p2);
-                            p1.getInventory().setHelmet(EventItem.TNTHEAD);
-                            p2.getInventory().setHelmet(EventItem.TNTHEAD);
-                            secoundsTNTTAGP1(p1);
-                            secoundsTNTTAGP2(p2);
-                            p2.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
-                            p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
-                            this.cancel();
+                        Player p1 = jogadores.get(random.nextInt(jogadores.size()));
+                        Player p2;
+                        do {
+                            p2 = jogadores.get(random.nextInt(jogadores.size()));
+                        } while (p1.equals(p2));
+                        tnt.add(p1);
+                        tnt.add(p2);
+                        p1.getInventory().setHelmet(EventItem.TNTHEAD);
+                        p2.getInventory().setHelmet(EventItem.TNTHEAD);
+                        secoundsTNTTAGP1(p1);
+                        secoundsTNTTAGP2(p2);
+                        p2.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
+                        p1.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 0, false, false));
+                        this.cancel();
                     }
                     tempoRestante--;
                 }
@@ -181,6 +188,7 @@ public class TNTTagEvent {
         SendMessages.sendPlayermessage(vencedores[0], text3);
         EventsMessage.sendLogEvent("TNTTag", vencedor, vencedores, premio1, premio2, premio3);
         EventPlayerManager.clearPlayerManager();
+        EventPlayerManager.clearPlayerItem();
         mortos.clear();
         jogadores.clear();
         tnt.clear();

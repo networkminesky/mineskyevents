@@ -91,8 +91,7 @@ public class TNTRunEvent {
                         }
                     }
 
-                    if (tempoRestante == 0) {
-                        contagem = false;
+                    if (tempoRestante == 5) {
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(p)) {
                                 if (selectedMap.equals("Mapa1")) {
@@ -101,6 +100,14 @@ public class TNTRunEvent {
                                 if (selectedMap.equals("Mapa2")) {
                                     p.teleport(Locations.tntrun2A, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 }
+                            }
+                        }
+                    }
+
+                    if (tempoRestante == 0) {
+                        contagem = false;
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (Util.PDVE(p)) {
                                 p.getInventory().removeItem(EventItem.BedLeave);
                                 p.getInventory().removeItem(EventItem.HeadEvents(p));
                                 this.cancel();
@@ -165,6 +172,7 @@ public class TNTRunEvent {
         SendMessages.sendPlayermessage(vencedores[0], text3);
         EventsMessage.sendLogEvent("TNTRun", vencedor, vencedores, premio1, premio2, premio3);
         EventPlayerManager.clearPlayerManager();
+        EventPlayerManager.clearPlayerItem();
         mortos.clear();
         restaurar();
         contagem = true;

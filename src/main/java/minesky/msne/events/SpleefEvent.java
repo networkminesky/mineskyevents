@@ -87,14 +87,24 @@ public class SpleefEvent {
                         }
                     }
 
+                    if (tempoRestante == 5) {
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (Util.PDVE(p)) {
+                                p.teleport(Locations.spleefA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                        }
+                    }
+
                     if (tempoRestante == 0) {
                         contagem = false;
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(p)) {
-                                p.teleport(Locations.spleefA, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 p.getInventory().removeItem(EventItem.BedLeave);
                                 p.getInventory().removeItem(EventItem.HeadEvents(p));
-                                p.getInventory().addItem(EventItem.SpleefITEM);
+                                if (!EventPlayerManager.getPlayerCheck(p)) {
+                                    p.getInventory().addItem(EventItem.SpleefITEM);
+                                    EventPlayerManager.addPlayerITEM(p.getPlayer(), true);
+                                }
                                 this.cancel();
                             }
                         }
@@ -157,6 +167,7 @@ public class SpleefEvent {
         SendMessages.sendPlayermessage(vencedores[0], text3);
         EventsMessage.sendLogEvent("Spleef", vencedor, vencedores, premio1, premio2, premio3);
         EventPlayerManager.clearPlayerManager();
+        EventPlayerManager.clearPlayerItem();
         mortos.clear();
         restaurar();
         contagem = true;

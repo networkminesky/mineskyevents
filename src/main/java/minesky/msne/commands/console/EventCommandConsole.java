@@ -174,6 +174,7 @@ public class EventCommandConsole {
                     }
                     SpleefEvent.mortos.clear();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     SpleefEvent.contagem = true;
                     SpleefEvent.contagemI = false;
                     SpleefEvent.temporizador.cancel();
@@ -202,6 +203,7 @@ public class EventCommandConsole {
                     }
                     TijolãoWarsEvent.mortos.clear();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     TijolãoWarsEvent.contagem = true;
                     TijolãoWarsEvent.contagemI = false;
                     TijolãoWarsEvent.temporizador.cancel();
@@ -229,6 +231,7 @@ public class EventCommandConsole {
                     }
                     EventCorridasPlayerManager.clearPlayerManager();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     CorridaEvent.contagem = true;
                     CorridaEvent.contagemI = false;
                     CorridaEvent.temporizador.cancel();
@@ -257,6 +260,7 @@ public class EventCommandConsole {
                     EventCorridasPlayerManager.clearPlayerManager();
                     CorridaBoatEvent.playerBOATLIST.clear();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     CorridaBoatEvent.contagem = true;
                     CorridaBoatEvent.contagemI = false;
                     CorridaBoatEvent.temporizador.cancel();
@@ -284,6 +288,7 @@ public class EventCommandConsole {
                     }
                     SumoEvent.mortos.clear();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     SumoEvent.contagem = true;
                     SumoEvent.contagemI = false;
                     SumoEvent.temporizador.cancel();
@@ -311,6 +316,7 @@ public class EventCommandConsole {
                     }
                     TNTRunEvent.mortos.clear();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     TNTRunEvent.contagem = true;
                     TNTRunEvent.contagemI = false;
                     TNTRunEvent.temporizador.cancel();
@@ -339,6 +345,7 @@ public class EventCommandConsole {
                     }
                     TNTTagEvent.mortos.clear();
                     EventPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     TNTTagEvent.jogadores.clear();
                     TNTTagEvent.tnt.clear();
                     TNTTagEvent.contagem = true;
@@ -371,6 +378,7 @@ public class EventCommandConsole {
                         }
                     }
                     EventCorridasPlayerManager.clearPlayerManager();
+                    EventPlayerManager.clearPlayerItem();
                     ParapenteEvent.playerCHECKPOINT.clear();
                     ParapenteEvent.playerARCOLIST.clear();
                     EventPlayerManager.clearPlayerManager();

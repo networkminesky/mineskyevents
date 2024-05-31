@@ -89,14 +89,24 @@ public class SumoEvent {
                         }
                     }
 
+                    if (tempoRestante == 5) {
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (Util.PDVE(p)) {
+                                p.teleport(Locations.sumoA, PlayerTeleportEvent.TeleportCause.COMMAND);
+                            }
+                        }
+                    }
+
                     if (tempoRestante == 0) {
                         contagem = false;
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(p)) {
-                                p.teleport(Locations.sumoA, PlayerTeleportEvent.TeleportCause.COMMAND);
                                 p.getInventory().removeItem(EventItem.BedLeave);
                                 p.getInventory().removeItem(EventItem.HeadEvents(p));
-                                p.getInventory().addItem(EventItem.SumoITEM);
+                                if (!EventPlayerManager.getPlayerCheck(p)) {
+                                    p.getInventory().addItem(EventItem.SumoITEM);
+                                    EventPlayerManager.addPlayerITEM(p, true);
+                                }
                                 this.cancel();
                             }
                             this.cancel();
@@ -159,6 +169,7 @@ public class SumoEvent {
         SendMessages.sendPlayermessage(vencedores[0], text3);
         EventsMessage.sendLogEvent("Sumo", vencedor, vencedores, premio1, premio2, premio3);
         EventPlayerManager.clearPlayerManager();
+        EventPlayerManager.clearPlayerItem();
         mortos.clear();
         contagem = true;
         contagemI = false;

@@ -104,14 +104,17 @@ public class TijolãoWarsEvent {
                                 }
                                 p.getInventory().removeItem(EventItem.BedLeave);
                                 p.getInventory().removeItem(EventItem.HeadEvents(p));
-                                ItemStack bricks = new ItemStack(Material.BRICK, 64);
-                                PlayerInventory inventory = p.getInventory();
+                                if (!EventPlayerManager.getPlayerCheck(p)) {
+                                    ItemStack bricks = new ItemStack(Material.BRICK, 64);
+                                    PlayerInventory inventory = p.getInventory();
 
-                                for (int i = 0; i < inventory.getSize(); i++) {
-                                    if (i == 40 || (i >= 36 && i <= 39)) {
-                                        continue;
+                                    for (int i = 0; i < inventory.getSize(); i++) {
+                                        if (i == 40 || (i >= 36 && i <= 39)) {
+                                            continue;
+                                        }
+                                        inventory.setItem(i, bricks.clone());
                                     }
-                                    inventory.setItem(i, bricks.clone());
+                                    EventPlayerManager.addPlayerITEM(p, true);
                                 }
                                 this.cancel();
                             }
@@ -175,6 +178,7 @@ public class TijolãoWarsEvent {
             SendMessages.sendPlayermessage(vencedores[0], text3);
             EventsMessage.sendLogEvent("TijolãoWars", vencedor, vencedores, premio1, premio2, premio3);
             EventPlayerManager.clearPlayerManager();
+            EventPlayerManager.clearPlayerItem();
             mortos.clear();
             contagem = true;
             contagemI = false;
