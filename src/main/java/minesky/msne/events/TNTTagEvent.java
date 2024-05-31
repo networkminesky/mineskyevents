@@ -36,7 +36,7 @@ public class TNTTagEvent {
     public static BukkitRunnable temp2;
     public static int TIME;
     public static List<Player> jogadores = new ArrayList<>();
-    public static Set<Player> tnt = new HashSet<>();
+    public static List<Player> tnt = new ArrayList<>();
     public static Player PEGOS;
     public static Player PEGOS2;
     public static final Random random = new Random();
@@ -196,16 +196,24 @@ public class TNTTagEvent {
         temp1.cancel();
         contagem = true;
         contagemI = false;
-        for (Player player1 : vencedores) {
-            File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
-            FileConfiguration config = DataManager.getConfiguration(file);
+        File fileV = DataManager.getFile(vencedor.getName().toLowerCase(), "playerdata");
+        FileConfiguration configV = DataManager.getConfiguration(fileV);
+        configV.set("Events.TNTTag.win", configV.getInt("Events.TNTTTag.win")+1);
+        try {
+            configV.save(fileV);
+            for (Player player1 : vencedores) {
+                File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
+                FileConfiguration config = DataManager.getConfiguration(file);
 
-            config.set("Events.TNTag.win", config.getInt("Events.TNTTag.win")+1);
-            try {
-                config.save(file);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                config.set("Events.TNTTag.win", config.getInt("Events.TNTTTag.win")+1);
+                try {
+                    config.save(file);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
     public static void secoundsTNTTAGP1(Player p) {
@@ -225,6 +233,7 @@ public class TNTTagEvent {
                 }
                 if (tempoRestante == 0) {
                     PEGOS.damage(999999999);
+                    PEGOS.setHealth(0);
                     this.cancel();
                 }
                 tempoRestante--;
@@ -250,6 +259,7 @@ public class TNTTagEvent {
                 }
                 if (tempoRestante == 0) {
                     PEGOS2.damage(999999999);
+                    PEGOS2.setHealth(0);
                     this.cancel();
                 }
                 tempoRestante--;

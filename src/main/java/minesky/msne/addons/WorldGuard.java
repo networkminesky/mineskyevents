@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import org.bukkit.Bukkit;
 
 public class WorldGuard {
+    public static StateFlag MORTE = new StateFlag("morte", false);
     public static StateFlag CORRIDA_FINAL = new StateFlag("corrida-final", false);
     public static StateFlag CORRIDA_BOAT_FINAL = new StateFlag("corrida-boat-final", false);
     public static StateFlag CORRIDA_PARAGLIDER_FINAL = new StateFlag("corrida-paraglider-final", false);
@@ -17,6 +18,7 @@ public class WorldGuard {
     public static void Registry() {
         FlagRegistry registry = com.sk89q.worldguard.WorldGuard.getInstance().getFlagRegistry();
         try {
+            registry.register(MORTE);
             registry.register(CORRIDA_FINAL);
             registry.register(CORRIDA_BOAT_FINAL);
             registry.register(CORRIDA_PARAGLIDER_FINAL);
@@ -24,11 +26,16 @@ public class WorldGuard {
             registry.register(CORRIDA_PARAGLIDER_ARCO);
             Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §aFlags registered!");
         } catch (FlagConflictException e) {
+            Flag<?> existingM = registry.get("morte");
             Flag<?> existingC = registry.get("corrida-final");
             Flag<?> existingB = registry.get("corrida-boat_-final");
             Flag<?> existingP = registry.get("corrida-paraglider-final");
             Flag<?> existingPC = registry.get("corrida-paraglider-checkpoint");
             Flag<?> existingPA = registry.get("corrida-paraglider-arco");
+            if (existingM instanceof StateFlag) {
+                MORTE = (StateFlag) existingM;
+                return;
+            }
             if (existingC instanceof StateFlag) {
                 CORRIDA_FINAL = (StateFlag) existingC;
                 return;

@@ -35,31 +35,16 @@ public class PlayerMove {
                 Location pl = player.getLocation();
                 Location block1 = pl.clone().subtract(0, 1, 0);
                 Location block2 = pl.clone().subtract(0, 2, 0);
-                if (MineSkyEvents.event.equals("TNTRun")) {
+                RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
+                if (regionManager == null) return;
+                ApplicableRegionSet regions = regionManager.getApplicableRegions(BukkitAdapter.asBlockVector(player.getLocation()));
+                for (ProtectedRegion region : regions) {
                     if (!Util.PDVE(player)) return;
-                    if (TNTRunEvent.contagem) return;
-                    if(!TNTRunEvent.contagemI) return;
-
-                    if (playerIdleTasks.containsKey(playerId)) {
-                        playerIdleTasks.get(playerId).cancel();
+                    if (region.getFlag(minesky.msne.addons.WorldGuard.MORTE) == StateFlag.State.ALLOW) {
+                        player.setHealth(0);
+                        player.damage(999999999);
                     }
-
-                    lastPlayerLocation.put(playerId, pl);
-
-                    if (block1.getBlock().getType() == Material.AIR || block1.getBlock().getType() == Material.LIGHT) return;
-                    TNTRunEvent.blocksbreak.put(block1, block1.getBlock().getType());
-                    TNTRunEvent.blocksbreak.put(block2, block2.getBlock().getType());
-                    block2.getBlock().setType(Material.AIR);
-                    block1.getBlock().setType(Material.AIR);
-                    onNotMovePlayer(player);
-                }
-                if (MineSkyEvents.event.equals("Corrida") || MineSkyEvents.event.equals("CorridaBoat") || MineSkyEvents.event.equals("Parapente")) {
-                    if (!Util.PDVE(player)) return;
-
-                    RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
-                    if (regionManager == null) return;
-                    ApplicableRegionSet regions = regionManager.getApplicableRegions(BukkitAdapter.asBlockVector(player.getLocation()));
-                    for (ProtectedRegion region : regions) {
+                    if (MineSkyEvents.event.equals("Corrida") || MineSkyEvents.event.equals("CorridaBoat") || MineSkyEvents.event.equals("Parapente")) {
                         if (region.getFlag(minesky.msne.addons.WorldGuard.CORRIDA_FINAL) == StateFlag.State.ALLOW) {
                             if (!RegionPlayerManager.getPlayer(player)) {
                                 CorridaEvent.chegada(player);
@@ -84,6 +69,24 @@ public class PlayerMove {
                             ParapenteEvent.Arcos(player, arcos);
                         }
                     }
+                }
+                if (MineSkyEvents.event.equals("TNTRun")) {
+                    if (!Util.PDVE(player)) return;
+                    if (TNTRunEvent.contagem) return;
+                    if(!TNTRunEvent.contagemI) return;
+
+                    if (playerIdleTasks.containsKey(playerId)) {
+                        playerIdleTasks.get(playerId).cancel();
+                    }
+
+                    lastPlayerLocation.put(playerId, pl);
+
+                    if (block1.getBlock().getType() == Material.AIR || block1.getBlock().getType() == Material.LIGHT) return;
+                    TNTRunEvent.blocksbreak.put(block1, block1.getBlock().getType());
+                    TNTRunEvent.blocksbreak.put(block2, block2.getBlock().getType());
+                    block2.getBlock().setType(Material.AIR);
+                    block1.getBlock().setType(Material.AIR);
+                    onNotMovePlayer(player);
                 }
             }
         }

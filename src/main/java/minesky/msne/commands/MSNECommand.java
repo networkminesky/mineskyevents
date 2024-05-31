@@ -51,7 +51,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter { ;
         String version = MineSkyEvents.get().getDescription().getVersion();
         if (args.length < 1) {
             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
-            player.sendMessage("§6§lMinesky Events §8» §6v" + version + "\n§6Notification §8- §7Enable and disable notifications\n§6Reload §8- §7Reload the plugin.\n\n§6Author§8: §7zBrunoC_");
+            player.sendMessage("§6§lMinesky Events §8» §6v" + version + "\n§6Notification §8- §7Enable and disable notifications\n§6Reload §8- §7Reload the plugin.\n\n§6Authors§8: §7BrunoC§8, §7Drawn");
             return true;
         }
         if (args[0].equalsIgnoreCase("adopt")) {
@@ -87,11 +87,6 @@ public class MSNECommand implements CommandExecutor, TabCompleter { ;
             s.sendMessage("§8[§a!§8] §aVocê recebeu todos os itens de eventos.");
             return true;
         }
-        if (args[0].equalsIgnoreCase("kill")) {
-            player.damage(999999999);
-            Bukkit.getLogger().warning("[MineSky-Events] " + player.getName() + " Morreu!");
-            return true;
-        }
         if (args[0].equalsIgnoreCase("reload")) {
             if (!s.hasPermission("mineskyevents.reload")) {
                 player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f , 1.0f);
@@ -100,7 +95,7 @@ public class MSNECommand implements CommandExecutor, TabCompleter { ;
             }
             MineSkyEvents.carregarConfigs();
             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
-            player.sendMessage("§6§lMinesky Events §8» §6v" + version + "\n§6Author§8: §7zBrunoC_\n§6Version§8: §7" + version + "\n\n§6MineSky Events §7reloaded successfully.\n§7NOTE: Some changes will only take effect when the server is restarted.");
+            player.sendMessage("§6§lMinesky Events §8» §6v" + version + "\n§6Authors§8: §7BrunoC§8, §7Drawn\n§6Version§8: §7" + version + "\n\n§6MineSky Events §7reloaded successfully.\n§7NOTE: Some changes will only take effect when the server is restarted.");
             return true;
         }
         if (args[0].equalsIgnoreCase("notification")) {

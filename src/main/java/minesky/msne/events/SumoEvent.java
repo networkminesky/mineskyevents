@@ -173,20 +173,24 @@ public class SumoEvent {
         mortos.clear();
         contagem = true;
         contagemI = false;
-        for (Player player1 : vencedores) {
-            File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
-            FileConfiguration config = DataManager.getConfiguration(file);
-            File file2 = DataManager.getFile(vencedor.getName().toLowerCase(), "playerdata");
-            FileConfiguration config2 = DataManager.getConfiguration(file2);
+        File fileV = DataManager.getFile(vencedor.getName().toLowerCase(), "playerdata");
+        FileConfiguration configV = DataManager.getConfiguration(fileV);
+        configV.set("Events.Sumo.win", configV.getInt("Events.Sumo.win")+1);
+        try {
+            configV.save(fileV);
+            for (Player player1 : vencedores) {
+                File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
+                FileConfiguration config = DataManager.getConfiguration(file);
 
-            config.set("Events.Sumo.win", config.getInt("Events.Sumo.win")+1);
-            config2.set("Events.Sumo.win", config.getInt("Events.Sumo.win")+1);
-            try {
-                config.save(file);
-                config2.save(file);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                config.set("Events.Sumo.win", config.getInt("Events.Sumo.win")+1);
+                try {
+                    config.save(file);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

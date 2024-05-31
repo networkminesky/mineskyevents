@@ -3,6 +3,89 @@
 # =--------------------------= #
 Webhook:
   link: ""
+# =--------------------------------------= #
+# +          Preços dos Eventos          + #
+# =--------------------------------------= #
+Spleef:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+TijolãoWars:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+Corrida:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+CorridaBoat:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+Sumo:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+TNTRun:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+TNTTag:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+Parapente:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
 # =-----------------------------= #
 # +          Blacklist          + #
 # =-----------------------------= #

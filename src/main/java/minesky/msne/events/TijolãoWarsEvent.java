@@ -182,21 +182,25 @@ public class TijolãoWarsEvent {
             mortos.clear();
             contagem = true;
             contagemI = false;
+        File fileV = DataManager.getFile(vencedor.getName().toLowerCase(), "playerdata");
+        FileConfiguration configV = DataManager.getConfiguration(fileV);
+        configV.set("Events.TijolãoWars.win", configV.getInt("Events.TijolãoWars.win")+1);
+        try {
+            configV.save(fileV);
             for (Player player1 : vencedores) {
                 File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
                 FileConfiguration config = DataManager.getConfiguration(file);
-                File file2 = DataManager.getFile(vencedor.getName().toLowerCase(), "playerdata");
-                FileConfiguration config2 = DataManager.getConfiguration(file2);
 
                 config.set("Events.TijolãoWars.win", config.getInt("Events.TijolãoWars.win")+1);
-                config2.set("Events.TijolãoWars.win", config.getInt("Events.TijolãoWars.win")+1);
                 try {
                     config.save(file);
-                    config2.save(file);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     public static String selectMapa() {
         return mapas.get(random.nextInt(mapas.size()));

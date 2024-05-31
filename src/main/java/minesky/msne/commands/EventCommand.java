@@ -1801,7 +1801,6 @@ public class EventCommand implements CommandExecutor {
             jogador.hidePlayer(MineSkyEvents.get(), p);
         }
         p.setAllowFlight(true);
-        p.setFlying(true);
         p.setInvisible(true);
         p.setGameMode(GameMode.ADVENTURE);
         p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));

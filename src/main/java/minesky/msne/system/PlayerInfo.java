@@ -250,7 +250,7 @@ public class PlayerInfo implements Listener {
                                         Player p1;
                                         do {
                                             p1 = TNTTagEvent.jogadores.get(TNTTagEvent.random.nextInt(TNTTagEvent.jogadores.size()));
-                                        } while (p1.equals(TNTTagEvent.tnt.contains(p1)));
+                                        } while (p1.equals(TNTTagEvent.tnt.get(0)));
                                         TNTTagEvent.tnt.add(p1);
                                         if (TNTTagEvent.PEGOS.getName().equalsIgnoreCase(p.getName())) {
                                             TNTTagEvent.temp1.cancel();
@@ -638,7 +638,7 @@ public class PlayerInfo implements Listener {
                             Player p1;
                             do {
                                 p1 = TNTTagEvent.jogadores.get(TNTTagEvent.random.nextInt(TNTTagEvent.jogadores.size()));
-                            } while (p1.equals(TNTTagEvent.tnt.contains(p1)));
+                            } while (p1.equals(TNTTagEvent.tnt.get(0)));
                             TNTTagEvent.tnt.add(p1);
                             if (TNTTagEvent.PEGOS.getName().equalsIgnoreCase(p.getName())) {
                                 TNTTagEvent.temp1.cancel();
@@ -709,6 +709,12 @@ public class PlayerInfo implements Listener {
             Player player = (Player) event.getEntity();
             if (Util.PDVES(player)) {
                 event.setCancelled(true);
+                return;
+            }
+            if (MineSkyEvents.event.equals("TNTTag")) {
+                if (Util.PDVE(player)) {
+                    event.setCancelled(true);
+                }
             }
         }
     }
@@ -763,6 +769,7 @@ public class PlayerInfo implements Listener {
             }
         }
     }
+
     @EventHandler
     public void onEntityDamageBlock(EntityDamageByBlockEvent event) {
         if (event.getEntity() instanceof Player) {

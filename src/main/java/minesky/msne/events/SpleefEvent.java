@@ -172,16 +172,24 @@ public class SpleefEvent {
         restaurar();
         contagem = true;
         contagemI = false;
-        for (Player player1 : vencedores) {
-            File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
-            FileConfiguration config = DataManager.getConfiguration(file);
+        File fileV = DataManager.getFile(vencedor.getName().toLowerCase(), "playerdata");
+        FileConfiguration configV = DataManager.getConfiguration(fileV);
+        configV.set("Events.Spleef.win", configV.getInt("Events.Spleef.win")+1);
+        try {
+            configV.save(fileV);
+            for (Player player1 : vencedores) {
+                File file = DataManager.getFile(player1.getName().toLowerCase(), "playerdata");
+                FileConfiguration config = DataManager.getConfiguration(file);
 
-            config.set("Events.Spleef.win", config.getInt("Events.Spleef.win")+1);
-            try {
-                config.save(file);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                config.set("Events.Spleef.win", config.getInt("Events.Spleef.win")+1);
+                try {
+                    config.save(file);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
