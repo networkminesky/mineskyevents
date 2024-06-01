@@ -469,6 +469,7 @@ public class PlayerInfo implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player p = event.getEntity();
+        p.spigot().respawn();
         if (Util.PDVES(p)) {
             File file = DataManager.getFile(p.getName().toLowerCase(), "playerdata");
             FileConfiguration config = DataManager.getConfiguration(file);

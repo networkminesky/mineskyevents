@@ -35,6 +35,25 @@ public class PlayerMove {
                 Location pl = player.getLocation();
                 Location block1 = pl.clone().subtract(0, 1, 0);
                 Location block2 = pl.clone().subtract(0, 2, 0);
+                if (MineSkyEvents.event.equals("TNTRun")) {
+                    if (!Util.PDVE(player)) return;
+                    if (TNTRunEvent.contagem) return;
+                    if(!TNTRunEvent.contagemI) return;
+
+                    if (playerIdleTasks.containsKey(playerId)) {
+                        playerIdleTasks.get(playerId).cancel();
+                    }
+
+                    lastPlayerLocation.put(playerId, pl);
+
+                    CheckMorte(player);
+                    if (block1.getBlock().getType() == Material.AIR || block1.getBlock().getType() == Material.LIGHT) return;
+                    TNTRunEvent.blocksbreak.put(block1, block1.getBlock().getType());
+                    TNTRunEvent.blocksbreak.put(block2, block2.getBlock().getType());
+                    block2.getBlock().setType(Material.AIR);
+                    block1.getBlock().setType(Material.AIR);
+                    onNotMovePlayer(player);
+                }
                 RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
                 if (regionManager == null) return;
                 ApplicableRegionSet regions = regionManager.getApplicableRegions(BukkitAdapter.asBlockVector(player.getLocation()));
@@ -70,27 +89,23 @@ public class PlayerMove {
                         }
                     }
                 }
-                if (MineSkyEvents.event.equals("TNTRun")) {
-                    if (!Util.PDVE(player)) return;
-                    if (TNTRunEvent.contagem) return;
-                    if(!TNTRunEvent.contagemI) return;
-
-                    if (playerIdleTasks.containsKey(playerId)) {
-                        playerIdleTasks.get(playerId).cancel();
-                    }
-
-                    lastPlayerLocation.put(playerId, pl);
-
-                    if (block1.getBlock().getType() == Material.AIR || block1.getBlock().getType() == Material.LIGHT) return;
-                    TNTRunEvent.blocksbreak.put(block1, block1.getBlock().getType());
-                    TNTRunEvent.blocksbreak.put(block2, block2.getBlock().getType());
-                    block2.getBlock().setType(Material.AIR);
-                    block1.getBlock().setType(Material.AIR);
-                    onNotMovePlayer(player);
-                }
             }
         }
     };
+
+    public static void CheckMorte(Player player) {
+        RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
+        if (regionManager == null) return;
+        ApplicableRegionSet regions = regionManager.getApplicableRegions(BukkitAdapter.asBlockVector(player.getLocation()));
+        for (ProtectedRegion region : regions) {
+            if (!Util.PDVE(player)) return;
+            if (region.getFlag(minesky.msne.addons.WorldGuard.MORTE) == StateFlag.State.ALLOW) {
+                player.setHealth(0);
+                player.damage(999999999);
+            }
+        }
+    }
+
     public static void onNotMovePlayer(Player player) {
         Location pl = player.getLocation();
         Location block1 = pl.clone().subtract(0, 1, 0);
