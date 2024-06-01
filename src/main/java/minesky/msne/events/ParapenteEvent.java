@@ -5,6 +5,7 @@ import minesky.msne.addons.MMOItem;
 import minesky.msne.addons.Vault;
 import minesky.msne.commands.EventCommand;
 import minesky.msne.commands.MSNECommand;
+import minesky.msne.config.Config;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.discord.EventsMessage;
@@ -83,13 +84,17 @@ public class ParapenteEvent {
                 public void run() {
                     contagemI = true;
                     contagem = true;
-                    if (tempoRestante == 180 ||tempoRestante == 60 || tempoRestante == 30 || tempoRestante == 15 || tempoRestante == 10 || tempoRestante == 5 || tempoRestante == 4 || tempoRestante == 3 || tempoRestante == 2 || tempoRestante == 1) {
+                    if (tempoRestante == 180 || tempoRestante == 120 ||tempoRestante == 60 || tempoRestante == 30 || tempoRestante == 15 || tempoRestante == 10 || tempoRestante == 5 || tempoRestante == 4 || tempoRestante == 3 || tempoRestante == 2 || tempoRestante == 1) {
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(player)) {
                                 player.sendTitle("§8[§3Corrida de Parapente§8]", "§7INICIANDO EM§8: §3" + tempoRestante + "s", 10, 70, 20);
                                 player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
                                 if (tempoRestante == 180) {
                                     player.sendTitle("§8[§3Corrida de Parapente§8]", "§7INICIANDO EM§8: §33m", 10, 70, 20);
+                                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
+                                }
+                                if (tempoRestante == 120) {
+                                    player.sendTitle("§8[§3Corrida de Parapente§8]", "§7INICIANDO EM§8: §32m", 10, 70, 20);
                                     player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
                                 }
                             }
@@ -165,15 +170,15 @@ public class ParapenteEvent {
                 int premio = 0;
                 Random random = new Random();
                 if (i == 0) {
-                    premio = random.nextInt(5500 - 4500 + 1) + 4500;
+                    premio = random.nextInt(Config.PARAPENTE_MAX_1 - Config.PARAPENTE_MIN_1 + 1) + Config.PARAPENTE_MIN_1;
                     premio1 = premio;
                 }
                 if (i == 1) {
-                    premio = random.nextInt(3500 - 2500 + 1) + 2500;
+                    premio = random.nextInt(Config.PARAPENTE_MAX_2 - Config.PARAPENTE_MIN_2 + 1) + Config.PARAPENTE_MIN_2;
                     premio2 = premio;
                 }
                 if (i == 2) {
-                    premio = random.nextInt(2500 - 1500 + 1) + 1500;
+                    premio = random.nextInt(Config.PARAPENTE_MAX_3 - Config.PARAPENTE_MIN_3 + 1) + Config.PARAPENTE_MIN_3;
                     premio3 = premio;
                 }
                 OfflinePlayer poff = Bukkit.getOfflinePlayer(EventCorridasPlayerManager.getPlayerManager().get(i));

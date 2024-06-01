@@ -8,14 +8,14 @@ Webhook:
 # =--------------------------------------= #
 Spleef:
   1-ganhador:
-    min: 2500
-    max: 3500
+    min: 4500
+    max: 5500
   2-ganhador:
+    min: 3500
+    max: 4500
+  3-ganhador:
     min: 1500
     max: 2500
-  3-ganhador:
-    min: 500
-    max: 1000
 TijolãoWars:
   1-ganhador:
     min: 2500

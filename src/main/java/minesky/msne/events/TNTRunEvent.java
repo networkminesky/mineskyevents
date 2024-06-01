@@ -3,6 +3,7 @@ package minesky.msne.events;
 import minesky.msne.MineSkyEvents;
 import minesky.msne.addons.Vault;
 import minesky.msne.commands.EventCommand;
+import minesky.msne.config.Config;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.discord.EventsMessage;
@@ -78,13 +79,17 @@ public class TNTRunEvent {
                 public void run() {
                     contagemI = true;
                     contagem = true;
-                    if (tempoRestante == 180 ||tempoRestante == 60 || tempoRestante == 30 || tempoRestante == 15 || tempoRestante == 10 || tempoRestante == 5 || tempoRestante == 4 || tempoRestante == 3 || tempoRestante == 2 || tempoRestante == 1) {
+                    if (tempoRestante == 180 || tempoRestante == 120 ||tempoRestante == 60 || tempoRestante == 30 || tempoRestante == 15 || tempoRestante == 10 || tempoRestante == 5 || tempoRestante == 4 || tempoRestante == 3 || tempoRestante == 2 || tempoRestante == 1) {
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             if (Util.PDVE(player)) {
                                 player.sendTitle("§8[§cTNTRUN§8]", "§7INICIANDO EM§8: §c" + tempoRestante + "s", 10, 70, 20);
                                 player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
                                 if (tempoRestante == 180) {
                                     player.sendTitle("§8[§cTNTRUN§8]", "§7INICIANDO EM§8: §c3m", 10, 70, 20);
+                                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
+                                }
+                                if (tempoRestante == 120) {
+                                    player.sendTitle("§8[§cTNTRUN§8]", "§7INICIANDO EM§8: §c2m", 10, 70, 20);
                                     player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BANJO, 1.0f , 1.0f);
                                 }
                             }
@@ -155,18 +160,18 @@ public class TNTRunEvent {
         TextComponent encerrar = new TextComponent("§c§lTNTRUN §8| §a1º Lugar §8- §a§l" + vencedor.getName() + " §8| §a2º Lugar §8- §a§l" + vencedores[1].getName() + " §8| §a3º Lugar §8- §a§l" + vencedores[0].getName());
         SendMessages.sendMessageBCMSNE(encerrar);
         Random random = new Random();
-        int premio1 = random.nextInt(5500 - 4500 + 1) + 4500;
-        int premio2 = random.nextInt(3500 - 2500 + 1) + 2500;
-        int premio3 = random.nextInt(2500 - 1500 + 1) + 1500;
+        int premio1 = random.nextInt(Config.TNTRUN_MAX_1 - Config.TNTRUN_MIN_1 + 1) + Config.TNTRUN_MIN_1;
+        int premio2 = random.nextInt(Config.TNTRUN_MAX_2 - Config.TNTRUN_MIN_2 + 1) + Config.TNTRUN_MIN_2;
+        int premio3 = random.nextInt(Config.TNTRUN_MAX_3 - Config.TNTRUN_MIN_3 + 1) + Config.TNTRUN_MIN_3;
         OfflinePlayer p1 = Bukkit.getOfflinePlayer(vencedor.getName());
         OfflinePlayer p2 = Bukkit.getOfflinePlayer(vencedores[0].getName());
         OfflinePlayer p3 = Bukkit.getOfflinePlayer(vencedores[1].getName());
         Vault.economy.depositPlayer(p1, premio1);
         Vault.economy.depositPlayer(p2, premio2);
         Vault.economy.depositPlayer(p3, premio3);
-        TextComponent text1 = new TextComponent("§c§lTNTRUN §8| §aVocê ganhou o §lTNTRUN §ae como prêmio você ganhou: §l" + premio1);
-        TextComponent text2 = new TextComponent("§c§lTNTRUN §8| §aVocê ganhou o §lTNTRUN §ae como prêmio você ganhou: §l" + premio2);
-        TextComponent text3 = new TextComponent("§c§lTNTRUN §8| §aVocê ganhou o §lTNTRUN §ae como prêmio você ganhou: §l" + premio3);
+        TextComponent text1 = new TextComponent("§c§lTNTRUN §8| §aVocê ganhou o §lTNTRUN §ae como prêmio você ganhou: §l$" + premio1);
+        TextComponent text2 = new TextComponent("§c§lTNTRUN §8| §aVocê ganhou o §lTNTRUN §ae como prêmio você ganhou: §l$" + premio2);
+        TextComponent text3 = new TextComponent("§c§lTNTRUN §8| §aVocê ganhou o §lTNTRUN §ae como prêmio você ganhou: §l$" + premio3);
         SendMessages.sendPlayermessage(vencedor, text1);
         SendMessages.sendPlayermessage(vencedores[1], text2);
         SendMessages.sendPlayermessage(vencedores[0], text3);
