@@ -11,7 +11,7 @@ import java.util.List;
 
 public class EventCommandTabCompleter implements TabCompleter {
     private final List<String> id = Arrays.asList("anunciar", "blacklist", "entrar", "kick", "set", "start", "finalizar");
-    private final List<String> names = Arrays.asList("Spleef", "TijolãoWars", "Corrida", "TNTRun", "CorridaBoat", "Sumo", "TNTTag", "Parapente");
+    private final List<String> names = Arrays.asList("Spleef", "TijolãoWars", "Corrida", "TNTRun", "CorridaBoat", "Sumo", "TNTTag", "Parapente", "CaptureBandeira");
     private final List<String> namesA = Arrays.asList("Mini-Wars", "Esconde-esconde", "Ruínas", "CopaPVP");
     private final List<String> namesF = new ArrayList<>();
 

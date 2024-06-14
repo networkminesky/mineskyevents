@@ -7,10 +7,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import minesky.msne.MineSkyEvents;
-import minesky.msne.events.CorridaBoatEvent;
-import minesky.msne.events.CorridaEvent;
-import minesky.msne.events.ParapenteEvent;
-import minesky.msne.events.TNTRunEvent;
+import minesky.msne.events.*;
 import minesky.msne.utils.RegionPlayerManager;
 import minesky.msne.utils.Util;
 import org.bukkit.Bukkit;
@@ -35,6 +32,7 @@ public class PlayerMove {
                 Location pl = player.getLocation();
                 Location block1 = pl.clone().subtract(0, 1, 0);
                 Location block2 = pl.clone().subtract(0, 2, 0);
+                if (!Util.PDVE(player)) return;
                 if (MineSkyEvents.event.equals("TNTRun")) {
                     if (!Util.PDVE(player)) return;
                     if (TNTRunEvent.contagem) return;

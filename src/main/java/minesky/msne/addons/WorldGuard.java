@@ -14,6 +14,7 @@ public class WorldGuard {
     public static StateFlag CORRIDA_PARAGLIDER_FINAL = new StateFlag("corrida-paraglider-final", false);
     public static IntegerFlag CORRIDA_PARAGLIDER_CHECKPOINT = new IntegerFlag("corrida-paraglider-checkpoint");
     public static IntegerFlag CORRIDA_PARAGLIDER_ARCO = new IntegerFlag("corrida-paraglider-arco");
+    public static StateFlag CAPTUREBANDEIRA_SAFEZONE = new StateFlag("capture-bandeira-safezone", false);
 
     public static void Registry() {
         FlagRegistry registry = com.sk89q.worldguard.WorldGuard.getInstance().getFlagRegistry();
@@ -24,6 +25,7 @@ public class WorldGuard {
             registry.register(CORRIDA_PARAGLIDER_FINAL);
             registry.register(CORRIDA_PARAGLIDER_CHECKPOINT);
             registry.register(CORRIDA_PARAGLIDER_ARCO);
+            registry.register(CAPTUREBANDEIRA_SAFEZONE);
             Bukkit.getConsoleSender().sendMessage("§8[§6MineSky Events§8] §aFlags registered!");
         } catch (FlagConflictException e) {
             Flag<?> existingM = registry.get("morte");
@@ -32,6 +34,7 @@ public class WorldGuard {
             Flag<?> existingP = registry.get("corrida-paraglider-final");
             Flag<?> existingPC = registry.get("corrida-paraglider-checkpoint");
             Flag<?> existingPA = registry.get("corrida-paraglider-arco");
+            Flag<?> existingCB = registry.get("capture-bandeira-safezone");
             if (existingM instanceof StateFlag) {
                 MORTE = (StateFlag) existingM;
                 return;
@@ -54,6 +57,10 @@ public class WorldGuard {
             }
             if (existingPA instanceof IntegerFlag) {
                 CORRIDA_PARAGLIDER_ARCO = (IntegerFlag) existingPA;
+                return;
+            }
+            if (existingCB instanceof StateFlag) {
+                CAPTUREBANDEIRA_SAFEZONE = (StateFlag) existingCB;
                 return;
             }
             Bukkit.getLogger().warning("[MineSky-Events] Conflito de flag detectado: " + e.getMessage());

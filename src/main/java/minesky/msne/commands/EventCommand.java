@@ -440,11 +440,11 @@ public class EventCommand implements CommandExecutor {
                     EventPlayerManager.clearPlayerManager();
                     EventPlayerManager.clearPlayerItem();
                     SpleefEvent.contagem = true;
-                    SpleefEvent.contagemI = false;
                     SpleefEvent.temporizador.cancel();
                     SpleefEvent.restaurar();
                     if (SpleefEvent.contagemI) {
                         SpleefEvent.contagemtemp.cancel();
+                        SpleefEvent.contagemI = false;
                     }
                     break;
                 case "TijolãoWars":
@@ -469,10 +469,10 @@ public class EventCommand implements CommandExecutor {
                     EventPlayerManager.clearPlayerManager();
                     EventPlayerManager.clearPlayerItem();
                     TijolãoWarsEvent.contagem = true;
-                    TijolãoWarsEvent.contagemI = false;
                     TijolãoWarsEvent.temporizador.cancel();
                     if (TijolãoWarsEvent.contagemI) {
                         TijolãoWarsEvent.contagemtemp.cancel();
+                        TijolãoWarsEvent.contagemI = false;
                     }
                     break;
                 case "Corrida":
@@ -497,10 +497,10 @@ public class EventCommand implements CommandExecutor {
                     EventPlayerManager.clearPlayerManager();
                     EventPlayerManager.clearPlayerItem();
                     CorridaEvent.contagem = true;
-                    CorridaEvent.contagemI = false;
                     CorridaEvent.temporizador.cancel();
                     if (CorridaEvent.contagemI) {
                         CorridaEvent.contagemtemp.cancel();
+                        CorridaEvent.contagemI = false;
                     }
                     break;
                 case "CorridaBoat":
@@ -526,10 +526,10 @@ public class EventCommand implements CommandExecutor {
                     CorridaBoatEvent.playerBOATLIST.clear();
                     EventPlayerManager.clearPlayerManager();
                     CorridaBoatEvent.contagem = true;
-                    CorridaBoatEvent.contagemI = false;
                     CorridaBoatEvent.temporizador.cancel();
                     if (CorridaBoatEvent.contagemI) {
                         CorridaBoatEvent.contagemtemp.cancel();
+                        CorridaBoatEvent.contagemI = false;
                     }
                     break;
                 case "Sumo":
@@ -554,10 +554,10 @@ public class EventCommand implements CommandExecutor {
                     EventPlayerManager.clearPlayerManager();
                     EventPlayerManager.clearPlayerItem();
                     SumoEvent.contagem = true;
-                    SumoEvent.contagemI = false;
                     SumoEvent.temporizador.cancel();
                     if (SumoEvent.contagemI) {
                         SumoEvent.contagemtemp.cancel();
+                        SumoEvent.contagemI = false;
                     }
                     break;
                 case "TNTRun":
@@ -582,11 +582,11 @@ public class EventCommand implements CommandExecutor {
                     EventPlayerManager.clearPlayerManager();
                     EventPlayerManager.clearPlayerItem();
                     TNTRunEvent.contagem = true;
-                    TNTRunEvent.contagemI = false;
                     TNTRunEvent.temporizador.cancel();
                     TNTRunEvent.restaurar();
                     if (TNTRunEvent.contagemI) {
                         TNTRunEvent.contagemtemp.cancel();
+                        TNTRunEvent.contagemI = false;
                     }
                     break;
                 case "TNTTag":
@@ -612,14 +612,14 @@ public class EventCommand implements CommandExecutor {
                     EventPlayerManager.clearPlayerItem();
                     TNTTagEvent.jogadores.clear();
                     TNTTagEvent.tnt.clear();
-                    TNTTagEvent.contagem = true;
-                    TNTTagEvent.contagemI = false;
                     TNTTagEvent.temporizador.cancel();
                     if (TNTTagEvent.contagemI) {
                         TNTTagEvent.contagemtemp.cancel();
                         if (!TNTTagEvent.contagem && TNTTagEvent.contagemI) {
                             TNTTagEvent.temp1.cancel();
                             TNTTagEvent.temp2.cancel();
+                            TNTTagEvent.contagem = true;
+                            TNTTagEvent.contagemI = false;
                         }
                     }
                     break;
@@ -647,10 +647,10 @@ public class EventCommand implements CommandExecutor {
                     ParapenteEvent.playerARCOLIST.clear();
                     EventPlayerManager.clearPlayerManager();
                     ParapenteEvent.contagem = true;
-                    ParapenteEvent.contagemI = false;
                     ParapenteEvent.temporizador.cancel();
                     if (ParapenteEvent.contagemI) {
                         ParapenteEvent.contagemtemp.cancel();
+                        ParapenteEvent.contagemI = false;
                     }
                     break;
                 case "Mini-Wars":
@@ -767,7 +767,7 @@ public class EventCommand implements CommandExecutor {
                 case "corridaboat":
                     CorridaBoatEvent.iniciarEvento();
                     break;
-                case "pegabandeira":
+                case "capturebandeira":
                     //orridaEvent.iniciarEvento();
                     s.sendMessage("§8[§c!§8] §cEvento indisponível.");
                     break;

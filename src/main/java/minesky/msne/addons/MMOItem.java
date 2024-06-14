@@ -9,9 +9,21 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 public class MMOItem {
+
+    private static boolean isMMOItemsLoaded() {
+        Plugin mmoItemsPlugin = Bukkit.getPluginManager().getPlugin("MMOItems");
+        return mmoItemsPlugin != null && mmoItemsPlugin.isEnabled();
+    }
+
     public static void darParaglider(Player player) {
+        if (!isMMOItemsLoaded()) {
+            Bukkit.getLogger().warning("[Minesky-Events] MMOItems plugin não encontrado ou não habilitado.");
+            player.sendMessage("§8[§c!§8] §cMMOItems plugin não encontrado ou não habilitado.");
+            return;
+        }
         net.Indyuce.mmoitems.api.item.mmoitem.MMOItem paraglider = MMOItems.plugin.getMMOItem(Type.MISCELLANEOUS, "PARAGLIDER");
         if (paraglider != null) {
             ItemStackBuilder itemStackBuilder = new ItemStackBuilder(paraglider);
@@ -31,6 +43,10 @@ public class MMOItem {
         }
     }
     public static ItemStack getParaglider() {
+        if (!isMMOItemsLoaded()) {
+            Bukkit.getLogger().warning("[Minesky-Events] MMOItems plugin não encontrado ou não habilitado.");
+            return null;
+        }
         net.Indyuce.mmoitems.api.item.mmoitem.MMOItem paraglider = MMOItems.plugin.getMMOItem(Type.MISCELLANEOUS, "PARAGLIDER");
         if (paraglider != null) {
             ItemStackBuilder itemStackBuilder = new ItemStackBuilder(paraglider);

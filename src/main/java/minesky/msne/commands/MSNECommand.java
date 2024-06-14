@@ -8,13 +8,16 @@ import minesky.msne.commands.console.MSNECommandConsole;
 import minesky.msne.config.DataManager;
 import minesky.msne.config.Locations;
 import minesky.msne.discord.EventsMessage;
+import minesky.msne.events.CaptureBandeiraEvent;
 import minesky.msne.events.CorridaBoatEvent;
 import minesky.msne.events.CorridaEvent;
 import minesky.msne.events.ParapenteEvent;
+import minesky.msne.system.event.EventGUIS;
 import minesky.msne.system.event.EventPlayerManager;
 import minesky.msne.utils.EventItem;
 import minesky.msne.utils.SendMessages;
 import minesky.msne.utils.Util;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -82,10 +85,99 @@ public class MSNECommand implements CommandExecutor, TabCompleter { ;
             player.getInventory().addItem(EventItem.TNTHEAD);
             player.getInventory().addItem(EventItem.BarcoITEM);
             player.getInventory().addItem(EventItem.CheckPoint);
+            player.getInventory().addItem(EventItem.FlagORANGE);
+            player.getInventory().addItem(EventItem.FlagLIME);
+            player.getInventory().addItem(EventItem.FlagITEM_WOODEN_SWORD);
+            player.getInventory().addItem(EventItem.FlagITEM_STONE_SWORD);
+            player.getInventory().addItem(EventItem.FlagITEM_IRON_SWORD);
+            player.getInventory().addItem(EventItem.FlagITEM_DIAMOND_SWORD);
+            player.getInventory().addItem(EventItem.FlagITEM_WOODEN_AXE);
+            player.getInventory().addItem(EventItem.FlagITEM_IRON_AXE);
+            player.getInventory().addItem(EventItem.FlagITEM_GOLDEN_AXE);
+            player.getInventory().addItem(EventItem.FlagITEM_DIAMOND_AXE);
+            player.getInventory().addItem(EventItem.FlagITEM_WOODEN_PICKAXE);
+            player.getInventory().addItem(EventItem.FlagITEM_IRON_PICKAXE);
+            player.getInventory().addItem(EventItem.FlagITEM_GOLDEN_PICKAXE);
+            player.getInventory().addItem(EventItem.FlagITEM_DIAMOND_PICKAXE);
+            player.getInventory().addItem(EventItem.FlagITEM_ARMOR_HELMET_LIME);
+            player.getInventory().addItem(EventItem.FlagITEM_ARMOR_CHESTPLATE_LIME);
+            player.getInventory().addItem(EventItem.FlagITEM_ARMOR_LEGGING_LIME);
+            player.getInventory().addItem(EventItem.FlagITEM_ARMOR_BOTTS_LIME);
+            player.getInventory().addItem(EventItem.FlagITEM_ARMOR_HELMET_ORANGE);
+            player.getInventory().addItem(EventItem.FlagITEM_ARMOR_CHESTPLATE_ORANGE);
+            player.getInventory().addItem(EventItem.FlagITEM_ARMOR_LEGGING_ORANGE);
+            player.getInventory().addItem(EventItem.FlagITEM_ARMOR_BOTTS_ORANGE);
+            player.getInventory().addItem(EventItem.FlagITEM_SHIELD);
+            player.getInventory().addItem(EventItem.FlagITEM_SHEARS);
+            player.getInventory().addItem(EventItem.FlagITEM_FLINT_AND_STEEL);
+            player.getInventory().addItem(EventItem.FlagITEM_BOW);
+            player.getInventory().addItem(EventItem.FlagITEM_BOW_POWER);
+            player.getInventory().addItem(EventItem.FlagITEM_BOW_POWER_PUNCH);
+            player.getInventory().addItem(EventItem.FlagITEM_TOWER);
+            player.getInventory().addItem(EventItem.FlagITEM_CHAILMALL_LEGGING);
             MMOItem.darParaglider(player);
             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1.0f , 1.0f);
             s.sendMessage("§8[§a!§8] §aVocê recebeu todos os itens de eventos.");
             return true;
+        }
+        if (args[0].equalsIgnoreCase("cb_shopI")) {
+            player.openInventory(EventGUIS.getInventorySHOP_INICIAL());
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("cb_shopB")) {
+            player.openInventory(EventGUIS.getInventorySHOP_BLOCOS());
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("cb_shopC")) {
+            player.openInventory(EventGUIS.getInventorySHOP_COMBATE());
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("cb_shopP")) {
+            player.openInventory(EventGUIS.getInventorySHOP_POÇOES());
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("cb_shopF")) {
+            player.openInventory(EventGUIS.getInventorySHOP_FERRAMENTAS());
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("cb_shopA")) {
+            player.openInventory(EventGUIS.getInventorySHOP_ATAQUE());
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("cb_shopO")) {
+            player.openInventory(EventGUIS.getInventorySHOP_OUTROS());
+            return true;
+        }
+        if (args[0].equalsIgnoreCase("TESTE")) {
+            if (s.hasPermission("mineskyevents.admin")) {
+                EventGUIS.upgradeSWORD.put(player, 0);
+                EventGUIS.upgradeArmor.put(player, 0);
+                EventGUIS.upgradePICKAXE.put(player, 0);
+                EventGUIS.upgradeAXE.put(player, 0);
+                if (args[1].equalsIgnoreCase("1")) {
+                    CaptureBandeiraEvent.time.put(player, "Green");
+                }
+                if (args[1].equals("2")) {
+                    CaptureBandeiraEvent.time.put(player, "Orange");
+                }
+            }
+        }
+        if (args[0].equalsIgnoreCase("tester")) {
+            if (s.hasPermission("mineskyevents.admin")) {
+                CaptureBandeiraEvent.restaurar();
+            }
+        }
+        if (args[0].equalsIgnoreCase("testec")) {
+            if (s.hasPermission("mineskyevents.admin")) {
+                TextComponent text = new TextComponent("§8| §aTestando color hex VELOCITY");
+                SendMessages.sendMessageCHMSNE("#2493b4", "Capture a Bandeira ", text);
+            }
+        }
+        if (args[0].equalsIgnoreCase("testem")) {
+            if (s.hasPermission("mineskyevents.admin")) {
+                TextComponent text = new TextComponent("§8| §aMensagem teste!");
+                SendMessages.sendPlayerCHMSNE(player, "#2493b4", "Capture a Bandeira ", text);
+            }
         }
         if (args[0].equalsIgnoreCase("reload")) {
             if (!s.hasPermission("mineskyevents.reload")) {
