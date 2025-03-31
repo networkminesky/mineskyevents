@@ -1,0 +1,82 @@
+name: MineskyEvents
+version: 1.1.2-BETA
+main: net.minesky.MineSkyEvents
+api-version: '1.19'
+authors: [zBrunoC (Bruno C.), Drawn (G. Druta)]
+load: POSTWORLD
+depeend: [WorldGuard, Vault]
+
+permissions:
+  mineskyevents.reload:
+    description: Permissão para dar reload nas configs do plugin.
+    default: op
+  mineskyevents.give:
+    description: Permissão para receber itens dos eventos.
+    default: op
+  mineskyevents.money:
+    description: Permissão para depocitar money na conta.
+    default: op
+  mineskyevents.clear:
+    description: Permissão para dar clear no inventário dos jogadores.
+    default: op
+  mineskyevents.command.event.start:
+    description: Permissão para iniciar um evento automatico.
+    default: op
+  mineskyevents.command.event.force:
+    description: Permissão para forçar o start do evento ou pular o temporizador.
+    default: op
+  mineskyevents.command.event.set:
+    description: Permissão para setar mapas.
+    default: op
+  mineskyevents.bypass.join:
+    description: Permissão para burlar o autojoin.
+    default: op
+  mineskyevents.command.event.anunciar:
+    description: Permissão para anunciar o evento.
+    default: op
+  mineskyevents.command.event.kick:
+    description: Permissão para expulsar um jogador do evento.
+    default: op
+  mineskyevents.command.event.blacklist:
+    description: Permissão para adicionar ou remover um player de uma blacklist,
+    default: op
+  mineskyevents.command.event.finalizar:
+    description: Permissão para finalizar o evento.
+    default: op
+  mineskyevents.notify.enabled:
+    description: Permissão para habilitar/desabilitar as notificações,
+    default: op
+  mineskyevents.notify.moderation:
+    description: Permissão para receber notificação de moderador,
+    default: false
+  mineskyevents.notify.restored:
+    description: Permissão para receber notificação de mapas refeitos pelo plugin.
+    default: false
+  mineskyevents.notify.blacklist:
+    description: Permissão para receber notificação de blacklist.
+    default: false
+  mineskyevents.bypass.all:
+    description: Todas as permissões de burlar.
+    default: false
+    children:
+      mineskyevents.bypass.join: true
+  mineskyevents.notify.all:
+    description: Todas as notificações
+    default: false
+    children:
+      mineskyevents.notify.enabled: true
+      mineskyevents.notify.moderation: true
+      mineskyevents.notify.blacklist: true
+      mineskyevents.notify.leave: true
+      mineskyevents.notify.restored: true
+  mineskyevents.admin:
+    description: Todas as permissões.
+    default: op
+    children:
+      mineskyevents.reload: true
+      mineskyevents.give: true
+      mineskyevents.command.event.start: true
+      mineskyevents.command.event.set: true
+      mineskyevents.command.event.kick: true
+      mineskyevents.command.event.blacklist: true
+      mineskyevents.command.event.finalizar: true

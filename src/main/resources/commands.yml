@@ -1,0 +1,19 @@
+# =----------------------------= #
+# +          Comandos          + #
+# =----------------------------= #
+commands:
+  msne:
+    enabled: true
+    description: Comando principal do plugin de eventos
+    usage: /msne
+    aliases: [mineskyevents]
+  event:
+    enabled: true
+    description: Comando de evento
+    usage: /event (Event/Start/Blacklist/Kick) [event/add/remove] [interaction]
+    aliases:  [evento]
+  sair:
+    enabled: true
+    description: Voltar para o login!
+    usage: /sair
+    aliases: [msair]

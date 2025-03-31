@@ -1,0 +1,138 @@
+# =--------------------------= #
+# +          Config          + #
+# =--------------------------= #
+Webhook:
+  link: ""
+# =--------------------------------------= #
+# +          Preços dos Eventos          + #
+# =--------------------------------------= #
+Spleef:
+  1-ganhador:
+    min: 4500
+    max: 5500
+  2-ganhador:
+    min: 3500
+    max: 4500
+  3-ganhador:
+    min: 1500
+    max: 2500
+TijolãoWars:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+Corrida:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+CorridaBoat:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+Sumo:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+TNTRun:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+TNTTag:
+  1-ganhador:
+    min: 2500
+    max: 3500
+Parapente:
+  1-ganhador:
+    min: 2500
+    max: 3500
+  2-ganhador:
+    min: 1500
+    max: 2500
+  3-ganhador:
+    min: 500
+    max: 1000
+# =-----------------------------= #
+# +          Blacklist          + #
+# =-----------------------------= #
+blacklist:
+  tntrun:
+    list:
+      - hacker2000
+  tijolãowars:
+    list:
+      - hacker2001
+  corrida:
+    list:
+      - hacker2002
+  corridaboat:
+    list:
+      - hacker2003
+  sumo:
+    list:
+      - hacker2004
+  tnttag:
+    list:
+      - hacker2005
+  parapente:
+    list:
+      - hacker2006
+  spleef:
+    list:
+      - hacker2007
+# =--------------------------------= #
+# +          IP Blacklist          + #
+# =--------------------------------= #
+blacklistip:
+  tntrun:
+    list:
+      - 00.00.000
+  tijolãowars:
+    list:
+      - 00.00.001
+  corrida:
+    list:
+      - 00.00.002
+  corridaboat:
+    list:
+      - 00.00.003
+  sumo:
+    list:
+      - 00.00.004
+  tnttag:
+    list:
+      - 00.00.005
+  parapente:
+    list:
+      - 00.00.006
+  spleef:
+    list:
+      - 00.00.007
